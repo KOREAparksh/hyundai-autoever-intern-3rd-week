@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://DB??:3306/DB?
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
