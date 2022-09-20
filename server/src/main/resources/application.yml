@@ -1,8 +1,11 @@
 spring:
+  config:
+    import: optional:classpath:.env[.properties]
+
   datasource:
-    url: jdbc:mysql://DB??:3306/DB?
-    username:
-    password:
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PW}
+    url: ${DATABASE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
