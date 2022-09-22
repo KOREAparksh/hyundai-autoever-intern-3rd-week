@@ -4,9 +4,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
-@Entity
 @Data
+@Entity
 @RequiredArgsConstructor
 public class User {
 	@Id

@@ -6,26 +6,24 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
 @Data
+@Entity
 @Table(name = "USER_DEVICE_MGR")
-public class UserDevice implements Serializable {
+@IdClass(UserDeviceId.class)
+@ToString(callSuper = true)
+public class UserDevice {
 //	@Id
 //	@Column(name = "USER_ID")
 //	private String user_id;
 
 	@Id
 	@ManyToOne
-	@ToString.Exclude
+	@JoinColumn(name = "USER_ID")
 	private User user;
-
-//	@Id
-//	@Column(name = "DEVICE_ID")
-//	private String device_id;
 
 	@Id
 	@ManyToOne
-	@ToString.Exclude
+	@JoinColumn(name = "DEVICE_ID")
 	private DeviceMaster deviceMaster;
 
 	@Column(name = "MAX_RESENT_CNT")
