@@ -1,10 +1,14 @@
 package com.example.hyundaiboot.service;
 
 import com.example.hyundaiboot.domain.UserDevice;
+import com.example.hyundaiboot.dto.DeviceDto;
+import com.example.hyundaiboot.repository.DeviceMasterRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserDeviceServiceTest {
 	@Autowired
 	private UserDeviceService userDeviceService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private DeviceMasterRepository deviceMasterRepository;
 
 	@Test
 	void testGetAllDevices(){
@@ -22,6 +30,41 @@ class UserDeviceServiceTest {
 	@Test
 	void testGetUserDeviceByUserId(){
 		userDeviceService.getDevices("1").forEach(System.out::println);
+	}
+
+	@Test
+	void testPostDevice() throws Exception{
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("1");
+		deviceDto.setDeviceDescription("testtest");
+		deviceDto.setDeviceId("3");
+		deviceDto.setDeviceKind("test macbook");
+		deviceDto.setMaxSentCount(3);
+		deviceDto.setIsUsed("Y");
+
+		userDeviceService.postDevice(deviceDto);
+
+		System.out.println("User=============");
+		System.out.println(userService.getAllUser());
+		System.out.println("UserDevice=============");
+		System.out.println(userDeviceService.getAllDevice());
+		System.out.println("Device=============");
+		System.out.println(deviceMasterRepository.findAll());
+	}
+
+	@Test
+	void testPostDeviceErrorBySameDeviceId(){
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("1");
+		deviceDto.setDeviceDescription("testtest");
+		deviceDto.setDeviceId("2");
+		deviceDto.setDeviceKind("test macbook");
+		deviceDto.setMaxSentCount(3);
+		deviceDto.setIsUsed("Y");
+
+		Assertions.assertThrows(NoSuchFieldException.class, () -> {
+			userDeviceService.postDevice(deviceDto);
+		});
 	}
 
 }

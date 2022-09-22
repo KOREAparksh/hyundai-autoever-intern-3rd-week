@@ -12,10 +12,9 @@ import com.example.hyundaiboot.service.UserDeviceService;
 import com.example.hyundaiboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +60,20 @@ public class ApiController {
 		return userDeviceService.getAllDevice();
 	}
 
+	@PostMapping("/devices")
+	public ResponseEntity postDevices(@RequestBody DeviceDto deviceDto){
+		try {
+			userDeviceService.postDevice(deviceDto);
+			return ResponseEntity.ok().build();
+		} catch (NoSuchFieldException e){
+			System.out.println("11" + e.getMessage());
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+			System.out.println("22" + e.getMessage());
+		}
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
 
 	@GetMapping("/push-message-history")
 	public List<PushHistoryDto> getPushMessageHistory(){

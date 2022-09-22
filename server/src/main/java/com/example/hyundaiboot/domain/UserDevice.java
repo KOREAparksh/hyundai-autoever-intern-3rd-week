@@ -1,8 +1,7 @@
 package com.example.hyundaiboot.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.sun.istack.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,20 +10,25 @@ import java.io.Serializable;
 @Entity
 @Table(name = "USER_DEVICE_MGR")
 @EqualsAndHashCode()
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 @IdClass(UserDeviceId.class)
 public class UserDevice {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
+	@NotNull
 	private User user;
 
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "DEVICE_ID")
+	@NotNull
 	private DeviceMaster deviceMaster;
 
 	@Column(name = "MAX_RESENT_CNT")
-	private int max_sent_count;
+	private int maxSentCount;
 
 	@Column(name = "USER_DEVICE_DESC")
 	private String description;
