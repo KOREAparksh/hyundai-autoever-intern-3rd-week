@@ -14,6 +14,5 @@ public class UserServiceTest {
 	@Test
 	void testAllUser(){
 		User user = userService.getAllUser().get(0);
-		System.out.println(user.getUserDeviceList());
 	}
 }

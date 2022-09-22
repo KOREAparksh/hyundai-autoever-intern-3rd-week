@@ -1,7 +1,9 @@
 package com.example.hyundaiboot.controller;
 
+import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
+import com.example.hyundaiboot.service.PushMessageQueueService;
 import com.example.hyundaiboot.service.UserDeviceService;
 import com.example.hyundaiboot.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,9 @@ public class ApiController {
 
 	@Autowired
 	private UserDeviceService userDeviceService;
+
+	@Autowired
+	private PushMessageQueueService pushMessageQueueService;
 
 
 	@GetMapping("/txt")
@@ -48,7 +53,7 @@ public class ApiController {
 	}
 
 	@GetMapping("/devices")
-	public List<UserDevice> getUserDevice(){
+	public List<UserDevice> getUserDevices(){
 		return userDeviceService.getAllDevice();
 	}
 
@@ -57,5 +62,10 @@ public class ApiController {
 		List<UserDevice> userDevices;
 		userDevices = userDeviceService.getDevices(userid);
 		return userDevices;
+	}
+
+	@GetMapping("/push-message-queue")
+	public List<PushMessageQueue> getAllPushMessageQueue(){
+		return pushMessageQueueService.getAllPushMessageQueue();
 	}
 }

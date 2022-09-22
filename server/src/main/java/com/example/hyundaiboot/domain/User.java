@@ -32,8 +32,4 @@ public class User {
 	@Column(name = "USER_COLOR")
 	private String color;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	@ToString.Exclude
-	private List<UserDevice> userDeviceList = new ArrayList<>();
 }

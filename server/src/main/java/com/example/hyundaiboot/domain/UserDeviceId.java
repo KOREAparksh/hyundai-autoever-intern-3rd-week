@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserDeviceId implements Serializable {
 	private String user;
 	private String deviceMaster;

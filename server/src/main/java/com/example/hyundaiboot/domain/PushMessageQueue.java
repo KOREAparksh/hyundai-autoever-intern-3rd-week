@@ -2,6 +2,8 @@ package com.example.hyundaiboot.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,10 +30,13 @@ public class PushMessageQueue{
 
 	@Id
 	@ManyToOne
-	@JoinColumns({
-			@JoinColumn(name = "USER_ID"),
-			@JoinColumn(name = "DEVICE_ID")
-	})
+	@NotFound(action = NotFoundAction.IGNORE)
+//	@JoinColumns({
+//			@JoinColumn(name = "USER_ID"),
+//			@JoinColumn(name = "DEVICE_ID")
+//	})
+	@JoinColumn(name = "USER_ID" )
+	@JoinColumn(name = "DEVICE_ID")
 	private UserDevice userDevice;
 
 	@Id
