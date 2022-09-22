@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface DeviceMasterRepository extends JpaRepository<DeviceMaster, String> {
 	Optional<DeviceMaster> findById(String id);
+	void deleteById(String id);
 }

@@ -61,17 +61,27 @@ public class ApiController {
 	}
 
 	@PostMapping("/devices")
-	public ResponseEntity postDevices(@RequestBody DeviceDto deviceDto){
+	public ResponseEntity postDevice(@RequestBody DeviceDto deviceDto){
 		try {
 			userDeviceService.postDevice(deviceDto);
 			return ResponseEntity.ok().build();
 		} catch (NoSuchFieldException e){
-			System.out.println("11" + e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}catch (Exception e){
-			System.out.println("22" + e.getMessage());
 		}
 
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
+	@DeleteMapping("/devices")
+	public ResponseEntity deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
+		try{
+			userDeviceService.deleteDevice(userId, deviceId);
+			return ResponseEntity.ok().build();
+		}catch (NoSuchFieldException e){
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 

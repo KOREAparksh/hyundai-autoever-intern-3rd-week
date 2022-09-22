@@ -75,4 +75,18 @@ public class UserDeviceService {
 		userDevice.setUseState(deviceDto.getIsUsed());
 		userDeviceRepository.save(userDevice);
 	}
+
+	@Transactional
+	public void deleteDevice(String userId, String deviceId) throws Exception {
+		if (userRepository.findById(userId).isEmpty())
+			throw new NoSuchFieldException("없는 사용자입니다.");
+		User user = userRepository.findById(userId).get();
+
+		if (deviceMasterRepository.findById(deviceId).isEmpty())
+			throw new NoSuchFieldException("없는 기기입니다.");
+		DeviceMaster deviceMaster = deviceMasterRepository.findById(deviceId).get();
+
+		userDeviceRepository.deleteByUserAndDeviceMaster(user, deviceMaster);
+		deviceMasterRepository.deleteById(deviceId);
+	}
 }

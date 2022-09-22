@@ -83,6 +83,20 @@ class ApiControllerTest {
 	}
 
 	@Test
+	void testDeleteDevice() throws Exception{
+		mockMvc.perform(MockMvcRequestBuilders.delete("/devices?user_id=1&device_id=3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void testDeleteDeviceErrorByDeviceId() throws Exception{
+		mockMvc.perform(MockMvcRequestBuilders.delete("/devices?user_id=1&device_id=4"))
+				.andDo(print())
+				.andExpect(status().is4xxClientError());
+	}
+
+	@Test
 	void getPushHistory() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/push-message-history"))
 				.andDo(print())
