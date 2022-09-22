@@ -15,6 +15,11 @@ class UserDeviceServiceTest {
 	private UserDeviceService userDeviceService;
 
 	@Test
+	void testGetAllDevices(){
+		userDeviceService.getAllDevice().forEach(System.out::println);
+	}
+
+	@Test
 	void testGetUserDeviceByUserId(){
 		userDeviceService.getDevices("1").forEach(System.out::println);
 	}
