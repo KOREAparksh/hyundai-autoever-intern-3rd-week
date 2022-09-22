@@ -13,8 +13,8 @@ class PushMessageHistoryServiceTest {
 	private PushMessageHistoryService pushMessageHistoryService;
 
 	@Test
-	void testGetAllPushMessageHistory(){
-		pushMessageHistoryService.getPushMessageHistoryByUserid("1").forEach(System.out::println);
+	void testGetPushMessageHistory(){
+		pushMessageHistoryService.getPushMessageHistory().forEach(System.out::println);
 	}
 
 }

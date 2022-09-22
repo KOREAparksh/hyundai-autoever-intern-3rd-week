@@ -11,8 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,5 +33,13 @@ class ApiControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get("/devices"))
 				.andDo(print())
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	void getPushHistory() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/push-message-history"))
+				.andDo(print())
+				.andExpect(status().isOk());
+
 	}
 }

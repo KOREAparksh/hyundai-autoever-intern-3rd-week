@@ -4,6 +4,7 @@ import com.example.hyundaiboot.domain.PushMessageHistory;
 import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
+import com.example.hyundaiboot.dto.PushHistoryDto;
 import com.example.hyundaiboot.service.PushMessageHistoryService;
 import com.example.hyundaiboot.service.PushMessageQueueService;
 import com.example.hyundaiboot.service.UserDeviceService;
@@ -67,7 +68,7 @@ public class ApiController {
 	}
 
 	@GetMapping("/push-message-history")
-	public List<PushMessageHistory> getPushMessageHistory(@RequestParam String userid){
-		return pushMessageHistoryService.getPushMessageHistoryByUserid(userid);
+	public List<PushHistoryDto> getPushMessageHistory(){
+		return pushMessageHistoryService.getPushMessageHistory();
 	}
 }
