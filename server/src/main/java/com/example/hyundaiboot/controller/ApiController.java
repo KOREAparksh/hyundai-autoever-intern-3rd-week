@@ -1,8 +1,10 @@
 package com.example.hyundaiboot.controller;
 
+import com.example.hyundaiboot.domain.PushMessageHistory;
 import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
+import com.example.hyundaiboot.service.PushMessageHistoryService;
 import com.example.hyundaiboot.service.PushMessageQueueService;
 import com.example.hyundaiboot.service.UserDeviceService;
 import com.example.hyundaiboot.service.UserService;
@@ -26,7 +28,7 @@ public class ApiController {
 	private UserDeviceService userDeviceService;
 
 	@Autowired
-	private PushMessageQueueService pushMessageQueueService;
+	private PushMessageHistoryService pushMessageHistoryService;
 
 
 	@GetMapping("/txt")
@@ -64,8 +66,8 @@ public class ApiController {
 		return userDevices;
 	}
 
-	@GetMapping("/push-message-queue")
-	public List<PushMessageQueue> getAllPushMessageQueue(){
-		return pushMessageQueueService.getAllPushMessageQueue();
+	@GetMapping("/push-message-history")
+	public List<PushMessageHistory> getPushMessageHistory(@RequestParam String userid){
+		return pushMessageHistoryService.getPushMessageHistoryByUserid(userid);
 	}
 }
