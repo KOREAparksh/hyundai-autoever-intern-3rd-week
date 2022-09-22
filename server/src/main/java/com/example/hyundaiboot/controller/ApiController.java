@@ -4,6 +4,7 @@ import com.example.hyundaiboot.domain.PushMessageHistory;
 import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
+import com.example.hyundaiboot.dto.DeviceDto;
 import com.example.hyundaiboot.dto.PushHistoryDto;
 import com.example.hyundaiboot.service.PushMessageHistoryService;
 import com.example.hyundaiboot.service.PushMessageQueueService;
@@ -56,16 +57,10 @@ public class ApiController {
 	}
 
 	@GetMapping("/devices")
-	public List<UserDevice> getUserDevices(){
+	public List<DeviceDto> getAllDevices(){
 		return userDeviceService.getAllDevice();
 	}
 
-	@GetMapping("/device")
-	public List<UserDevice> getUserDevice(@RequestParam String userid){
-		List<UserDevice> userDevices;
-		userDevices = userDeviceService.getDevices(userid);
-		return userDevices;
-	}
 
 	@GetMapping("/push-message-history")
 	public List<PushHistoryDto> getPushMessageHistory(){
