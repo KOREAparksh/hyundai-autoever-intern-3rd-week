@@ -18,12 +18,12 @@ public class UserDevice {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "USER_ID")
+	@JoinColumn(name = "USER_ID", nullable = false)
 	private User user;
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "DEVICE_ID")
+	@JoinColumn(name = "DEVICE_ID", nullable = false)
 	private DeviceMaster deviceMaster;
 
 	@Column(name = "MAX_RESENT_CNT")

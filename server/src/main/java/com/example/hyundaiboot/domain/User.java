@@ -2,9 +2,11 @@ package com.example.hyundaiboot.domain;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,4 +31,9 @@ public class User {
 
 	@Column(name = "USER_COLOR")
 	private String color;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	@ToString.Exclude
+	private List<UserDevice> userDeviceList = new ArrayList<>();
 }

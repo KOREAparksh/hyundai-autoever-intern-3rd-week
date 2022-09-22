@@ -19,6 +19,11 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	@Transactional
+	public List<User> getAllUser(){
+		return userRepository.findAll();
+	}
+
+	@Transactional
 	public User getUserById(String id){
 		System.out.println("111");
 		Optional<User> userOptional = userRepository.findById(id);
