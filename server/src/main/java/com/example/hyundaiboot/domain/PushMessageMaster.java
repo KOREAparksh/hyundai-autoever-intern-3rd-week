@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table(name = "PUSH_MSG_MST")
 public class PushMessageMaster  implements Serializable {
 	@Id
-	@Column(name = "PUSH_MESSAGE_ID")
+	@Column(name = "PUSH_MSG_ID")
 	private long id;
 
 	@Column(name = "PUSH_TITLE")
