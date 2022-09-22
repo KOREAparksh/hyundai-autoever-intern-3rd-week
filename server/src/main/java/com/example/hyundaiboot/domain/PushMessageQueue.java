@@ -1,6 +1,7 @@
 package com.example.hyundaiboot.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @IdClass(PushMessageQueQueId.class)
 @Table(name = "PUSH_MSG_SENT_QUEUE")
+@EqualsAndHashCode
 public class PushMessageQueue{
 	@Id
 	@Column(name = "PUSH_GEN_DT")

@@ -1,6 +1,7 @@
 package com.example.hyundaiboot.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 

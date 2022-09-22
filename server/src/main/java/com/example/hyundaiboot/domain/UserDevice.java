@@ -1,6 +1,7 @@
 package com.example.hyundaiboot.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "USER_DEVICE_MGR")
+@EqualsAndHashCode()
 @IdClass(UserDeviceId.class)
 public class UserDevice {
 	@Id
