@@ -3,12 +3,13 @@ package com.example.hyundaiboot.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "PUSH_MSG_SENT_QUEUE")
-public class PushMessageQueue {
+public class PushMessageQueue  implements Serializable {
 	@Id
 	@Column(name = "PUSH_GEN_DT")
 	private LocalDateTime generateTime;

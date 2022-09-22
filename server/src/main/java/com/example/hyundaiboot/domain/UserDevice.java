@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
 @Table(name = "USER_DEVICE_MGR")
-public class UserDevice {
+public class UserDevice implements Serializable {
 //	@Id
 //	@Column(name = "USER_ID")
 //	private String user_id;

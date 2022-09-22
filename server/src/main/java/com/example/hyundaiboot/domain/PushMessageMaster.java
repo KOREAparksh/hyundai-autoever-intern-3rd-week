@@ -6,11 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Data
 @Table(name = "PUSH_MSG_MST")
-public class PushMessageMaster {
+public class PushMessageMaster  implements Serializable {
 	@Id
 	@Column(name = "PUSH_MESSAGE_ID")
 	private long id;
