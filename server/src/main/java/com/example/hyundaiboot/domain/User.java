@@ -1,11 +1,13 @@
 package com.example.hyundaiboot.domain;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 public class User {
 	@Id
 	@Column(name = "USER_ID")
@@ -14,7 +16,7 @@ public class User {
 	@Column(name = "USER_NAME")
 	private String name;
 
-	@Column(name = "USER_PW")
+	@Column(name = "USER_PWD")
 	private String pw;
 
 	@Column(name = "USER_FONT")
