@@ -53,7 +53,6 @@ public class UserDeviceService {
 		// 유저가 없다 -> 계정 만들고 와야 함.
 		// 유저가 있는데 이미 DeviceId가 있다 -> 중복
 		//1. 사용자 확인
-		System.out.println(deviceDto.getUserId());
 		if (userRepository.findById(deviceDto.getUserId()).isEmpty())
 			throw new NoSuchFieldException("없는 사용자입니다.");
 		User user = userRepository.findById(deviceDto.getUserId()).get();

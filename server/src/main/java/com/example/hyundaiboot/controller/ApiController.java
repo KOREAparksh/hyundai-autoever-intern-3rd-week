@@ -5,11 +5,9 @@ import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
 import com.example.hyundaiboot.dto.DeviceDto;
+import com.example.hyundaiboot.dto.PushGroupDto;
 import com.example.hyundaiboot.dto.PushHistoryDto;
-import com.example.hyundaiboot.service.PushMessageHistoryService;
-import com.example.hyundaiboot.service.PushMessageQueueService;
-import com.example.hyundaiboot.service.UserDeviceService;
-import com.example.hyundaiboot.service.UserService;
+import com.example.hyundaiboot.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +22,12 @@ import java.util.Optional;
 public class ApiController {
 	@Autowired
 	private UserService userService;
-
 	@Autowired
 	private UserDeviceService userDeviceService;
-
 	@Autowired
 	private PushMessageHistoryService pushMessageHistoryService;
+	@Autowired
+	private UserMessageGroupService userMessageGroupService;
 
 
 	@GetMapping("/txt")
@@ -85,8 +83,20 @@ public class ApiController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
-	@GetMapping("/push-message-history")
+	@GetMapping("/push-message-histories")
 	public List<PushHistoryDto> getPushMessageHistory(){
 		return pushMessageHistoryService.getPushMessageHistory();
+	}
+
+	@GetMapping("/push-groups")
+	public ResponseEntity<List<PushGroupDto>>  getPushGroup(@RequestParam("user_id") String userId){
+		try {
+			List<PushGroupDto> list = userMessageGroupService.getPushGroup(userId);
+			return ResponseEntity.ok(list);
+		} catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 }

@@ -98,9 +98,23 @@ class ApiControllerTest {
 
 	@Test
 	void getPushHistory() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/push-message-history"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/push-message-histories"))
 				.andDo(print())
 				.andExpect(status().isOk());
 
+	}
+
+	@Test
+	void getPushGroup() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/push-groups?user_id=1"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void getPushGroupErrorById() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/push-groups?user_id=100"))
+				.andDo(print())
+				.andExpect(status().is4xxClientError());
 	}
 }
