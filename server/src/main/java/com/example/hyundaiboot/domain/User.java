@@ -1,16 +1,21 @@
 package com.example.hyundaiboot.domain;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.sun.istack.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Data
+@Entity
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class User {
 	@Id
 	@Column(name = "USER_ID")
+	@NotNull
 	private String id;
 
 	@Column(name = "USER_NAME")
@@ -23,8 +28,10 @@ public class User {
 	private String font;
 
 	@Column(name = "USER_LANG")
+	@NotNull
 	private String lang;
 
 	@Column(name = "USER_COLOR")
 	private String color;
+
 }

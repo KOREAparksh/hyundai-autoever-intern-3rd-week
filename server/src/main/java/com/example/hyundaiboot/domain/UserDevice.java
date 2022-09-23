@@ -1,35 +1,34 @@
 package com.example.hyundaiboot.domain;
 
-import lombok.Data;
-import lombok.ToString;
+import com.sun.istack.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
 @Data
+@Entity
 @Table(name = "USER_DEVICE_MGR")
-public class UserDevice implements Serializable {
-//	@Id
-//	@Column(name = "USER_ID")
-//	private String user_id;
-
+@EqualsAndHashCode()
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@IdClass(UserDeviceId.class)
+public class UserDevice {
 	@Id
 	@ManyToOne
-	@ToString.Exclude
+	@JoinColumn(name = "USER_ID")
+	@NotNull
 	private User user;
 
-//	@Id
-//	@Column(name = "DEVICE_ID")
-//	private String device_id;
-
 	@Id
 	@ManyToOne
-	@ToString.Exclude
+	@JoinColumn(name = "DEVICE_ID")
+	@NotNull
 	private DeviceMaster deviceMaster;
 
 	@Column(name = "MAX_RESENT_CNT")
-	private int max_sent_count;
+	private int maxSentCount;
 
 	@Column(name = "USER_DEVICE_DESC")
 	private String description;
