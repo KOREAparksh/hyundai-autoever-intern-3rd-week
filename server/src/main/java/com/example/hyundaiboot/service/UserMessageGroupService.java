@@ -49,4 +49,17 @@ public class UserMessageGroupService {
 
 		return result;
 	}
+
+	@Transactional
+	public void updatePushMessageGroup(String userId, List<String> groupList) throws NoSuchFieldException {
+		User user = userRepository.findById(userId).orElseThrow(()->new NoSuchFieldException("없는 유저입니다."));
+		List<PushMessageGroup> pushMessageGroupList = pushMessageGroupRepository.findAll();
+
+		userMessageGroupRepository.deleteAllByUserId(userId);
+		for(String pushMessageGroupId : groupList){
+			PushMessageGroup pushMessageGroup = pushMessageGroupRepository
+						.findById(pushMessageGroupId).orElseThrow(()->new NoSuchFieldException());
+			userMessageGroupRepository.save(new UserMessageGroup(user, pushMessageGroup));
+		}
+	}
 }

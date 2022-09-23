@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface UserMessageGroupRepository extends JpaRepository<UserMessageGroup, UserMessageGroupId> {
 	Optional<UserMessageGroup> findByUserAndPushMessageGroup(User user, PushMessageGroup pushMessageGroup);
 	Optional<UserMessageGroup> findByUserIdAndPushMessageGroupId(String userId, String pushMessageGroupId);
+	void deleteAllByUserId(String userId);
 }

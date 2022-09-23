@@ -117,4 +117,11 @@ class ApiControllerTest {
 				.andDo(print())
 				.andExpect(status().is4xxClientError());
 	}
+
+	@Test
+	void putPushGroup() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.put("/push-groups?user_id=1&group_id_list=2,3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
 }

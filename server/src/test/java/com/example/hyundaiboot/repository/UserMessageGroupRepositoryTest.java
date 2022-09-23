@@ -1,5 +1,6 @@
 package com.example.hyundaiboot.repository;
 
+import com.example.hyundaiboot.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,5 +18,4 @@ class UserMessageGroupRepositoryTest {
 		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "1"));
 		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "2"));
 	}
-
 }

@@ -99,4 +99,16 @@ public class ApiController {
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
+
+	@PutMapping("/push-groups")
+	public ResponseEntity  putPushGroup(@RequestParam("user_id") String userId, @RequestParam("group_id_list") List<String> groupIdList){
+		try {
+			userMessageGroupService.updatePushMessageGroup(userId, groupIdList);
+			return ResponseEntity.ok().build();
+		} catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
 }
