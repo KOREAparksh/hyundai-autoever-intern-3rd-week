@@ -36,26 +36,24 @@ public class ApiController {
 	}
 
 	@GetMapping("/user")
-	public User getUser(@RequestParam String id){
-		Optional<User> userOptional;
-		User user;
+	public ResponseEntity<User> getUser(@RequestParam String id){
 		try {
-			user  = userService.getUserById(id);
+			User user  = userService.getUserById(id);
+			return ResponseEntity.ok(user);
+		}catch (NoSuchFieldException e){
+			return ResponseEntity.badRequest().build();
 		}catch (Exception e){
-			user = new User();
-			user.setId( "ttt");
-			user.setName("test");
-			user.setPw("123");
-			user.setColor("blue");
-			user.setFont("맑은");
-			user.setLang("2");
+		return ResponseEntity.internalServerError().build();
 		}
-		return user;
 	}
 
 	@GetMapping("/devices")
-	public List<DeviceDto> getAllDevices(){
-		return userDeviceService.getAllDevice();
+	public ResponseEntity<List<DeviceDto>> getAllDevices(){
+		try {
+			return ResponseEntity.ok(userDeviceService.getAllDevice());
+		}catch (Exception e){
+			return ResponseEntity.internalServerError().build();
+		}
 	}
 
 	@PostMapping("/devices")

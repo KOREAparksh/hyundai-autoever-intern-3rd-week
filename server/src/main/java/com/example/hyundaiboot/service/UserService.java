@@ -24,11 +24,8 @@ public class UserService {
 	}
 
 	@Transactional
-	public User getUserById(String id){
-		System.out.println("111");
-		Optional<User> userOptional = userRepository.findById(id);
-		System.out.println(userOptional);
-		User user = userOptional.get();
+	public User getUserById(String id) throws NoSuchFieldException {
+		User user = userRepository.findById(id).orElseThrow(()->new NoSuchFieldException());
 		return user;
 	}
 }
