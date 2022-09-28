@@ -1,3 +1,4 @@
+import 'package:app/const/Color.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class _FavoriteButton extends StatelessWidget {
       padding: EdgeInsets.all(_padding),
       decoration: BoxDecoration(
         border: Border.all(
-          color: (title == null) ? Color(0x1a000000) : Color(0x1a000000),
+          color: (title == null) ? boxBorderDisable : mainColor,
         ),
         borderRadius: BorderRadius.circular(_radius),
       ),
@@ -45,7 +46,7 @@ class _FavoriteButton extends StatelessWidget {
           title ?? "Blank",
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: (title != null) ? null : Color(0x66000000),
+            color: (title != null) ? null : textDisable,
             fontWeight: (title != null) ? FontWeight.bold : null,
             fontSize: 16,
           ),
