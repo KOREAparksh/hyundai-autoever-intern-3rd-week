@@ -1,3 +1,4 @@
+import 'package:app/widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -6,7 +7,10 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: CustomAppBar(
+        hasStar: true,
+        title: "132213123213asdfasdfadsfasdfsdf",
+      ),
       body: Container(),
     );
   }
