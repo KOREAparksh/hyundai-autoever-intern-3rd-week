@@ -21,6 +21,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   //MarginPadding
   final _appBarLeadingMargin = 13.0;
+  final _appBarTitleSideMargin = 80.0;
   final _appBarTrailingMargin = 13.0;
   final _appBarTrailingInnerMargin = 7.0;
   final _appBarLogoBottomMargin = 5.0;
@@ -72,7 +73,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         ? Container(
             margin: EdgeInsets.only(bottom: _appBarLogoBottomMargin),
             child: Image.asset(_logo, width: _logoWidth))
-        : Container(child: Text(title!, overflow: TextOverflow.ellipsis));
+        : Container(
+            margin: EdgeInsets.only(
+                left: _appBarTitleSideMargin, right: _appBarTitleSideMargin),
+            child: Text(title!, overflow: TextOverflow.ellipsis),
+          );
   }
 
   Widget _trailing() {

@@ -9,7 +9,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         hasStar: true,
-        title: "132213123213asdfasdfadsfasdfsdfsdf",
+        title: "132213123213asdfasdfadsfasdfsdf",
       ),
       body: Container(),
     );
