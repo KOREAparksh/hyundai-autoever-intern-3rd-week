@@ -110,6 +110,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     required Icon icon,
   }) {
     return IconButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      disabledColor: Colors.transparent,
       padding: EdgeInsets.zero,
       constraints: BoxConstraints(),
       onPressed: onPressed,
