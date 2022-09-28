@@ -12,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MainScreen(),
+      title: 'Hyundai Auto-ever App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      getPages: [
+        GetPage(name: '/', page: () => MainScreen()),
+      ],
+      initialRoute: "/",
     );
   }
 }
