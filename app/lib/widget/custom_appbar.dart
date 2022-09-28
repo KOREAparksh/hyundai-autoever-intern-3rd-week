@@ -7,6 +7,9 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.title,
     this.middleAsset,
     this.hasStar = false,
+    this.onTapLeading,
+    this.onTapStar,
+    this.onTapNoti,
   }) : super(key: key);
 
   @override
@@ -15,6 +18,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String? title;
   final String? middleAsset;
   final bool hasStar;
+  final VoidCallback? onTapLeading;
+  final VoidCallback? onTapStar;
+
+  //Todo: 외부 주입 말고 내부적으로 구현
+  final VoidCallback? onTapNoti;
 
   //Size
   final _logoWidth = 100.0;
@@ -63,7 +71,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       margin: EdgeInsets.only(left: _appBarLeadingMargin),
       child: _customIconButton(
         icon: Icon(Icons.menu),
-        onPressed: () {},
+        onPressed: onTapLeading ?? () {},
       ),
     );
   }
@@ -94,13 +102,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     if (hasStar) {
       _list.add(_customIconButton(
         icon: Icon(Icons.star_border),
-        onPressed: () {},
+        onPressed: onTapStar ?? () {},
       ));
     }
     _list.add(SizedBox(width: _appBarTrailingInnerMargin));
     _list.add(_customIconButton(
       icon: Icon(Icons.notifications),
-      onPressed: () {},
+      onPressed: onTapNoti ?? () {},
     ));
     return _list;
   }
