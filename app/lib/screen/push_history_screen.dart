@@ -212,16 +212,31 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: _title, hasStar: true),
-      body: Container(
-        margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-        child: GroupedListView<PushHistoryDto, DateTime>(
-          elements: _list,
-          groupBy: (element) => element.pushDateTime,
-          cacheExtent: _list.length + 5,
-          itemBuilder: _itemBuilder,
-          groupHeaderBuilder: (element) => _groupHeader(element),
-          useStickyGroupSeparators: true,
-        ),
+      body: Stack(
+        children: [
+          Container(
+            margin:
+                EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
+            child: GroupedListView<PushHistoryDto, DateTime>(
+              elements: _list,
+              groupBy: (element) => element.pushDateTime,
+              cacheExtent: _list.length + 5,
+              itemBuilder: _itemBuilder,
+              groupHeaderBuilder: (element) => _groupHeader(element),
+              useStickyGroupSeparators: true,
+            ),
+          ),
+          Container(
+            alignment: Alignment.topRight,
+            child: ListFilterHeader(
+              height: _headerHeight,
+              margin: _bodySideMargin,
+              onTapDetail: () {},
+              onTapOrder: () {},
+              onTapSearch: () {},
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -229,18 +244,71 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   Widget _itemBuilder(context, PushHistoryDto element) =>
       PushHistoryListTile(data: element);
 
-  Widget _indexBuilder(context, PushHistoryDto element, int i) =>
-      PushHistoryListTile(data: element);
-
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
-      // color: Colors.red,
       height: _headerHeight,
+      color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Text(
         DateFormat("yyyy-MM-dd").format(element.pushDateTime),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
+    );
+  }
+}
+
+class ListFilterHeader extends StatelessWidget {
+  const ListFilterHeader({
+    Key? key,
+    required this.height,
+    required this.margin,
+    required this.onTapSearch,
+    required this.onTapOrder,
+    required this.onTapDetail,
+  }) : super(key: key);
+
+  final double height;
+  final double margin;
+  final VoidCallback onTapSearch;
+  final VoidCallback onTapOrder;
+  final VoidCallback onTapDetail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      margin: EdgeInsets.only(left: margin, right: margin),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _iconButtonForm(
+            onPressed: onTapDetail,
+            icon: Icon(Icons.format_line_spacing),
+          ),
+          _iconButtonForm(
+            onPressed: onTapOrder,
+            icon: Icon(Icons.sort_by_alpha),
+          ),
+          _iconButtonForm(
+            onPressed: onTapSearch,
+            icon: Icon(Icons.search_outlined),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _iconButtonForm(
+      {required VoidCallback onPressed, required Icon icon}) {
+    return IconButton(
+      onPressed: onTapSearch,
+      icon: icon,
+      disabledColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      focusColor: Colors.transparent,
     );
   }
 }
