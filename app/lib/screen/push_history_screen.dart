@@ -205,12 +205,14 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
     ),
   ];
 
+  final _bodySideMargin = 27.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: _title, hasStar: true),
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
         child: GroupedListView<PushHistoryDto, DateTime>(
           elements: _list,
           groupBy: (element) => element.pushDateTime,
@@ -235,14 +237,21 @@ class PushHistoryListTile extends StatelessWidget {
 
   final PushHistoryDto data;
 
+  final _width = 330.0;
+  final _innerPadding = 15.0;
+  final _radius = 20.0;
+  final _rowHeight = 25.0;
+  final _stateWidth = 50.0;
+  final _stateHeight = 15.0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330,
-      padding: EdgeInsets.all(15),
+      width: _width,
+      padding: EdgeInsets.all(_innerPadding),
       decoration: BoxDecoration(
         border: Border.all(color: boxBorderDisable),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(_radius),
         color: Colors.blue,
       ),
       child: Column(
@@ -259,7 +268,7 @@ class PushHistoryListTile extends StatelessWidget {
   }
 
   Widget _form({required Widget child}) {
-    return SizedBox(height: 25, child: child);
+    return SizedBox(height: _rowHeight, child: child);
   }
 
   Widget _times() {
@@ -292,8 +301,8 @@ class PushHistoryListTile extends StatelessWidget {
             child: Text(data.userName, overflow: TextOverflow.ellipsis)),
         Expanded(flex: 2, child: Text(data.deviceDescription)),
         Container(
-          width: 50,
-          height: 15,
+          width: _stateWidth,
+          height: _stateHeight,
           color: Colors.green,
           alignment: Alignment.center,
           child: Text(
