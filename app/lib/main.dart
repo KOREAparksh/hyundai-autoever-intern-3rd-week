@@ -1,4 +1,5 @@
 import 'package:app/screen/main_screen.dart';
+import 'package:app/screen/push_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       getPages: [
         GetPage(name: '/', page: () => MainScreen()),
+        GetPage(name: '/push/history', page: () => PushHistoryScreen()),
       ],
-      initialRoute: "/",
+      initialRoute: "/push/history",
     );
   }
 }
