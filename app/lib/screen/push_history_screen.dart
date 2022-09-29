@@ -219,7 +219,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           groupSeparatorBuilder: (DateTime groupByValue) =>
               Text(groupByValue.toString()),
           itemBuilder: (context, PushHistoryDto element) =>
-              PushHistoryListDetailTile(data: element),
+              PushHistoryListTile(data: element),
           useStickyGroupSeparators: true,
           floatingHeader: true,
           stickyHeaderBackgroundColor: Colors.red,
@@ -246,23 +246,26 @@ class PushHistoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      padding: EdgeInsets.all(_innerPadding),
-      decoration: BoxDecoration(
-        border: Border.all(color: boxBorderDisable),
+    return Card(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_radius),
-        color: Colors.blue,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _form(child: _times()),
-          _form(child: _info()),
-          Container(height: 2, color: Colors.black),
-          _form(child: _pushTitle()),
-          _form(child: _pushContents()),
-        ],
+      elevation: 5,
+      color: Colors.white,
+      shadowColor: Color(0x2b333333),
+      child: Container(
+        width: _width,
+        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _form(child: _times()),
+            _form(child: _info()),
+            Container(height: 2, color: Colors.black),
+            _form(child: _pushTitle()),
+            _form(child: _pushContents()),
+          ],
+        ),
       ),
     );
   }
@@ -345,27 +348,30 @@ class PushHistoryListDetailTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: boxBorderDisable),
+    return Card(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_radius),
-        color: Colors.blue,
       ),
-      child: Column(
-        children: [
-          _form(child: _timeContainer()),
-          Container(height: 1, color: Colors.black),
-          _form(child: _infoForm(name: data.userName, id: data.userId)),
-          _form(
-            child: _infoForm(name: data.deviceDescription, id: data.deviceId),
-          ),
-          Container(height: 1, color: Colors.black),
-          SizedBox(height: 5),
-          _pushTitle(),
-          _form(child: _pushContents()),
-        ],
+      elevation: 5,
+      color: Colors.white,
+      shadowColor: Color(0x2b333333),
+      child: Container(
+        width: _width,
+        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+        child: Column(
+          children: [
+            _form(child: _timeContainer()),
+            Container(height: 1, color: Colors.black),
+            _form(child: _infoForm(name: data.userName, id: data.userId)),
+            _form(
+              child: _infoForm(name: data.deviceDescription, id: data.deviceId),
+            ),
+            Container(height: 1, color: Colors.black),
+            SizedBox(height: 5),
+            _pushTitle(),
+            _form(child: _pushContents()),
+          ],
+        ),
       ),
     );
   }
