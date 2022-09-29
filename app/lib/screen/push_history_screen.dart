@@ -219,7 +219,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           groupSeparatorBuilder: (DateTime groupByValue) =>
               Text(groupByValue.toString()),
           itemBuilder: (context, PushHistoryDto element) =>
-              PushHistoryListTile(data: element),
+              PushHistoryListDetailTile(data: element),
           useStickyGroupSeparators: true,
           floatingHeader: true,
           stickyHeaderBackgroundColor: Colors.red,
@@ -326,6 +326,128 @@ class PushHistoryListTile extends StatelessWidget {
         data.pushContent,
         overflow: TextOverflow.ellipsis,
       ),
+    );
+  }
+}
+
+class PushHistoryListDetailTile extends StatelessWidget {
+  const PushHistoryListDetailTile({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  final PushHistoryDto data;
+
+  final _width = 330.0;
+  final _radius = 20.0;
+  final _stateWidth = 20.0;
+  final _stateHeight = 15.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _width,
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      decoration: BoxDecoration(
+        border: Border.all(color: boxBorderDisable),
+        borderRadius: BorderRadius.circular(_radius),
+        color: Colors.blue,
+      ),
+      child: Column(
+        children: [
+          _form(child: _timeContainer()),
+          Container(height: 1, color: Colors.black),
+          _form(child: _infoForm(name: data.userName, id: data.userId)),
+          _form(
+            child: _infoForm(name: data.deviceDescription, id: data.deviceId),
+          ),
+          Container(height: 1, color: Colors.black),
+          SizedBox(height: 5),
+          _pushTitle(),
+          _form(child: _pushContents()),
+        ],
+      ),
+    );
+  }
+
+  Widget _pushContents() =>
+      Text(data.pushContent, overflow: TextOverflow.ellipsis);
+
+  Widget _pushTitle() {
+    return Container(
+      height: 30,
+      alignment: Alignment.centerLeft,
+      child: Text(
+        data.pushTitle,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _timeContainer() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: _timeForm(
+              title: "푸시",
+              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.pushDateTime)),
+        ),
+        Expanded(
+          flex: 1,
+          child: _timeForm(
+              title: "수신",
+              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.sentDateTime)),
+        ),
+        Container(
+          width: _stateWidth,
+          height: _stateHeight,
+          color: Colors.green,
+          alignment: Alignment.center,
+          child: Text(
+            data.sentState,
+            style: TextStyle(color: Colors.white, fontSize: 10),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _form({required Widget child}) {
+    return Container(
+      height: 25,
+      alignment: Alignment.centerLeft,
+      child: child,
+    );
+  }
+
+  Widget _timeForm({required String title, required String time}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          time,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 12, color: textLight),
+        ),
+      ],
+    );
+  }
+
+  Widget _infoForm({required String name, required String id}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        Text(id, style: TextStyle(fontSize: 12, color: textLight)),
+      ],
     );
   }
 }
