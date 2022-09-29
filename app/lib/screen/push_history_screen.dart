@@ -206,6 +206,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   ];
 
   final _bodySideMargin = 27.0;
+  final _headerHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
@@ -216,14 +217,29 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
         child: GroupedListView<PushHistoryDto, DateTime>(
           elements: _list,
           groupBy: (element) => element.pushDateTime,
-          groupSeparatorBuilder: (DateTime groupByValue) =>
-              Text(groupByValue.toString()),
-          itemBuilder: (context, PushHistoryDto element) =>
-              PushHistoryListTile(data: element),
+          cacheExtent: _list.length + 5,
+          itemBuilder: _itemBuilder,
+          groupHeaderBuilder: (element) => _groupHeader(element),
           useStickyGroupSeparators: true,
-          floatingHeader: true,
-          stickyHeaderBackgroundColor: Colors.red,
         ),
+      ),
+    );
+  }
+
+  Widget _itemBuilder(context, PushHistoryDto element) =>
+      PushHistoryListTile(data: element);
+
+  Widget _indexBuilder(context, PushHistoryDto element, int i) =>
+      PushHistoryListTile(data: element);
+
+  Widget _groupHeader(PushHistoryDto element) {
+    return Container(
+      // color: Colors.red,
+      height: _headerHeight,
+      alignment: Alignment.centerLeft,
+      child: Text(
+        DateFormat("yyyy-MM-dd").format(element.pushDateTime),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
     );
   }
@@ -238,7 +254,7 @@ class PushHistoryListTile extends StatelessWidget {
   final PushHistoryDto data;
 
   final _width = 330.0;
-  final _innerPadding = 15.0;
+  final _topBottomMargin = 10.0;
   final _radius = 20.0;
   final _rowHeight = 25.0;
   final _stateWidth = 50.0;
@@ -246,25 +262,28 @@ class PushHistoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(_radius),
-      ),
-      elevation: 5,
-      color: Colors.white,
-      shadowColor: Color(0x2b333333),
-      child: Container(
-        width: _width,
-        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _form(child: _times()),
-            _form(child: _info()),
-            Container(height: 2, color: Colors.black),
-            _form(child: _pushTitle()),
-            _form(child: _pushContents()),
-          ],
+    return Container(
+      margin: EdgeInsets.only(top: _topBottomMargin, bottom: _topBottomMargin),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(_radius),
+        ),
+        elevation: 5,
+        color: Colors.white,
+        shadowColor: Color(0x2b333333),
+        child: Container(
+          width: _width,
+          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _form(child: _times()),
+              _form(child: _info()),
+              Container(height: 2, color: Colors.black),
+              _form(child: _pushTitle()),
+              _form(child: _pushContents()),
+            ],
+          ),
         ),
       ),
     );
@@ -342,35 +361,40 @@ class PushHistoryListDetailTile extends StatelessWidget {
   final PushHistoryDto data;
 
   final _width = 330.0;
+  final _topBottomMargin = 10.0;
   final _radius = 20.0;
   final _stateWidth = 20.0;
   final _stateHeight = 15.0;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(_radius),
-      ),
-      elevation: 5,
-      color: Colors.white,
-      shadowColor: Color(0x2b333333),
-      child: Container(
-        width: _width,
-        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: Column(
-          children: [
-            _form(child: _timeContainer()),
-            Container(height: 1, color: Colors.black),
-            _form(child: _infoForm(name: data.userName, id: data.userId)),
-            _form(
-              child: _infoForm(name: data.deviceDescription, id: data.deviceId),
-            ),
-            Container(height: 1, color: Colors.black),
-            SizedBox(height: 5),
-            _pushTitle(),
-            _form(child: _pushContents()),
-          ],
+    return Container(
+      margin: EdgeInsets.only(top: _topBottomMargin, bottom: _topBottomMargin),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(_radius),
+        ),
+        elevation: 5,
+        color: Colors.white,
+        shadowColor: Color(0x2b333333),
+        child: Container(
+          width: _width,
+          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+          child: Column(
+            children: [
+              _form(child: _timeContainer()),
+              Container(height: 1, color: Colors.black),
+              _form(child: _infoForm(name: data.userName, id: data.userId)),
+              _form(
+                child:
+                    _infoForm(name: data.deviceDescription, id: data.deviceId),
+              ),
+              Container(height: 1, color: Colors.black),
+              SizedBox(height: 5),
+              _pushTitle(),
+              _form(child: _pushContents()),
+            ],
+          ),
         ),
       ),
     );
