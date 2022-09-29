@@ -242,7 +242,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   }
 
   Widget _itemBuilder(context, PushHistoryDto element) =>
-      PushHistoryListTile(data: element);
+      PushHistoryListDetailTile(data: element);
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
@@ -276,6 +276,7 @@ class ListFilterHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.transparent,
       height: height,
       margin: EdgeInsets.only(left: margin, right: margin),
       child: Row(
@@ -347,7 +348,7 @@ class PushHistoryListTile extends StatelessWidget {
             children: [
               _form(child: _times()),
               _form(child: _info()),
-              Container(height: 2, color: Colors.black),
+              Container(height: 1, color: Colors.black),
               _form(child: _pushTitle()),
               _form(child: _pushContents()),
             ],
@@ -387,9 +388,20 @@ class PushHistoryListTile extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            flex: 1,
-            child: Text(data.userName, overflow: TextOverflow.ellipsis)),
-        Expanded(flex: 2, child: Text(data.deviceDescription)),
+          flex: 1,
+          child: Text(
+            data.userName,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            data.deviceDescription,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         Container(
           width: _stateWidth,
           height: _stateHeight,
@@ -397,7 +409,10 @@ class PushHistoryListTile extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             data.sentState,
-            style: TextStyle(color: Colors.white, fontSize: 12),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+            ),
           ),
         ),
       ],
@@ -406,7 +421,12 @@ class PushHistoryListTile extends StatelessWidget {
 
   Widget _pushTitle() {
     return Container(
-        alignment: Alignment.centerLeft, child: Text(data.pushTitle));
+      alignment: Alignment.centerLeft,
+      child: Text(
+        data.pushTitle,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      ),
+    );
   }
 
   Widget _pushContents() {
@@ -542,9 +562,17 @@ class PushHistoryListDetailTile extends StatelessWidget {
       children: [
         SizedBox(
           width: 100,
-          child: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Text(
+            name,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
-        Text(id, style: TextStyle(fontSize: 12, color: textLight)),
+        Text(
+          id,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 12, color: textLight),
+        ),
       ],
     );
   }
