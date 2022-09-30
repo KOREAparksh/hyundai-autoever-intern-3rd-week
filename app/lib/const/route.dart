@@ -1,19 +1,19 @@
 // ignore_for_file: constant_identifier_names
 
-enum Route {
+enum KRoute {
   HOME,
   PUSH_HISTORY,
   DEVICE_REGISTER,
 }
 
-extension RouteExtension on Route {
+extension RouteExtension on KRoute {
   String get name {
     switch (this) {
-      case Route.HOME:
+      case KRoute.HOME:
         return '/';
-      case Route.PUSH_HISTORY:
+      case KRoute.PUSH_HISTORY:
         return '/push/history';
-      case Route.DEVICE_REGISTER:
+      case KRoute.DEVICE_REGISTER:
         return '/push/register';
       default:
         return '/';
