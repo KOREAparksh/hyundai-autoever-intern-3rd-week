@@ -1,8 +1,13 @@
+import 'package:app/const/Color.dart';
+import 'package:app/const/route.dart';
+import 'package:app/controller/base_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+  const CustomDrawer({Key? key, this.baseController}) : super(key: key);
+
+  final BaseController? baseController;
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -48,7 +53,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               "123123",
                               overflow: TextOverflow.ellipsis,
@@ -71,77 +76,39 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    ListTile(title: Text("홈")),
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       title: Text("모바일공통"),
+                      initiallyExpanded: true,
                       children: [
                         ExpansionTile(
                           title: Text("푸시알람"),
+                          initiallyExpanded: true,
                           children: [
-                            ListTile(
-                              title: Text("모바일기기등록"),
-                              onTap: () => Get.toNamed("/push/register"),
+                            _ThirdTile(
+                              title: "모바일기기등록",
+                              baseController: widget.baseController,
+                              route: KRoute.DEVICE_REGISTER.name,
                             ),
-                            ListTile(
-                              title: Text("푸시알람전송이력"),
-                              onTap: () => Get.toNamed("/push/history"),
+                            _ThirdTile(
+                              title: "푸시알람전송이력",
+                              baseController: widget.baseController,
+                              route: KRoute.PUSH_HISTORY.name,
                             ),
                           ],
                         ),
-                        _Dummy(),
-                        _Dummy(),
+                        ExpansionTile(
+                          title: Text("Dummy"),
+                        )
                       ],
                     ),
-                    ExpansionTile(
-                      maintainState: true,
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("Production"),
-                      children: [
-                        _Dummy(),
-                        _Dummy(),
-                        _Dummy(),
-                      ],
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("Order"),
-                      children: [
-                        _Dummy(),
-                        _Dummy(),
-                        _Dummy(),
-                      ],
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("Progress"),
-                      children: [
-                        _Dummy(),
-                        _Dummy(),
-                        _Dummy(),
-                      ],
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("상태"),
-                      children: [
-                        _Dummy(),
-                        _Dummy(),
-                        _Dummy(),
-                      ],
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("Quality"),
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("Equipment"),
-                    ),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("공통"),
-                    ),
+                    _Dummy(title: "Production"),
+                    _Dummy(title: "Order"),
+                    _Dummy(title: "Progress"),
+                    _Dummy(title: "상태"),
+                    _Dummy(title: "Quality"),
+                    _Dummy(title: "Equipment"),
+                    _Dummy(title: "공통"),
                   ],
                 ),
               ),
@@ -154,19 +121,76 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 }
 
-class _Dummy extends StatelessWidget {
-  const _Dummy({
+class _ThirdTile extends StatelessWidget {
+  const _ThirdTile({
     Key? key,
+    this.baseController,
+    required this.title,
+    required this.route,
   }) : super(key: key);
+
+  final BaseController? baseController;
+  final String title;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: (Get.currentRoute == route) ? mainColor : null,
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+            color: (Get.currentRoute == route) ? Colors.white : null,
+          ),
+        ),
+        contentPadding: EdgeInsets.only(left: 50),
+        onTap: () {
+          (Get.currentRoute == KRoute.HOME.name)
+              ? Get.toNamed(route)
+              : Get.offNamed(route);
+          baseController?.closeDrawer();
+        },
+      ),
+    );
+  }
+}
+
+class _Dummy extends StatelessWidget {
+  const _Dummy({Key? key, required this.title}) : super(key: key);
+
+  final title;
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text("Dummy"),
+      tilePadding: EdgeInsets.zero,
+      title: Text(title),
       children: const [
-        ListTile(title: Text("Dummy")),
-        ListTile(title: Text("Dummy")),
-        ListTile(title: Text("Dummy")),
+        ExpansionTile(
+          title: Text("Dummy"),
+          children: [
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+          ],
+        ),
+        ExpansionTile(
+          title: Text("Dummy"),
+          children: [
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+          ],
+        ),
+        ExpansionTile(
+          title: Text("Dummy"),
+          children: [
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+            ListTile(title: Text("Dummy")),
+          ],
+        ),
       ],
     );
   }

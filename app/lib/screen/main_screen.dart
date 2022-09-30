@@ -13,7 +13,7 @@ class MainScreen extends GetView<MainController> {
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: CustomAppBar(baseController: controller),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(baseController: controller),
       body: SizedBox(
         width: double.infinity,
         child: Column(
