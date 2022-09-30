@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/push/history', page: () => PushHistoryScreen()),
         GetPage(name: '/push/register', page: () => DeviceRegisterScreen()),
       ],
-      initialRoute: "/push/register",
+      initialRoute: "/push/history",
     );
   }
 }

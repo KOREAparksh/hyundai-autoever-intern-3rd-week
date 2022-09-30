@@ -207,6 +207,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
+  final _dateFormat = "yyyy-MM-dd";
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +251,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
       color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Text(
-        DateFormat("yyyy-MM-dd").format(element.pushDateTime),
+        DateFormat(_dateFormat).format(element.pushDateTime),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
     );
@@ -324,6 +325,8 @@ class PushHistoryListTile extends StatelessWidget {
 
   final _width = 330.0;
   final _topBottomMargin = 10.0;
+  final _innerPaddingTopBottom = 15.0;
+  final _innerPaddingSide = 5.0;
   final _radius = 20.0;
   final _rowHeight = 25.0;
   final _stateWidth = 50.0;
@@ -342,7 +345,12 @@ class PushHistoryListTile extends StatelessWidget {
         shadowColor: shadowColor,
         child: Container(
           width: _width,
-          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+          padding: EdgeInsets.fromLTRB(
+            _innerPaddingTopBottom,
+            _innerPaddingSide,
+            _innerPaddingTopBottom,
+            _innerPaddingSide,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -451,8 +459,12 @@ class PushHistoryListDetailTile extends StatelessWidget {
   final _width = 330.0;
   final _topBottomMargin = 10.0;
   final _radius = 20.0;
+  final _infoMainWidth = 100.0;
+  final _formHeight = 25.0;
+  final _titleFormHeight = 30.0;
   final _stateWidth = 20.0;
   final _stateHeight = 15.0;
+  final _dateFormat = "yy/MM/dd hh:mm:ss";
 
   @override
   Widget build(BuildContext context) {
@@ -493,7 +505,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
 
   Widget _pushTitle() {
     return Container(
-      height: 30,
+      height: _titleFormHeight,
       alignment: Alignment.centerLeft,
       child: Text(
         data.pushTitle,
@@ -509,13 +521,13 @@ class PushHistoryListDetailTile extends StatelessWidget {
           flex: 1,
           child: _timeForm(
               title: "푸시",
-              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.pushDateTime)),
+              time: DateFormat(_dateFormat).format(data.pushDateTime)),
         ),
         Expanded(
           flex: 1,
           child: _timeForm(
               title: "수신",
-              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.sentDateTime)),
+              time: DateFormat(_dateFormat).format(data.sentDateTime)),
         ),
         Container(
           width: _stateWidth,
@@ -533,7 +545,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
 
   Widget _form({required Widget child}) {
     return Container(
-      height: 25,
+      height: _formHeight,
       alignment: Alignment.centerLeft,
       child: child,
     );
@@ -561,7 +573,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: 100,
+          width: _infoMainWidth,
           child: Text(
             name,
             overflow: TextOverflow.ellipsis,
