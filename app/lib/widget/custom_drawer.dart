@@ -20,8 +20,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   //marginpadding
   final _bodySideMargin = 15.0;
 
-  final _tileKey = GlobalKey<State>();
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -29,54 +27,44 @@ class _CustomDrawerState extends State<CustomDrawer> {
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
         child: Column(
           children: [
-            Container(
-              color: Colors.blue,
-              child: DrawerHeader(
-                padding: EdgeInsets.zero,
-                child: Container(
-                  color: Colors.red,
-                  child: Column(
-                    children: [
-                      Image.asset(_logo, height: _logoHeight),
-                      Expanded(
-                        child: Container(
-                          color: Colors.green,
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: _profileRadius,
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.person,
-                                  size: _profileIconSize,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "123123",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text("345345",
-                                      overflow: TextOverflow.ellipsis),
-                                ],
-                              ),
-                            ],
+            DrawerHeader(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  Image.asset(_logo, height: _logoHeight),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: _profileRadius,
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          child: Icon(
+                            Icons.person,
+                            size: _profileIconSize,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "123123",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text("345345", overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
             Expanded(

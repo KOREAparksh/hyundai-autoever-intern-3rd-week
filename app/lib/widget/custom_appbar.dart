@@ -1,4 +1,4 @@
-import 'package:app/controller/scaffold_controller.dart';
+import 'package:app/controller/base_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +11,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.hasStar = false,
     this.onTapStar,
     this.onTapNoti,
+    this.baseController,
   }) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String? middleAsset;
   final bool hasStar;
   final VoidCallback? onTapStar;
+  final BaseController? baseController;
 
   //Todo: 외부 주입 말고 내부적으로 구현
   final VoidCallback? onTapNoti;
@@ -36,8 +38,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   //Asset
   final _logo = "assets/autoever_logo.png";
-
-  final scaffoldController = Get.find<ScaffoldController>();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       margin: EdgeInsets.only(left: _appBarLeadingMargin),
       child: _customIconButton(
         icon: Icon(Icons.menu),
-        onPressed: scaffoldController.openDrawer,
+        onPressed: baseController?.openDrawer ??
+            () => Get.snackbar("Error", "base controller error"),
       ),
     );
   }

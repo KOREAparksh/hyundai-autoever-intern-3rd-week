@@ -1,10 +1,14 @@
 import 'package:app/const/Color.dart';
+import 'package:app/controller/push_history_controller.dart';
 import 'package:app/dto/push_history_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
+//Todo: Stateless로 변경 -> GetView
 class PushHistoryScreen extends StatefulWidget {
   const PushHistoryScreen({Key? key}) : super(key: key);
 
@@ -208,11 +212,18 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
   final _dateFormat = "yyyy-MM-dd";
+  final controller = Get.find<PushHistoryController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: _title, hasStar: true),
+      key: controller.scaffoldKey,
+      appBar: CustomAppBar(
+        title: _title,
+        hasStar: true,
+        baseController: controller,
+      ),
+      drawer: CustomDrawer(),
       body: Stack(
         children: [
           Container(
