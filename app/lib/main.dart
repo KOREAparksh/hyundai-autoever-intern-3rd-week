@@ -1,3 +1,4 @@
+import 'package:app/const/route.dart' as route;
 import 'package:app/controller/device_register_controller.dart';
 import 'package:app/controller/main_controller.dart';
 import 'package:app/controller/push_history_controller.dart';
@@ -23,11 +24,15 @@ class MyApp extends StatelessWidget {
       title: 'Hyundai Auto-ever App',
       theme: ThemeData(primarySwatch: Colors.blue),
       getPages: [
-        GetPage(name: '/', page: () => MainScreen()),
-        GetPage(name: '/push/history', page: () => PushHistoryScreen()),
-        GetPage(name: '/push/register', page: () => DeviceRegisterScreen()),
+        GetPage(name: route.Route.HOME.name, page: () => MainScreen()),
+        GetPage(
+            name: route.Route.PUSH_HISTORY.name,
+            page: () => PushHistoryScreen()),
+        GetPage(
+            name: route.Route.DEVICE_REGISTER.name,
+            page: () => DeviceRegisterScreen()),
       ],
-      initialRoute: "/",
+      initialRoute: route.Route.HOME.name,
     );
   }
 }
