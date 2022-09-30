@@ -32,76 +32,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
         child: Column(
           children: [
-            DrawerHeader(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  Image.asset(_logo, height: _logoHeight),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: _profileRadius,
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: _profileIconSize,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "123123",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text("345345", overflow: TextOverflow.ellipsis),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _drawerHeader(),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: Text("모바일공통"),
-                      initiallyExpanded: true,
-                      children: [
-                        ExpansionTile(
-                          title: Text("푸시알람"),
-                          initiallyExpanded: true,
-                          children: [
-                            _ThirdTile(
-                              title: "모바일기기등록",
-                              baseController: widget.baseController,
-                              route: KRoute.DEVICE_REGISTER.name,
-                            ),
-                            _ThirdTile(
-                              title: "푸시알람전송이력",
-                              baseController: widget.baseController,
-                              route: KRoute.PUSH_HISTORY.name,
-                            ),
-                          ],
-                        ),
-                        ExpansionTile(
-                          title: Text("Dummy"),
-                        )
-                      ],
-                    ),
+                    _pushTile(),
                     _Dummy(title: "Production"),
                     _Dummy(title: "Order"),
                     _Dummy(title: "Progress"),
@@ -116,6 +52,78 @@ class _CustomDrawerState extends State<CustomDrawer> {
             Container(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _pushTile() {
+    return ExpansionTile(
+      tilePadding: EdgeInsets.zero,
+      title: Text("모바일공통"),
+      initiallyExpanded: true,
+      children: [
+        ExpansionTile(
+          title: Text("푸시알람"),
+          initiallyExpanded: true,
+          children: [
+            _ThirdTile(
+              title: "모바일기기등록",
+              baseController: widget.baseController,
+              route: KRoute.DEVICE_REGISTER.name,
+            ),
+            _ThirdTile(
+              title: "푸시알람전송이력",
+              baseController: widget.baseController,
+              route: KRoute.PUSH_HISTORY.name,
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text("Dummy"),
+        )
+      ],
+    );
+  }
+
+  Widget _drawerHeader() {
+    return DrawerHeader(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Image.asset(_logo, height: _logoHeight),
+          Expanded(
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: _profileRadius,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: Icon(
+                    Icons.person,
+                    size: _profileIconSize,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "123123",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text("345345", overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
