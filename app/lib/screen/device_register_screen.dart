@@ -22,6 +22,9 @@ class DeviceRegisterScreen extends StatelessWidget {
     DeviceDto("parkseunghan", "note21", "1device111", "Android", 3, "Y"),
   ];
 
+  final _bodySideMargin = 27.0;
+  final _headerHeight = 40.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +32,13 @@ class DeviceRegisterScreen extends StatelessWidget {
         title: _title,
         hasStar: true,
       ),
-      body: DeviceRegisterListTile(
-        data: _list[0],
+      body: Container(
+        margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
+        child: ListView.builder(
+          itemCount: _list.length,
+          cacheExtent: _list.length + 5,
+          itemBuilder: (_, int i) => DeviceRegisterListTile(data: _list[i]),
+        ),
       ),
     );
   }
