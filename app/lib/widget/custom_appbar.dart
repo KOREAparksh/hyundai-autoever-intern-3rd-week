@@ -48,12 +48,14 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   Widget _middleWidget() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        _actions(),
-        _center(),
-      ],
+    return Material(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _actions(),
+          _center(),
+        ],
+      ),
     );
   }
 
