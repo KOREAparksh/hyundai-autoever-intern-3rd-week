@@ -6,11 +6,12 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          Image.asset("assets/autoever_icon.png"),
-        ],
-      ),
+      child: Drawer(),
+      // child: Column(
+      //   children: [
+      //     Image.asset("assets/autoever_icon.png"),
+      //   ],
+      // ),
     );
   }
 }

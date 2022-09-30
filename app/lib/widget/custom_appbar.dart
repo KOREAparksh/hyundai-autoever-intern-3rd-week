@@ -1,13 +1,14 @@
+import 'package:app/controller/scaffold_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  const CustomAppBar({
+  CustomAppBar({
     Key? key,
     this.title,
     this.middleAsset,
     this.hasStar = false,
-    this.onTapLeading,
     this.onTapStar,
     this.onTapNoti,
   }) : super(key: key);
@@ -18,7 +19,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String? title;
   final String? middleAsset;
   final bool hasStar;
-  final VoidCallback? onTapLeading;
   final VoidCallback? onTapStar;
 
   //Todo: 외부 주입 말고 내부적으로 구현
@@ -36,6 +36,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   //Asset
   final _logo = "assets/autoever_logo.png";
+
+  final scaffoldController = Get.find<ScaffoldController>();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       margin: EdgeInsets.only(left: _appBarLeadingMargin),
       child: _customIconButton(
         icon: Icon(Icons.menu),
-        onPressed: onTapLeading ?? () {},
+        onPressed: scaffoldController.openDrawer,
       ),
     );
   }

@@ -1,14 +1,21 @@
 import 'package:app/const/Color.dart';
+import 'package:app/controller/scaffold_controller.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  MainScreen({Key? key}) : super(key: key);
+
+  final _scaffoldController = Get.find<ScaffoldController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldController.scaffoldKey,
       appBar: CustomAppBar(),
+      drawer: CustomDrawer(),
       body: SizedBox(
         width: double.infinity,
         child: Column(
