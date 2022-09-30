@@ -8,6 +8,6 @@ class DeviceDto {
   final int maxSentCount;
   final String isUsed;
 
-  DeviceDto(this.userId, this.deviceDescription, this.deviceId, this.deviceKind,
-      this.maxSentCount, this.isUsed);
+  const DeviceDto(this.userId, this.deviceDescription, this.deviceId,
+      this.deviceKind, this.maxSentCount, this.isUsed);
 }
