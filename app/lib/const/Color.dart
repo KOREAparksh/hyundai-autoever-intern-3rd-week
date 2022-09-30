@@ -7,3 +7,5 @@ const textDisable = Color(0x66000000);
 const textLight = Color(0xff9b9b9b);
 
 const mainColor = Color(0xff002c5f);
+
+const shadowColor = Color(0x2b333333);

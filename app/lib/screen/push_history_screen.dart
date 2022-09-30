@@ -339,7 +339,7 @@ class PushHistoryListTile extends StatelessWidget {
         ),
         elevation: 5,
         color: Colors.white,
-        shadowColor: Color(0x2b333333),
+        shadowColor: shadowColor,
         child: Container(
           width: _width,
           padding: EdgeInsets.fromLTRB(15, 5, 15, 5),

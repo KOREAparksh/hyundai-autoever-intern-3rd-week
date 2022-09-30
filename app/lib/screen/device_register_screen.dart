@@ -1,3 +1,4 @@
+import 'package:app/const/Color.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +144,7 @@ class DeviceRegisterListTile extends StatelessWidget {
         ),
         elevation: 5,
         color: Colors.white,
-        shadowColor: Color(0x2b333333),
+        shadowColor: shadowColor,
         child: Stack(
           children: [
             _contents(),
