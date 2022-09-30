@@ -1,3 +1,4 @@
+import 'package:app/const/Color.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -126,11 +127,12 @@ class DeviceRegisterListTile extends StatelessWidget {
 
   final _width = 330.0;
   final _height = 118.0;
+  final _radius = 20.0;
   final _formHeight = 25.0;
   final _topBottomMargin = 5.0;
   final _innerPadding = 20.0;
   final _dividerMargin = 20.0;
-  final _radius = 20.0;
+  final _iconSize = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +145,7 @@ class DeviceRegisterListTile extends StatelessWidget {
         ),
         elevation: 5,
         color: Colors.white,
-        shadowColor: Color(0x2b333333),
+        shadowColor: shadowColor,
         child: Stack(
           children: [
             _contents(),
@@ -160,10 +162,7 @@ class DeviceRegisterListTile extends StatelessWidget {
       padding: EdgeInsets.all(_innerPadding),
       child: Row(
         children: [
-          Expanded(
-            flex: 2,
-            child: _info(),
-          ),
+          Expanded(flex: 2, child: _info()),
           _divider(),
           Expanded(flex: 1, child: _state()),
         ],
@@ -217,7 +216,6 @@ class DeviceRegisterListTile extends StatelessWidget {
 
   Widget _deleteIcon() {
     return Container(
-      // color: Colors.blue,
       alignment: Alignment.topRight,
       child: IconButton(
         splashColor: Colors.transparent,
@@ -226,10 +224,7 @@ class DeviceRegisterListTile extends StatelessWidget {
         hoverColor: Colors.transparent,
         disabledColor: Colors.transparent,
         onPressed: () {},
-        icon: Icon(
-          Icons.delete,
-          size: 20,
-        ),
+        icon: Icon(Icons.delete, size: _iconSize),
       ),
     );
   }
