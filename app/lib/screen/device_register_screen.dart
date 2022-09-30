@@ -9,12 +9,12 @@ class DeviceRegisterScreen extends StatelessWidget {
 
   final List<DeviceDto> _list = const [
     DeviceDto("WJKIM", "note10", "device1", "Android", 3, "Y"),
-    DeviceDto("WJKIM", "note11", "device2", "Android", 3, "Y"),
+    DeviceDto("WJKIM", "note11", "device2", "Android", 3, "N"),
     DeviceDto("WJKIM", "note12", "device3", "Android", 3, "Y"),
-    DeviceDto("asdf", "note13", "device4", "Android", 3, "Y"),
+    DeviceDto("asdf", "note13", "device4", "Android", 3, "N"),
     DeviceDto("asdf", "note14", "device5", "Android", 3, "Y"),
     DeviceDto("asdfasdf", "note15", "device6", "Android", 3, "Y"),
-    DeviceDto("asdfasdf", "note16", "device7", "Android", 3, "Y"),
+    DeviceDto("asdfasdf", "note16", "device7", "Android", 3, "N"),
     DeviceDto("hyj", "note17", "device8", "Android", 3, "Y"),
     DeviceDto("hyj", "note18", "device9", "Android", 3, "Y"),
     DeviceDto("parkseunghan", "note19", "1device1", "Android", 3, "Y"),
@@ -34,12 +34,84 @@ class DeviceRegisterScreen extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-        child: ListView.builder(
-          itemCount: _list.length,
-          cacheExtent: _list.length + 5,
-          itemBuilder: (_, int i) => DeviceRegisterListTile(data: _list[i]),
+        child: Column(
+          children: [
+            _ListFilterHeader(
+              height: _headerHeight,
+              onTapAdd: () {},
+              onTapSort: () {},
+              onTapSearch: () {},
+            ),
+            Expanded(child: _listView()),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _listView() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _list.length,
+      cacheExtent: _list.length + 5,
+      itemBuilder: (_, int i) => DeviceRegisterListTile(data: _list[i]),
+    );
+  }
+}
+
+class _ListFilterHeader extends StatelessWidget {
+  const _ListFilterHeader({
+    Key? key,
+    required this.height,
+    required this.onTapAdd,
+    required this.onTapSort,
+    required this.onTapSearch,
+  }) : super(key: key);
+
+  final double height;
+  final VoidCallback onTapAdd;
+  final VoidCallback onTapSort;
+  final VoidCallback onTapSearch;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      height: height,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _iconButtonForm(
+            onPressed: onTapAdd,
+            icon: Icon(Icons.add_box_rounded),
+          ),
+          Row(
+            children: [
+              _iconButtonForm(
+                onPressed: onTapSort,
+                icon: Icon(Icons.sort_by_alpha),
+              ),
+              _iconButtonForm(
+                onPressed: onTapSearch,
+                icon: Icon(Icons.search_outlined),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _iconButtonForm(
+      {required VoidCallback onPressed, required Icon icon}) {
+    return IconButton(
+      onPressed: onPressed,
+      disabledColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      icon: icon,
     );
   }
 }
@@ -55,7 +127,7 @@ class DeviceRegisterListTile extends StatelessWidget {
   final _width = 330.0;
   final _height = 118.0;
   final _formHeight = 25.0;
-  final _topBottomMargin = 10.0;
+  final _topBottomMargin = 5.0;
   final _innerPadding = 20.0;
   final _dividerMargin = 20.0;
   final _radius = 20.0;
