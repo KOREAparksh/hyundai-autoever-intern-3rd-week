@@ -48,14 +48,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   Widget _middleWidget() {
-    return Material(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _actions(),
-          _center(),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _actions(),
+        _center(),
+      ],
     );
   }
 
@@ -122,15 +120,17 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     required VoidCallback onPressed,
     required Icon icon,
   }) {
-    return IconButton(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      disabledColor: Colors.transparent,
-      padding: EdgeInsets.zero,
-      constraints: BoxConstraints(),
-      onPressed: onPressed,
-      icon: icon,
+    return Material(
+      child: IconButton(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        disabledColor: Colors.transparent,
+        padding: EdgeInsets.zero,
+        constraints: BoxConstraints(),
+        onPressed: onPressed,
+        icon: icon,
+      ),
     );
   }
 }
