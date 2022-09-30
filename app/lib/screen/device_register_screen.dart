@@ -1,11 +1,20 @@
 import 'package:app/const/Color.dart';
+import 'package:app/controller/device_register_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DeviceRegisterScreen extends StatelessWidget {
-  const DeviceRegisterScreen({Key? key}) : super(key: key);
+//Todo: Stateless로 변경 -> GetView
+class DeviceRegisterScreen extends StatefulWidget {
+  DeviceRegisterScreen({Key? key}) : super(key: key);
 
+  @override
+  State<DeviceRegisterScreen> createState() => _DeviceRegisterScreenState();
+}
+
+class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _title = "모바일기기등록";
 
   final List<DeviceDto> _list = const [
@@ -25,14 +34,18 @@ class DeviceRegisterScreen extends StatelessWidget {
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
+  final controller = Get.find<DeviceRegisterController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.scaffoldKey,
       appBar: CustomAppBar(
         title: _title,
         hasStar: true,
+        baseController: controller,
       ),
+      drawer: CustomDrawer(),
       body: Container(
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
         child: Column(
