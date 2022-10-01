@@ -48,7 +48,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   @override
   void initState() {
     super.initState();
-    // _list.forEach((element) => _contentList.add(element));
+    _list.forEach((element) => _contentList.add(element));
   }
 
   @override
@@ -92,7 +92,6 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     return _ListFilterHeader(
       height: _headerHeight,
       onTapAdd: () {},
-      onTapSort: () {},
       onTapSearch: () => _showDialog(
         CustomDialog(
           mainTitle: "검색",
@@ -184,13 +183,11 @@ class _ListFilterHeader extends StatelessWidget {
     Key? key,
     required this.height,
     required this.onTapAdd,
-    required this.onTapSort,
     required this.onTapSearch,
   }) : super(key: key);
 
   final double height;
   final VoidCallback onTapAdd;
-  final VoidCallback onTapSort;
   final VoidCallback onTapSearch;
 
   @override
@@ -205,17 +202,9 @@ class _ListFilterHeader extends StatelessWidget {
             onPressed: onTapAdd,
             icon: Icon(Icons.add_box_rounded),
           ),
-          Row(
-            children: [
-              _iconButtonForm(
-                onPressed: onTapSort,
-                icon: Icon(Icons.sort_by_alpha),
-              ),
-              _iconButtonForm(
-                onPressed: onTapSearch,
-                icon: Icon(Icons.search_outlined),
-              ),
-            ],
+          _iconButtonForm(
+            onPressed: onTapSearch,
+            icon: Icon(Icons.search_outlined),
           ),
         ],
       ),
