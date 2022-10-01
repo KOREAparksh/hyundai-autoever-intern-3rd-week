@@ -38,7 +38,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
   final _searchDialogContentsMargin = 30.0;
-  final _searchDialogTextFieldPAdding = 5.0;
+  final _searchDialogTextFieldPadding = 5.0;
   final _userIdController = TextEditingController();
   final _deviceIdController = TextEditingController();
   final _deviceController = TextEditingController();
@@ -105,6 +105,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
                 SizedBox(height: 10),
                 OutlinedButton(
                   onPressed: () {
+                    _contentList.clear();
                     _userIdController.clear();
                     _deviceIdController.clear();
                     _deviceController.clear();
@@ -144,7 +145,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(_searchDialogTextFieldPAdding),
+        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
         hintText: hint,
       ),
     );
