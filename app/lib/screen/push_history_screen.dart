@@ -460,7 +460,7 @@ class ListFilterHeader extends StatelessWidget {
   Widget _iconButtonForm(
       {required VoidCallback onPressed, required Icon icon}) {
     return IconButton(
-      onPressed: onTapSearch,
+      onPressed: onPressed,
       icon: icon,
       disabledColor: Colors.transparent,
       hoverColor: Colors.transparent,
