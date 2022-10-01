@@ -2,6 +2,7 @@ import 'package:app/const/Color.dart';
 import 'package:app/controller/device_register_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_dialog.dart';
 import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class DeviceRegisterScreen extends StatefulWidget {
 class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _title = "모바일기기등록";
 
-  final List<DeviceDto> _list = const [
+  final List<DeviceDto> _list = [
     DeviceDto("WJKIM", "note10", "device1", "Android", 3, "Y"),
     DeviceDto("WJKIM", "note11", "device2", "Android", 3, "N"),
     DeviceDto("WJKIM", "note12", "device3", "Android", 3, "Y"),
@@ -68,7 +69,14 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
       shrinkWrap: true,
       itemCount: _list.length,
       cacheExtent: _list.length + 5,
-      itemBuilder: (_, int i) => DeviceRegisterListTile(data: _list[i]),
+      itemBuilder: (_, int i) => DeviceRegisterListTile(
+        data: _list[i],
+        onDelete: () {
+          //Todo: Device Delete 통신 필요
+          _list.removeAt(i);
+          setState(() {});
+        },
+      ),
     );
   }
 }
@@ -134,9 +142,11 @@ class DeviceRegisterListTile extends StatelessWidget {
   const DeviceRegisterListTile({
     Key? key,
     required this.data,
+    required this.onDelete,
   }) : super(key: key);
 
   final DeviceDto data;
+  final VoidCallback onDelete;
 
   final _width = 330.0;
   final _height = 118.0;
@@ -236,7 +246,30 @@ class DeviceRegisterListTile extends StatelessWidget {
         focusColor: Colors.transparent,
         hoverColor: Colors.transparent,
         disabledColor: Colors.transparent,
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: Get.context!,
+            builder: (_) {
+              return CustomDialog(
+                mainTitle: "정말  삭제하시겠습니까?",
+                contents: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.userId),
+                    Text(data.deviceId),
+                    Text(data.deviceDescription),
+                    Text(data.deviceKind),
+                  ],
+                ),
+                onTapPositive: () {
+                  onDelete.call();
+                  Get.back();
+                },
+                onTabNegative: () => Get.back(),
+              );
+            },
+          );
+        },
         icon: Icon(Icons.delete, size: _iconSize),
       ),
     );
