@@ -2,6 +2,7 @@ import 'package:app/const/Color.dart';
 import 'package:app/controller/device_register_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_dialog.dart';
 import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,9 +33,31 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     DeviceDto("parkseunghan", "note21", "1device111", "Android", 3, "Y"),
   ];
 
+  final List<DeviceDto> _contentList = [];
+
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
+  final _searchDialogContentsMargin = 30.0;
+  final _searchDialogTextFieldPadding = 5.0;
+  final _userIdController = TextEditingController();
+  final _deviceIdController = TextEditingController();
+  final _deviceController = TextEditingController();
+
   final controller = Get.find<DeviceRegisterController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _list.forEach((element) => _contentList.add(element));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _userIdController.dispose();
+    _deviceIdController.dispose();
+    _deviceController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +73,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
         child: Column(
           children: [
-            _ListFilterHeader(
-              height: _headerHeight,
-              onTapAdd: () {},
-              onTapSort: () {},
-              onTapSearch: () {},
-            ),
+            _header(),
             Expanded(child: _listView()),
           ],
         ),
@@ -63,12 +81,100 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     );
   }
 
+  void _showDialog(Widget dialog) {
+    showDialog(
+      context: Get.context!,
+      builder: (_) => dialog,
+    );
+  }
+
+  _ListFilterHeader _header() {
+    return _ListFilterHeader(
+      height: _headerHeight,
+      onTapAdd: () {},
+      onTapSearch: () => _showDialog(
+        CustomDialog(
+          mainTitle: "검색",
+          contents: Container(
+            margin: EdgeInsets.all(_searchDialogContentsMargin),
+            child: Column(
+              children: [
+                _textField(hint: "사용자ID", controller: _userIdController),
+                _textField(hint: "Device명", controller: _deviceIdController),
+                _textField(hint: "Device Kind", controller: _deviceController),
+                SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: () {
+                    _contentList.clear();
+                    _userIdController.clear();
+                    _deviceIdController.clear();
+                    _deviceController.clear();
+                    _list.forEach((element) => _contentList.add(element));
+                    setState(() {});
+                    Get.back();
+                  },
+                  child: Text("초기화"),
+                ),
+              ],
+            ),
+          ),
+          onTapPositive: () {
+            String _userId = _userIdController.text;
+            String _deviceId = _deviceIdController.text;
+            String _deviceKind = _deviceController.text;
+            _contentList.clear();
+            _list.forEach((element) {
+              if (element.userId.contains(_userId) &&
+                  element.deviceId.contains(_deviceId) &&
+                  element.deviceKind.contains(_deviceKind)) {
+                _contentList.add(element);
+              }
+            });
+            setState(() {});
+            Get.back();
+          },
+          onTabNegative: () {
+            Get.back();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _textField({required String hint, required controller}) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
+        hintText: hint,
+      ),
+    );
+  }
+
   Widget _listView() {
+    if (_contentList.isEmpty) {
+      return Center(
+        child: Text(
+          "등록된 모바일 기기가 없습니다.",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      );
+    }
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: _list.length,
-      cacheExtent: _list.length + 5,
-      itemBuilder: (_, int i) => DeviceRegisterListTile(data: _list[i]),
+      itemCount: _contentList.length,
+      cacheExtent: _contentList.length + 5,
+      itemBuilder: (_, int i) => DeviceRegisterListTile(
+        data: _contentList[i],
+        onDelete: () {
+          //Todo: Device Delete 통신 필요
+          _contentList.removeAt(i);
+          setState(() {});
+        },
+      ),
     );
   }
 }
@@ -78,13 +184,11 @@ class _ListFilterHeader extends StatelessWidget {
     Key? key,
     required this.height,
     required this.onTapAdd,
-    required this.onTapSort,
     required this.onTapSearch,
   }) : super(key: key);
 
   final double height;
   final VoidCallback onTapAdd;
-  final VoidCallback onTapSort;
   final VoidCallback onTapSearch;
 
   @override
@@ -99,17 +203,9 @@ class _ListFilterHeader extends StatelessWidget {
             onPressed: onTapAdd,
             icon: Icon(Icons.add_box_rounded),
           ),
-          Row(
-            children: [
-              _iconButtonForm(
-                onPressed: onTapSort,
-                icon: Icon(Icons.sort_by_alpha),
-              ),
-              _iconButtonForm(
-                onPressed: onTapSearch,
-                icon: Icon(Icons.search_outlined),
-              ),
-            ],
+          _iconButtonForm(
+            onPressed: onTapSearch,
+            icon: Icon(Icons.search_outlined),
           ),
         ],
       ),
@@ -134,9 +230,11 @@ class DeviceRegisterListTile extends StatelessWidget {
   const DeviceRegisterListTile({
     Key? key,
     required this.data,
+    required this.onDelete,
   }) : super(key: key);
 
   final DeviceDto data;
+  final VoidCallback onDelete;
 
   final _width = 330.0;
   final _height = 118.0;
@@ -236,7 +334,30 @@ class DeviceRegisterListTile extends StatelessWidget {
         focusColor: Colors.transparent,
         hoverColor: Colors.transparent,
         disabledColor: Colors.transparent,
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: Get.context!,
+            builder: (_) {
+              return CustomDialog(
+                mainTitle: "정말  삭제하시겠습니까?",
+                contents: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.userId),
+                    Text(data.deviceId),
+                    Text(data.deviceDescription),
+                    Text(data.deviceKind),
+                  ],
+                ),
+                onTapPositive: () {
+                  onDelete.call();
+                  Get.back();
+                },
+                onTabNegative: () => Get.back(),
+              );
+            },
+          );
+        },
         icon: Icon(Icons.delete, size: _iconSize),
       ),
     );
