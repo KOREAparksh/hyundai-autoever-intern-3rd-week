@@ -14,6 +14,7 @@ class DeviceInfoField extends StatefulWidget {
     String s3,
     String s4,
     String s5,
+    bool isUse,
   ) onTapButton;
 
   @override
@@ -31,7 +32,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
   final _deviceDescController = TextEditingController();
   final _deviceKindController = TextEditingController();
   final _stateController = TextEditingController();
-  bool? _state = true;
+  bool _state = true;
 
   @override
   void dispose() {
@@ -69,6 +70,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
                   _deviceDescController.text,
                   _deviceKindController.text,
                   _stateController.text,
+                  _state,
                 ),
                 child: Text(widget.buttonText),
               ),
@@ -127,7 +129,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
         value: value,
         groupValue: _state,
         onChanged: (v) => setState(() {
-          _state = v;
+          _state = v!;
         }),
       ),
     );
