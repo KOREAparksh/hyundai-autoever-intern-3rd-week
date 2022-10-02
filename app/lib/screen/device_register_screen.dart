@@ -134,9 +134,12 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
       shrinkWrap: true,
       itemCount: controller.contentList.length,
       cacheExtent: controller.contentList.length + 5,
-      itemBuilder: (_, int i) => DeviceRegisterListTile(
-        data: controller.contentList[i],
-        onDelete: () => controller.onTapDelete(setState, i),
+      itemBuilder: (_, int i) => GestureDetector(
+        onTap: () => controller.onTapTile(i),
+        child: DeviceRegisterListTile(
+          data: controller.contentList[i],
+          onDelete: () => controller.onTapDelete(setState, i),
+        ),
       ),
     );
   }

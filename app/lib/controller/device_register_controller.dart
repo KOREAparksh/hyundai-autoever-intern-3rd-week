@@ -2,6 +2,7 @@ import 'package:app/controller/base_controller.dart';
 import 'package:app/controller/device_add_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/screen/device_add_screen.dart';
+import 'package:app/screen/device_modify_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,10 @@ class DeviceRegisterController extends BaseController {
   final deviceIdController = TextEditingController();
   final deviceController = TextEditingController();
   bool isSearchActive = false;
+
+  void onTapTile(int i) {
+    Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
+  }
 
   void onTapAddButton() {
     Get.to(() => DeviceAddScreen());

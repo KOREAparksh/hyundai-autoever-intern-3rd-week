@@ -21,8 +21,7 @@ class DeviceAddScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: _title, hasBack: true, hasNoti: false),
         body: DeviceInfoField(
-          onTapButton: (s1, s2, s3, s4, int1, bool1) =>
-              controller.onTapAddButton(s1, s2, s3, s4, int1, bool1),
+          onTapButton: controller.onTapAddButton,
           buttonText: "추가",
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:app/dto/device_dto.dart';
 import 'package:flutter/material.dart';
 
 class DeviceInfoField extends StatefulWidget {
@@ -5,17 +6,12 @@ class DeviceInfoField extends StatefulWidget {
     Key? key,
     required this.onTapButton,
     required this.buttonText,
+    this.deviceDto = const DeviceDto("", "", "", "", 0, ""),
   }) : super(key: key);
 
   final String buttonText;
-  final void Function(
-    String s1,
-    String s2,
-    String s3,
-    String s4,
-    int s5,
-    bool isUse,
-  ) onTapButton;
+  final DeviceDto deviceDto;
+  final void Function(DeviceDto newDto) onTapButton;
 
   @override
   State<DeviceInfoField> createState() => _DeviceInfoFieldState();
@@ -33,6 +29,16 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
   final _deviceKindController = TextEditingController();
   final _maxCountController = TextEditingController();
   bool _state = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _userIdController.text = widget.deviceDto.userId;
+    _deviceIdController.text = widget.deviceDto.deviceId;
+    _deviceDescController.text = widget.deviceDto.deviceDescription;
+    _deviceKindController.text = widget.deviceDto.deviceKind;
+    _maxCountController.text = widget.deviceDto.maxSentCount.toString();
+  }
 
   @override
   void dispose() {
@@ -73,12 +79,14 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
                   onPressed: () {
                     if (_formKey.currentState?.validate() == true) {
                       widget.onTapButton(
-                        _userIdController.text,
-                        _deviceIdController.text,
-                        _deviceDescController.text,
-                        _deviceKindController.text,
-                        int.parse(_maxCountController.text),
-                        _state,
+                        DeviceDto(
+                          _userIdController.text,
+                          _deviceIdController.text,
+                          _deviceDescController.text,
+                          _deviceKindController.text,
+                          int.parse(_maxCountController.text),
+                          _state ? "Y" : "N",
+                        ),
                       );
                     }
                   },
