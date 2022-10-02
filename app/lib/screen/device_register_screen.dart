@@ -7,15 +7,9 @@ import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//Todo: Stateless로 변경 -> GetView
-class DeviceRegisterScreen extends StatefulWidget {
+class DeviceRegisterScreen extends StatelessWidget {
   DeviceRegisterScreen({Key? key}) : super(key: key);
 
-  @override
-  State<DeviceRegisterScreen> createState() => _DeviceRegisterScreenState();
-}
-
-class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _title = "모바일기기등록";
 
   final _bodySideMargin = 27.0;
@@ -23,22 +17,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _searchDialogContentsMargin = 30.0;
   final _searchDialogTextFieldPadding = 5.0;
 
-  final controller =
-      Get.put<DeviceRegisterController>(DeviceRegisterController());
-
-  @override
-  void initState() {
-    super.initState();
-    controller.list.forEach((element) => controller.contentList.add(element));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.userIdController.dispose();
-    controller.deviceIdController.dispose();
-    controller.deviceController.dispose();
-  }
+  final controller = Get.put(DeviceRegisterController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,40 +48,42 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     );
   }
 
-  _ListFilterHeader _header() {
-    return _ListFilterHeader(
-      height: _headerHeight,
-      isSearchActive: controller.isSearchActive,
-      onTapAdd: controller.onTapAddButton,
-      onTapSearch: () => _showDialog(
-        CustomDialog(
-          mainTitle: "검색",
-          contents: Container(
-            margin: EdgeInsets.all(_searchDialogContentsMargin),
-            child: Column(
-              children: [
-                _textField(
-                  hint: "사용자ID",
-                  controller: controller.userIdController,
-                ),
-                _textField(
-                  hint: "Device명",
-                  controller: controller.deviceIdController,
-                ),
-                _textField(
-                  hint: "Device Kind",
-                  controller: controller.deviceController,
-                ),
-                SizedBox(height: 10),
-                OutlinedButton(
-                  onPressed: () => controller.onTapSearchInit(setState),
-                  child: Text("초기화"),
-                ),
-              ],
+  Widget _header() {
+    return Obx(
+      () => _ListFilterHeader(
+        height: _headerHeight,
+        isSearchActive: controller.isSearchActive.value,
+        onTapAdd: controller.onTapAddButton,
+        onTapSearch: () => _showDialog(
+          CustomDialog(
+            mainTitle: "검색",
+            contents: Container(
+              margin: EdgeInsets.all(_searchDialogContentsMargin),
+              child: Column(
+                children: [
+                  _textField(
+                    hint: "사용자ID",
+                    controller: controller.userIdController,
+                  ),
+                  _textField(
+                    hint: "Device명",
+                    controller: controller.deviceIdController,
+                  ),
+                  _textField(
+                    hint: "Device Kind",
+                    controller: controller.deviceController,
+                  ),
+                  SizedBox(height: 10),
+                  OutlinedButton(
+                    onPressed: controller.onTapSearchInit,
+                    child: Text("초기화"),
+                  ),
+                ],
+              ),
             ),
+            onTapPositive: controller.onTapSearchDialogPositive,
+            onTabNegative: controller.onTapSearchDialogNegative,
           ),
-          onTapPositive: () => controller.onTapSearchDialogPositive(setState),
-          onTabNegative: controller.onTapSearchDialogNegative,
         ),
       ),
     );
@@ -119,28 +100,29 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   }
 
   Widget _listView() {
-    if (controller.contentList.isEmpty) {
-      return Center(
-        child: Text(
-          "등록된 모바일 기기가 없습니다.",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      );
-    }
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: controller.contentList.length,
-      cacheExtent: controller.contentList.length + 5,
-      itemBuilder: (_, int i) => GestureDetector(
-        onTap: () => controller.onTapTile(i),
-        child: DeviceRegisterListTile(
-          data: controller.contentList[i],
-          onDelete: () => controller.onTapDelete(setState, i),
-        ),
-      ),
+    return Obx(
+      () => (controller.contentList.isEmpty)
+          ? Center(
+              child: Text(
+                "등록된 모바일 기기가 없습니다.",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.contentList.length,
+              cacheExtent: controller.contentList.length + 5,
+              itemBuilder: (_, int i) => GestureDetector(
+                onTap: () => controller.onTapTile(i),
+                child: DeviceRegisterListTile(
+                  data: controller.contentList[i],
+                  onDelete: () => controller.onTapDelete(i),
+                ),
+              ),
+            ),
     );
   }
 }

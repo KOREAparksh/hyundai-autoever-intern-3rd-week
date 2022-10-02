@@ -7,11 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DeviceRegisterController extends BaseController {
-  final List<DeviceDto> contentList = [];
+  final RxList<DeviceDto> contentList = <DeviceDto>[].obs;
   final userIdController = TextEditingController();
   final deviceIdController = TextEditingController();
   final deviceController = TextEditingController();
-  bool isSearchActive = false;
+  RxBool isSearchActive = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    list.forEach((element) => contentList.add(element));
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    userIdController.dispose();
+    deviceIdController.dispose();
+    deviceController.dispose();
+  }
 
   void onTapTile(int i) {
     Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
@@ -21,18 +36,19 @@ class DeviceRegisterController extends BaseController {
     Get.to(() => DeviceAddScreen());
   }
 
-  void onTapSearchInit(void Function(void Function() fn) setState2) {
+  void onTapSearchInit(/*void Function(void Function() fn) setState2*/) {
     contentList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceController.clear();
-    isSearchActive = false;
+    isSearchActive(false);
     list.forEach((element) => contentList.add(element));
-    setState2.call(() {});
+    // setState2.call(() {});
     Get.back();
   }
 
-  void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
+  void onTapSearchDialogPositive(
+      /*void Function(void Function() fn) setState2*/) {
     String _userId = userIdController.text.toLowerCase();
     String _deviceId = deviceIdController.text.toLowerCase();
     String _deviceKind = deviceController.text.toLowerCase();
@@ -44,11 +60,12 @@ class DeviceRegisterController extends BaseController {
         contentList.add(element);
       }
     });
-    isSearchActive = true;
+    isSearchActive(true);
     if (_userId == "" && _deviceId == "" && _deviceKind == "") {
-      isSearchActive = false;
+      isSearchActive(false);
     }
-    setState2.call(() {});
+    // setState2.call(() {});
+
     Get.back();
   }
 
@@ -56,10 +73,10 @@ class DeviceRegisterController extends BaseController {
     Get.back();
   }
 
-  void onTapDelete(void Function(void Function() fn) setState2, int i) {
+  void onTapDelete(/*void Function(void Function() fn) setState2,*/ int i) {
     //Todo: Device Delete 통신 필요
     contentList.removeAt(i);
-    setState2.call(() {});
+    // setState2.call(() {});
   }
 
   final List<DeviceDto> list = const [

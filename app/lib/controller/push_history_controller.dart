@@ -61,7 +61,6 @@ class PushHistoryController extends BaseController {
       });
     } else {
       list.forEach((element) {
-        print("element state:  ${element.sentState}");
         if (element.userId.toLowerCase().contains(_userId) &&
             element.userName.toLowerCase().contains(_userName) &&
             element.deviceId.toLowerCase().contains(_deviceId) &&
