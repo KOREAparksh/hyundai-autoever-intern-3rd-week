@@ -54,37 +54,41 @@ class DeviceRegisterScreen extends StatelessWidget {
         height: _headerHeight,
         isSearchActive: controller.isSearchActive.value,
         onTapAdd: controller.onTapAddButton,
-        onTapSearch: () => _showDialog(
-          CustomDialog(
-            mainTitle: "검색",
-            contents: Container(
-              margin: EdgeInsets.all(_searchDialogContentsMargin),
-              child: Column(
-                children: [
-                  _textField(
-                    hint: "사용자ID",
-                    controller: controller.userIdController,
-                  ),
-                  _textField(
-                    hint: "Device명",
-                    controller: controller.deviceIdController,
-                  ),
-                  _textField(
-                    hint: "Device Kind",
-                    controller: controller.deviceController,
-                  ),
-                  SizedBox(height: 10),
-                  OutlinedButton(
-                    onPressed: controller.onTapSearchInit,
-                    child: Text("초기화"),
-                  ),
-                ],
+        onTapSearch: _onTapSearchDialog,
+      ),
+    );
+  }
+
+  void _onTapSearchDialog() {
+    _showDialog(
+      CustomDialog(
+        mainTitle: "검색",
+        contents: Container(
+          margin: EdgeInsets.all(_searchDialogContentsMargin),
+          child: Column(
+            children: [
+              _textField(
+                hint: "사용자ID",
+                controller: controller.userIdController,
               ),
-            ),
-            onTapPositive: controller.onTapSearchDialogPositive,
-            onTabNegative: controller.onTapSearchDialogNegative,
+              _textField(
+                hint: "Device명",
+                controller: controller.deviceIdController,
+              ),
+              _textField(
+                hint: "Device Kind",
+                controller: controller.deviceController,
+              ),
+              SizedBox(height: 10),
+              OutlinedButton(
+                onPressed: controller.onTapSearchInit,
+                child: Text("초기화"),
+              ),
+            ],
           ),
         ),
+        onTapPositive: controller.onTapSearchDialogPositive,
+        onTabNegative: controller.onTapSearchDialogNegative,
       ),
     );
   }
@@ -101,28 +105,29 @@ class DeviceRegisterScreen extends StatelessWidget {
 
   Widget _listView() {
     return Obx(
-      () => (controller.contentList.isEmpty)
-          ? Center(
-              child: Text(
-                "등록된 모바일 기기가 없습니다.",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.contentList.length,
-              cacheExtent: controller.contentList.length + 5,
-              itemBuilder: (_, int i) => GestureDetector(
-                onTap: () => controller.onTapTile(i),
-                child: DeviceRegisterListTile(
-                  data: controller.contentList[i],
-                  onDelete: () => controller.onTapDelete(i),
-                ),
+      () {
+        if ((controller.contentList.isEmpty)) {
+          return Center(
+            child: Text(
+              "등록된 모바일 기기가 없습니다.",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            ),
+          );
+        } else {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.contentList.length,
+            cacheExtent: controller.contentList.length + 5,
+            itemBuilder: (_, int i) => GestureDetector(
+              onTap: () => controller.onTapTile(i),
+              child: DeviceRegisterListTile(
+                data: controller.contentList[i],
+                onDelete: () => controller.onTapDelete(i),
               ),
             ),
+          );
+        }
+      },
     );
   }
 }
