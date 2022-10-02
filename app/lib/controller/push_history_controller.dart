@@ -12,13 +12,7 @@ class PushHistoryController extends BaseController {
   final isRead = ["전체", "확인", "미확인"];
   int isReadIndex = 0;
 
-  void onTapDetail() {
-    print("detail");
-  }
-
   void onTapOrder() {}
-
-  void onTapSearch() {}
 
   void onTapInitail(void Function(void Function() fn) setState2) {
     contentsList.clear();

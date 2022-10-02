@@ -73,7 +73,6 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
             child: ListFilterHeader(
               height: _headerHeight,
               margin: _bodySideMargin,
-              onTapDetail: controller.onTapDetail,
               onTapOrder: controller.onTapOrder,
               onTapSearch: _searchDialog,
             ),
@@ -183,7 +182,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   }
 
   Widget _itemBuilder(context, PushHistoryDto element) =>
-      PushHistoryListDetailTile(data: element);
+      PushHistoryListTile(data: element);
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
@@ -205,14 +204,12 @@ class ListFilterHeader extends StatelessWidget {
     required this.margin,
     required this.onTapSearch,
     required this.onTapOrder,
-    required this.onTapDetail,
   }) : super(key: key);
 
   final double height;
   final double margin;
   final VoidCallback onTapSearch;
   final VoidCallback onTapOrder;
-  final VoidCallback onTapDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -224,10 +221,6 @@ class ListFilterHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _iconButtonForm(
-            onPressed: onTapDetail,
-            icon: Icon(Icons.format_line_spacing),
-          ),
           _iconButtonForm(
             onPressed: onTapOrder,
             icon: Icon(Icons.sort_by_alpha),
@@ -255,8 +248,8 @@ class ListFilterHeader extends StatelessWidget {
   }
 }
 
-class PushHistoryListDetailTile extends StatelessWidget {
-  const PushHistoryListDetailTile({
+class PushHistoryListTile extends StatelessWidget {
+  const PushHistoryListTile({
     Key? key,
     required this.data,
   }) : super(key: key);
