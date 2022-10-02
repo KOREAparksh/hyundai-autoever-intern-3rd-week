@@ -73,6 +73,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
             child: ListFilterHeader(
               height: _headerHeight,
               margin: _bodySideMargin,
+              isSearchActive: controller.isSearchActive,
               onTapOrder: controller.onTapOrder,
               onTapSearch: _searchDialog,
             ),
@@ -150,8 +151,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("전체"),
-                value: controller.isRead[0],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[0],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) => controller.onTapSearchFilterAll(setState2),
               ),
             ),
@@ -159,8 +160,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("수신"),
-                value: controller.isRead[1],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[1],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) =>
                     controller.onTapSearchFilterStateTrue(setState2),
               ),
@@ -169,8 +170,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("미수신"),
-                value: controller.isRead[2],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[2],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) =>
                     controller.onTapSearchFilterStateFalse(setState2),
               ),
@@ -204,12 +205,14 @@ class ListFilterHeader extends StatelessWidget {
     required this.margin,
     required this.onTapSearch,
     required this.onTapOrder,
+    required this.isSearchActive,
   }) : super(key: key);
 
   final double height;
   final double margin;
   final VoidCallback onTapSearch;
   final VoidCallback onTapOrder;
+  final bool isSearchActive;
 
   @override
   Widget build(BuildContext context) {
@@ -227,6 +230,7 @@ class ListFilterHeader extends StatelessWidget {
           ),
           _iconButtonForm(
             onPressed: onTapSearch,
+            isActive: isSearchActive,
             icon: Icon(Icons.search_outlined),
           ),
         ],
@@ -235,15 +239,19 @@ class ListFilterHeader extends StatelessWidget {
   }
 
   Widget _iconButtonForm(
-      {required VoidCallback onPressed, required Icon icon}) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: icon,
-      disabledColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
+      {required VoidCallback onPressed, required Icon icon, isActive = false}) {
+    return Container(
+      color: (isActive) ? mainColor : null,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: icon,
+        color: (isActive) ? Colors.white : null,
+        disabledColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+      ),
     );
   }
 }

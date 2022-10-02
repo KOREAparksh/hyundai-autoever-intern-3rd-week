@@ -9,8 +9,9 @@ class PushHistoryController extends BaseController {
   final userNameController = TextEditingController();
   final deviceIdController = TextEditingController();
   final pushTitleController = TextEditingController();
-  final isRead = ["전체", "확인", "미확인"];
-  int isReadIndex = 0;
+  final readStates = ["전체", "확인", "미확인"];
+  int readStatesIndex = 0;
+  bool isSearchActive = false;
 
   void onTapOrder() {}
 
@@ -20,7 +21,8 @@ class PushHistoryController extends BaseController {
     deviceIdController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
-    isReadIndex = 0;
+    readStatesIndex = 0;
+    isSearchActive = false;
     list.forEach((element) => contentsList.add(element));
     setState2.call(() {});
     Get.back();
@@ -31,9 +33,9 @@ class PushHistoryController extends BaseController {
     final _userName = userNameController.text;
     final _deviceId = deviceIdController.text;
     final _pushTitle = pushTitleController.text;
-    final _state = (isReadIndex == 0)
+    final _state = (readStatesIndex == 0)
         ? ""
-        : (isReadIndex == 1)
+        : (readStatesIndex == 1)
             ? "Y"
             : "N";
 
@@ -47,6 +49,16 @@ class PushHistoryController extends BaseController {
         contentsList.add(element);
       }
     });
+
+    isSearchActive = true;
+    if (_userId == "" &&
+        _userName == "" &&
+        _deviceId == "" &&
+        _pushTitle == "" &&
+        _state == "") {
+      isSearchActive = false;
+    }
+
     setState2.call(() {});
     Get.back();
   }
@@ -56,16 +68,16 @@ class PushHistoryController extends BaseController {
   }
 
   void onTapSearchFilterAll(void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 0);
+    setState2(() => readStatesIndex = 0);
   }
 
   void onTapSearchFilterStateTrue(void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 1);
+    setState2(() => readStatesIndex = 1);
   }
 
   void onTapSearchFilterStateFalse(
       void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 2);
+    setState2(() => readStatesIndex = 2);
   }
 
   final List<PushHistoryDto> list = [
