@@ -46,40 +46,47 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-          left: _marginSide, right: _marginSide, top: _marginTop),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _textFieldRow(title: "사용자ID", controller: _userIdController),
-            _textFieldRow(title: "기기 ID", controller: _deviceIdController),
-            _textFieldRow(title: "기기 설명", controller: _deviceDescController),
-            _textFieldRow(title: "모바일 종류", controller: _deviceKindController),
-            _textFieldRow(
-              title: "최대전송",
-              controller: _maxCountController,
-              isNumber: true,
-            ),
-            _radioRow(),
-            SizedBox(height: 10),
-            SizedBox(
-              width: _buttonWidth,
-              child: ElevatedButton(
-                onPressed: () => widget.onTapButton(
-                  _userIdController.text,
-                  _deviceIdController.text,
-                  _deviceDescController.text,
-                  _deviceKindController.text,
-                  int.parse(_maxCountController.text),
-                  _state,
-                ),
-                child: Text(widget.buttonText),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        margin: EdgeInsets.only(
+            left: _marginSide, right: _marginSide, top: _marginTop),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _textFieldRow(title: "사용자ID", controller: _userIdController),
+              _textFieldRow(title: "기기 ID", controller: _deviceIdController),
+              _textFieldRow(title: "기기 설명", controller: _deviceDescController),
+              _textFieldRow(title: "모바일 종류", controller: _deviceKindController),
+              _textFieldRow(
+                title: "최대전송",
+                controller: _maxCountController,
+                isNumber: true,
               ),
-            ),
-          ],
+              _radioRow(),
+              SizedBox(height: 10),
+              SizedBox(
+                width: _buttonWidth,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() == true) {
+                      widget.onTapButton(
+                        _userIdController.text,
+                        _deviceIdController.text,
+                        _deviceDescController.text,
+                        _deviceKindController.text,
+                        int.parse(_maxCountController.text),
+                        _state,
+                      );
+                    }
+                  },
+                  child: Text(widget.buttonText),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -105,15 +112,19 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
   }
 
   Widget _textField({required controller, isNumber = false}) {
-    return SizedBox(
-      height: 40,
-      child: TextField(
-        controller: controller,
-        keyboardType: (isNumber) ? TextInputType.number : null,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.all(5),
-        ),
+    return TextFormField(
+      controller: controller,
+      validator: (data) {
+        if (data == null || data.isEmpty) {
+          return "값이 비었습니다";
+        }
+        return null;
+      },
+      keyboardType: (isNumber) ? TextInputType.number : null,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(5),
       ),
     );
   }
