@@ -13,7 +13,7 @@ class DeviceInfoField extends StatefulWidget {
     String s2,
     String s3,
     String s4,
-    String s5,
+    int s5,
     bool isUse,
   ) onTapButton;
 
@@ -31,7 +31,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
   final _deviceIdController = TextEditingController();
   final _deviceDescController = TextEditingController();
   final _deviceKindController = TextEditingController();
-  final _stateController = TextEditingController();
+  final _maxCountController = TextEditingController();
   bool _state = true;
 
   @override
@@ -41,7 +41,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
     _deviceIdController.dispose();
     _deviceDescController.dispose();
     _deviceKindController.dispose();
-    _stateController.dispose();
+    _maxCountController.dispose();
   }
 
   @override
@@ -58,7 +58,11 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
             _textFieldRow(title: "기기 ID", controller: _deviceIdController),
             _textFieldRow(title: "기기 설명", controller: _deviceDescController),
             _textFieldRow(title: "모바일 종류", controller: _deviceKindController),
-            _textFieldRow(title: "사용자ID", controller: _stateController),
+            _textFieldRow(
+              title: "최대전송",
+              controller: _maxCountController,
+              isNumber: true,
+            ),
             _radioRow(),
             SizedBox(height: 10),
             SizedBox(
@@ -69,7 +73,7 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
                   _deviceIdController.text,
                   _deviceDescController.text,
                   _deviceKindController.text,
-                  _stateController.text,
+                  int.parse(_maxCountController.text),
                   _state,
                 ),
                 child: Text(widget.buttonText),
@@ -81,7 +85,8 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
     );
   }
 
-  Widget _textFieldRow({required title, required controller}) {
+  Widget _textFieldRow(
+      {required title, required controller, isNumber = false}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Row(
@@ -92,18 +97,19 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
           ),
           Expanded(
             flex: 5,
-            child: _textField(controller: controller),
+            child: _textField(controller: controller, isNumber: isNumber),
           ),
         ],
       ),
     );
   }
 
-  Widget _textField({required controller}) {
+  Widget _textField({required controller, isNumber = false}) {
     return SizedBox(
       height: 40,
       child: TextField(
         controller: controller,
+        keyboardType: (isNumber) ? TextInputType.number : null,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.all(5),
