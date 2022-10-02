@@ -48,18 +48,9 @@ class PushHistoryController extends BaseController {
             ? "y"
             : "n";
 
-    print("_state $_state");
-    print("_userId $_userId");
-    print("_userName $_userName");
-    print("_deviceId $_deviceId");
-    print("_pushTitle $_pushTitle");
-
     contentsList.clear();
     if (isOrderActive) {
       list.reversed.forEach((element) {
-        print("element state:  ${element.sentState}");
-        print("element state:  ${element.sentState}");
-        print("element state:  ${element.sentState}");
         if (element.userId.toLowerCase().contains(_userId) &&
             element.userName.toLowerCase().contains(_userName) &&
             element.deviceId.toLowerCase().contains(_deviceId) &&

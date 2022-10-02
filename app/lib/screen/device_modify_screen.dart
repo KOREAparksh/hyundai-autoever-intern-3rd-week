@@ -47,6 +47,7 @@ class DeviceModifyScreen extends StatelessWidget {
                   child: Text("수정"),
                 ),
               ),
+              SizedBox(height: 100),
             ],
           ),
         ),
