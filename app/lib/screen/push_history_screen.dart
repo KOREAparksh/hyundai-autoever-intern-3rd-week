@@ -62,7 +62,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
             child: GroupedListView<PushHistoryDto, DateTime>(
               elements: controller.contentsList,
               groupBy: (element) => element.pushDateTime,
-              cacheExtent: controller.contentsList.length + 5,
+              sort: false,
+              // cacheExtent: controller.contentsList.length + 5,
               itemBuilder: _itemBuilder,
               groupHeaderBuilder: (element) => _groupHeader(element),
               useStickyGroupSeparators: true,
@@ -74,7 +75,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               height: _headerHeight,
               margin: _bodySideMargin,
               isSearchActive: controller.isSearchActive,
-              onTapOrder: controller.onTapOrder,
+              isOrderActive: controller.isOrderActive,
+              onTapOrder: () => controller.onTapOrder(setState),
               onTapSearch: _searchDialog,
             ),
           ),
@@ -112,7 +114,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               _radioButtons(),
               SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () => controller.onTapInitail(setState),
+                onPressed: () => controller.onTapInit(setState),
                 child: Text("초기화"),
               ),
             ],
@@ -206,6 +208,7 @@ class ListFilterHeader extends StatelessWidget {
     required this.onTapSearch,
     required this.onTapOrder,
     required this.isSearchActive,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final double height;
@@ -213,6 +216,7 @@ class ListFilterHeader extends StatelessWidget {
   final VoidCallback onTapSearch;
   final VoidCallback onTapOrder;
   final bool isSearchActive;
+  final bool isOrderActive;
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +230,7 @@ class ListFilterHeader extends StatelessWidget {
         children: [
           _iconButtonForm(
             onPressed: onTapOrder,
+            isActive: isOrderActive,
             icon: Icon(Icons.sort_by_alpha),
           ),
           _iconButtonForm(

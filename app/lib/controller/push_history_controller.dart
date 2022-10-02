@@ -11,11 +11,18 @@ class PushHistoryController extends BaseController {
   final pushTitleController = TextEditingController();
   final readStates = ["전체", "확인", "미확인"];
   int readStatesIndex = 0;
+  bool isOrderActive = false;
   bool isSearchActive = false;
 
-  void onTapOrder() {}
+  void onTapOrder(void Function(void Function() fn) setState2) {
+    final temp = List.from(contentsList.reversed);
+    contentsList.clear();
+    temp.forEach((element) => contentsList.add(element));
+    isOrderActive = (isOrderActive) ? false : true;
+    setState2.call(() {});
+  }
 
-  void onTapInitail(void Function(void Function() fn) setState2) {
+  void onTapInit(void Function(void Function() fn) setState2) {
     contentsList.clear();
     userIdController.clear();
     deviceIdController.clear();
@@ -23,7 +30,9 @@ class PushHistoryController extends BaseController {
     pushTitleController.clear();
     readStatesIndex = 0;
     isSearchActive = false;
-    list.forEach((element) => contentsList.add(element));
+    (isOrderActive)
+        ? list.reversed.forEach((element) => contentsList.add(element))
+        : list.forEach((element) => contentsList.add(element));
     setState2.call(() {});
     Get.back();
   }
@@ -40,15 +49,27 @@ class PushHistoryController extends BaseController {
             : "N";
 
     contentsList.clear();
-    list.forEach((element) {
-      if (element.userId.contains(_userId) &&
-          element.userName.contains(_userName) &&
-          element.deviceId.contains(_deviceId) &&
-          element.pushTitle.contains(_pushTitle) &&
-          element.sentState.contains(_state)) {
-        contentsList.add(element);
-      }
-    });
+    if (isOrderActive) {
+      list.reversed.forEach((element) {
+        if (element.userId.contains(_userId) &&
+            element.userName.contains(_userName) &&
+            element.deviceId.contains(_deviceId) &&
+            element.pushTitle.contains(_pushTitle) &&
+            element.sentState.contains(_state)) {
+          contentsList.add(element);
+        }
+      });
+    } else {
+      list.forEach((element) {
+        if (element.userId.contains(_userId) &&
+            element.userName.contains(_userName) &&
+            element.deviceId.contains(_deviceId) &&
+            element.pushTitle.contains(_pushTitle) &&
+            element.sentState.contains(_state)) {
+          contentsList.add(element);
+        }
+      });
+    }
 
     isSearchActive = true;
     if (_userId == "" &&
