@@ -1,5 +1,6 @@
 import 'package:app/controller/base_controller.dart';
 import 'package:app/dto/device_dto.dart';
+import 'package:app/screen/device_add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +11,9 @@ class DeviceRegisterController extends BaseController {
   final deviceController = TextEditingController();
   bool isSearchActive = false;
 
-  void onTapAddButton() {}
+  void onTapAddButton() {
+    Get.to(() => DeviceAddScreen());
+  }
 
   void onTapSearchInit(void Function(void Function() fn) setState2) {
     contentList.clear();
