@@ -1,5 +1,5 @@
 import 'package:app/const/Color.dart';
-import 'package:app/controller/main_controller.dart';
+import 'package:app/controller/screen/main_controller.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';

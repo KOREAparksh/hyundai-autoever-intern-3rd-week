@@ -1,7 +1,7 @@
 import 'package:app/const/route.dart';
-import 'package:app/controller/device_register_controller.dart';
-import 'package:app/controller/main_controller.dart';
-import 'package:app/controller/push_history_controller.dart';
+import 'package:app/controller/screen/device_register_controller.dart';
+import 'package:app/controller/screen/main_controller.dart';
+import 'package:app/controller/screen/push_history_controller.dart';
 import 'package:app/screen/device_register_screen.dart';
 import 'package:app/screen/main_screen.dart';
 import 'package:app/screen/push_history_screen.dart';

@@ -1,8 +1,8 @@
 import 'package:app/dto/device_dto.dart';
 import 'package:flutter/material.dart';
 
-class DeviceInfoField extends StatefulWidget {
-  const DeviceInfoField({
+class DeviceInfoField extends StatelessWidget {
+  DeviceInfoField({
     Key? key,
     required this.onTapButton,
     required this.buttonText,
@@ -13,11 +13,6 @@ class DeviceInfoField extends StatefulWidget {
   final DeviceDto deviceDto;
   final void Function(DeviceDto newDto) onTapButton;
 
-  @override
-  State<DeviceInfoField> createState() => _DeviceInfoFieldState();
-}
-
-class _DeviceInfoFieldState extends State<DeviceInfoField> {
   final _marginTop = 50.0;
   final _marginSide = 15.0;
   final _buttonWidth = 100.0;

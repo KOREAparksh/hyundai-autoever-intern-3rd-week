@@ -1,5 +1,5 @@
 import 'package:app/controller/base_controller.dart';
-import 'package:app/controller/device_add_controller.dart';
+import 'package:app/controller/screen/device_add_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/screen/device_add_screen.dart';
 import 'package:app/screen/device_modify_screen.dart';
