@@ -1,5 +1,5 @@
 import 'package:app/const/Color.dart';
-import 'package:app/controller/device_modify_controller.dart';
+import 'package:app/controller/screen/device_modify_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/device_info_field.dart';
@@ -56,22 +56,20 @@ class DeviceModifyScreen extends StatelessWidget {
   }
 
   Widget _pushGroupList() {
-    return StatefulBuilder(
-      builder: (context, setState2) {
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: controller.list.length,
-          itemBuilder: (_, i) => ListTile(
-            title: Text(controller.list[i].pushGroupName),
-            subtitle: Text(controller.list[i].pushGroupId),
-            trailing: Checkbox(
-              value: controller.list[i].isCheck,
-              onChanged: (v) => controller.onChangeCheckbox(v, i, setState2),
-            ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: controller.list.length,
+      itemBuilder: (_, i) => ListTile(
+        title: Text(controller.list[i].pushGroupName),
+        subtitle: Text(controller.list[i].pushGroupId),
+        trailing: Obx(
+          () => Checkbox(
+            value: controller.list[i].isCheck,
+            onChanged: (v) => controller.onChangeCheckbox(v, i),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

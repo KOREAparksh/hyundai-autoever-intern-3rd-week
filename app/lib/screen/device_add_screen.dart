@@ -1,4 +1,4 @@
-import 'package:app/controller/device_add_controller.dart';
+import 'package:app/controller/screen/device_add_controller.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/device_info_field.dart';
 import 'package:flutter/cupertino.dart';

@@ -4,40 +4,53 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PushHistoryController extends BaseController {
-  final List<PushHistoryDto> contentsList = [];
+  final List<PushHistoryDto> contentsList = <PushHistoryDto>[].obs;
   final userIdController = TextEditingController();
   final userNameController = TextEditingController();
   final deviceIdController = TextEditingController();
   final pushTitleController = TextEditingController();
   final readStates = ["전체", "확인", "미확인"];
-  int readStatesIndex = 0;
-  bool isOrderActive = false;
-  bool isSearchActive = false;
+  RxInt readStatesIndex = 0.obs;
+  RxBool isOrderActive = false.obs;
+  RxBool isSearchActive = false.obs;
 
-  void onTapOrder(void Function(void Function() fn) setState2) {
+  @override
+  void onInit() {
+    super.onInit();
+    list.forEach((element) => contentsList.add(element));
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    userIdController.dispose();
+    userNameController.dispose();
+    deviceIdController.dispose();
+    pushTitleController.dispose();
+  }
+
+  void onTapOrder() {
     final temp = List.from(contentsList.reversed);
     contentsList.clear();
     temp.forEach((element) => contentsList.add(element));
-    isOrderActive = (isOrderActive) ? false : true;
-    setState2.call(() {});
+    (isOrderActive.isTrue) ? isOrderActive(false) : isOrderActive(true);
   }
 
-  void onTapInit(void Function(void Function() fn) setState2) {
+  void onTapInit() {
     contentsList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
-    readStatesIndex = 0;
-    isSearchActive = false;
-    (isOrderActive)
+    readStatesIndex(0);
+    isSearchActive(false);
+    (isOrderActive.isTrue)
         ? list.reversed.forEach((element) => contentsList.add(element))
         : list.forEach((element) => contentsList.add(element));
-    setState2.call(() {});
     Get.back();
   }
 
-  void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
+  void onTapSearchDialogPositive() {
     final _userId = userIdController.text.toLowerCase();
     final _userName = userNameController.text.toLowerCase();
     final _deviceId = deviceIdController.text.toLowerCase();
@@ -49,7 +62,7 @@ class PushHistoryController extends BaseController {
             : "n";
 
     contentsList.clear();
-    if (isOrderActive) {
+    if (isOrderActive.isTrue) {
       list.reversed.forEach((element) {
         if (element.userId.toLowerCase().contains(_userId) &&
             element.userName.toLowerCase().contains(_userName) &&
@@ -61,7 +74,6 @@ class PushHistoryController extends BaseController {
       });
     } else {
       list.forEach((element) {
-        print("element state:  ${element.sentState}");
         if (element.userId.toLowerCase().contains(_userId) &&
             element.userName.toLowerCase().contains(_userName) &&
             element.deviceId.toLowerCase().contains(_deviceId) &&
@@ -72,16 +84,14 @@ class PushHistoryController extends BaseController {
       });
     }
 
-    isSearchActive = true;
+    isSearchActive(true);
     if (_userId == "" &&
         _userName == "" &&
         _deviceId == "" &&
         _pushTitle == "" &&
         _state == "") {
-      isSearchActive = false;
+      isSearchActive(false);
     }
-
-    setState2.call(() {});
     Get.back();
   }
 
@@ -89,18 +99,11 @@ class PushHistoryController extends BaseController {
     Get.back();
   }
 
-  void onTapSearchFilterAll(void Function(void Function() fn) setState2) {
-    setState2(() => readStatesIndex = 0);
-  }
+  void onTapSearchFilterAll() => readStatesIndex(0);
 
-  void onTapSearchFilterStateTrue(void Function(void Function() fn) setState2) {
-    setState2(() => readStatesIndex = 1);
-  }
+  void onTapSearchFilterStateTrue() => readStatesIndex(1);
 
-  void onTapSearchFilterStateFalse(
-      void Function(void Function() fn) setState2) {
-    setState2(() => readStatesIndex = 2);
-  }
+  void onTapSearchFilterStateFalse() => readStatesIndex(2);
 
   final List<PushHistoryDto> list = [
     PushHistoryDto(

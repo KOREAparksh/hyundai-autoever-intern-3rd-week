@@ -1,5 +1,5 @@
 import 'package:app/const/Color.dart';
-import 'package:app/controller/push_history_controller.dart';
+import 'package:app/controller/screen/push_history_controller.dart';
 import 'package:app/dto/push_history_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/custom_dialog.dart';
@@ -9,15 +9,8 @@ import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
-//Todo: Stateless로 변경 -> GetView
-class PushHistoryScreen extends StatefulWidget {
-  const PushHistoryScreen({Key? key}) : super(key: key);
-
-  @override
-  State<PushHistoryScreen> createState() => _PushHistoryScreenState();
-}
-
-class _PushHistoryScreenState extends State<PushHistoryScreen> {
+class PushHistoryScreen extends StatelessWidget {
+  PushHistoryScreen({Key? key}) : super(key: key);
   final _title = "푸시알림전송이력";
 
   final _bodySideMargin = 27.0;
@@ -28,21 +21,6 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   final _radioButtonsHeight = 100.0;
 
   final controller = Get.put<PushHistoryController>(PushHistoryController());
-
-  @override
-  void initState() {
-    super.initState();
-    controller.list.forEach((element) => controller.contentsList.add(element));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.userIdController.dispose();
-    controller.userNameController.dispose();
-    controller.deviceIdController.dispose();
-    controller.pushTitleController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +41,15 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           ),
           Container(
             alignment: Alignment.topRight,
-            child: ListFilterHeader(
-              height: _headerHeight,
-              margin: _bodySideMargin,
-              isSearchActive: controller.isSearchActive,
-              isOrderActive: controller.isOrderActive,
-              onTapOrder: () => controller.onTapOrder(setState),
-              onTapSearch: _searchDialog,
+            child: Obx(
+              () => ListFilterHeader(
+                height: _headerHeight,
+                margin: _bodySideMargin,
+                isSearchActive: controller.isSearchActive.value,
+                isOrderActive: controller.isOrderActive.value,
+                onTapOrder: controller.onTapOrder,
+                onTapSearch: _searchDialog,
+              ),
             ),
           ),
         ],
@@ -78,22 +58,23 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
   }
 
   Widget _listView() {
-    if (controller.contentsList.isEmpty) {
-      return Center(
-        child: Text(
-          "푸시알림이력이 없습니다.",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-        ),
-      );
-    }
-    return GroupedListView<PushHistoryDto, DateTime>(
-      elements: controller.contentsList,
-      groupBy: (element) => element.pushDateTime,
-      sort: false,
-      cacheExtent: controller.contentsList.length + 5,
-      itemBuilder: _itemBuilder,
-      groupHeaderBuilder: (element) => _groupHeader(element),
-      useStickyGroupSeparators: true,
+    return Obx(
+      () => (controller.contentsList.isEmpty)
+          ? Center(
+              child: Text(
+                "푸시알림이력이 없습니다.",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+              ),
+            )
+          : GroupedListView<PushHistoryDto, DateTime>(
+              elements: controller.contentsList,
+              groupBy: (element) => element.pushDateTime,
+              sort: false,
+              cacheExtent: controller.contentsList.length + 5,
+              itemBuilder: _itemBuilder,
+              groupHeaderBuilder: (element) => _groupHeader(element),
+              useStickyGroupSeparators: true,
+            ),
     );
   }
 
@@ -126,13 +107,13 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               _radioButtons(),
               SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () => controller.onTapInit(setState),
+                onPressed: controller.onTapInit,
                 child: Text("초기화"),
               ),
             ],
           ),
         ),
-        onTapPositive: () => controller.onTapSearchDialogPositive(setState),
+        onTapPositive: controller.onTapSearchDialogPositive,
         onTabNegative: controller.onTapSearchDialogNegative,
       ),
     );
@@ -155,9 +136,10 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
     );
   }
 
+  //Todo: widget 분리
   Widget _radioButtons() {
-    return StatefulBuilder(
-      builder: (_, setState2) => SizedBox(
+    return Obx(
+      () => SizedBox(
         height: _radioButtonsHeight,
         child: Column(
           children: [
@@ -166,8 +148,9 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               child: RadioListTile<String>(
                 title: Text("전체"),
                 value: controller.readStates[0],
-                groupValue: controller.readStates[controller.readStatesIndex],
-                onChanged: (_) => controller.onTapSearchFilterAll(setState2),
+                groupValue:
+                    controller.readStates[controller.readStatesIndex.value],
+                onChanged: (_) => controller.onTapSearchFilterAll(),
               ),
             ),
             Expanded(
@@ -175,9 +158,9 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               child: RadioListTile<String>(
                 title: Text("수신"),
                 value: controller.readStates[1],
-                groupValue: controller.readStates[controller.readStatesIndex],
-                onChanged: (_) =>
-                    controller.onTapSearchFilterStateTrue(setState2),
+                groupValue:
+                    controller.readStates[controller.readStatesIndex.value],
+                onChanged: (_) => controller.onTapSearchFilterStateTrue(),
               ),
             ),
             Expanded(
@@ -185,9 +168,9 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               child: RadioListTile<String>(
                 title: Text("미수신"),
                 value: controller.readStates[2],
-                groupValue: controller.readStates[controller.readStatesIndex],
-                onChanged: (_) =>
-                    controller.onTapSearchFilterStateFalse(setState2),
+                groupValue:
+                    controller.readStates[controller.readStatesIndex.value],
+                onChanged: (_) => controller.onTapSearchFilterStateFalse(),
               ),
             ),
           ],
