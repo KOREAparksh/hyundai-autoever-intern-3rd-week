@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // ignore: constant_identifier_names
 enum DialogType { Confirm, OK }
 
-class CustomDialog extends StatefulWidget {
+class CustomDialog extends StatelessWidget {
   const CustomDialog({
     Key? key,
     this.dialogType = DialogType.Confirm,
@@ -28,24 +28,19 @@ class CustomDialog extends StatefulWidget {
   final VoidCallback onTapPositive;
   final double dialogInsetPadding;
 
-  @override
-  State<CustomDialog> createState() => _CustomDialogState();
-}
-
-class _CustomDialogState extends State<CustomDialog> {
   final _bodyRadius = 10.0;
   final _bodyTopBottomMargin = 28.0;
   final _gapMargin = 16.0;
   final _buttonHeight = 36.0;
   final _buttonRadius = 20.0;
   final _buttonBetweenPadding = 12.0;
-  late final _buttonSideMargin = EdgeInsets.only(left: 24, right: 24);
+  final _buttonSideMargin = 24.0;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Dialog(
-        insetPadding: EdgeInsets.all(widget.dialogInsetPadding),
+        insetPadding: EdgeInsets.all(dialogInsetPadding),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_bodyRadius),
@@ -67,32 +62,32 @@ class _CustomDialogState extends State<CustomDialog> {
   }
 
   Widget _mainTitle() {
-    return Text(widget.mainTitle, textAlign: TextAlign.center);
+    return Text(mainTitle, textAlign: TextAlign.center);
   }
 
   Widget _subTitle() {
-    if (widget.subTitle == null) {
+    if (subTitle == null) {
       return Container();
     }
     return Text(
-      widget.subTitle!,
+      subTitle!,
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 12, color: textLight),
     );
   }
 
   Widget _contents() {
-    if (widget.contents == null) {
+    if (contents == null) {
       return Container();
     }
     return Container(
       margin: EdgeInsets.only(bottom: _gapMargin),
-      child: widget.contents!,
+      child: contents!,
     );
   }
 
   Widget _buttons() {
-    if (widget.dialogType == DialogType.OK) {
+    if (dialogType == DialogType.OK) {
       return _okButtons();
     }
     return _confirmButtons();
@@ -100,7 +95,10 @@ class _CustomDialogState extends State<CustomDialog> {
 
   Widget _okButtons() {
     return Container(
-      margin: _buttonSideMargin,
+      margin: EdgeInsets.only(
+        left: _buttonSideMargin,
+        right: _buttonSideMargin,
+      ),
       child: SizedBox(
         width: double.infinity,
         height: _buttonHeight,
@@ -111,7 +109,10 @@ class _CustomDialogState extends State<CustomDialog> {
 
   Widget _confirmButtons() {
     return Container(
-      margin: _buttonSideMargin,
+      margin: EdgeInsets.only(
+        left: _buttonSideMargin,
+        right: _buttonSideMargin,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -137,8 +138,8 @@ class _CustomDialogState extends State<CustomDialog> {
 
   Widget _negativeButton() {
     return OutlinedButton(
-      onPressed: widget.onTabNegative,
-      child: Text(widget.negativeButtonText),
+      onPressed: onTabNegative,
+      child: Text(negativeButtonText),
       style: OutlinedButton.styleFrom(
         primary: Colors.black,
         textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
@@ -153,8 +154,8 @@ class _CustomDialogState extends State<CustomDialog> {
 
   Widget _positiveButton() {
     return OutlinedButton(
-      onPressed: widget.onTapPositive,
-      child: Text(widget.positiveButtonText),
+      onPressed: onTapPositive,
+      child: Text(positiveButtonText),
       style: OutlinedButton.styleFrom(
         primary: Colors.white,
         textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
