@@ -37,7 +37,9 @@ class _DeviceInfoFieldState extends State<DeviceInfoField> {
     _deviceIdController.text = widget.deviceDto.deviceId;
     _deviceDescController.text = widget.deviceDto.deviceDescription;
     _deviceKindController.text = widget.deviceDto.deviceKind;
-    _maxCountController.text = widget.deviceDto.maxSentCount.toString();
+    if (widget.deviceDto.maxSentCount != 0) {
+      _maxCountController.text = widget.deviceDto.maxSentCount.toString();
+    }
   }
 
   @override
