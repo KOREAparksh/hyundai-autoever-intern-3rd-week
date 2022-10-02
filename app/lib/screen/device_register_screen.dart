@@ -72,6 +72,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   _ListFilterHeader _header() {
     return _ListFilterHeader(
       height: _headerHeight,
+      isSearchActive: controller.isSearchActive,
       onTapAdd: controller.onTapAddButton,
       onTapSearch: () => _showDialog(
         CustomDialog(
@@ -133,9 +134,12 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
       shrinkWrap: true,
       itemCount: controller.contentList.length,
       cacheExtent: controller.contentList.length + 5,
-      itemBuilder: (_, int i) => DeviceRegisterListTile(
-        data: controller.contentList[i],
-        onDelete: () => controller.onTapDelete(setState, i),
+      itemBuilder: (_, int i) => GestureDetector(
+        onTap: () => controller.onTapTile(i),
+        child: DeviceRegisterListTile(
+          data: controller.contentList[i],
+          onDelete: () => controller.onTapDelete(setState, i),
+        ),
       ),
     );
   }
@@ -147,11 +151,13 @@ class _ListFilterHeader extends StatelessWidget {
     required this.height,
     required this.onTapAdd,
     required this.onTapSearch,
+    required this.isSearchActive,
   }) : super(key: key);
 
   final double height;
   final VoidCallback onTapAdd;
   final VoidCallback onTapSearch;
+  final bool isSearchActive;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +173,7 @@ class _ListFilterHeader extends StatelessWidget {
           ),
           _iconButtonForm(
             onPressed: onTapSearch,
+            isActive: isSearchActive,
             icon: Icon(Icons.search_outlined),
           ),
         ],
@@ -175,15 +182,19 @@ class _ListFilterHeader extends StatelessWidget {
   }
 
   Widget _iconButtonForm(
-      {required VoidCallback onPressed, required Icon icon}) {
-    return IconButton(
-      onPressed: onPressed,
-      disabledColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      icon: icon,
+      {required VoidCallback onPressed, required Icon icon, isActive = false}) {
+    return Container(
+      color: (isActive) ? mainColor : null,
+      child: IconButton(
+        onPressed: onPressed,
+        color: (isActive) ? Colors.white : null,
+        disabledColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        icon: icon,
+      ),
     );
   }
 }

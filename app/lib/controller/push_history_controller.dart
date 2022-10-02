@@ -9,50 +9,78 @@ class PushHistoryController extends BaseController {
   final userNameController = TextEditingController();
   final deviceIdController = TextEditingController();
   final pushTitleController = TextEditingController();
-  final isRead = ["전체", "확인", "미확인"];
-  int isReadIndex = 0;
+  final readStates = ["전체", "확인", "미확인"];
+  int readStatesIndex = 0;
+  bool isOrderActive = false;
+  bool isSearchActive = false;
 
-  void onTapDetail() {
-    print("detail");
+  void onTapOrder(void Function(void Function() fn) setState2) {
+    final temp = List.from(contentsList.reversed);
+    contentsList.clear();
+    temp.forEach((element) => contentsList.add(element));
+    isOrderActive = (isOrderActive) ? false : true;
+    setState2.call(() {});
   }
 
-  void onTapOrder() {}
-
-  void onTapSearch() {}
-
-  void onTapInitail(void Function(void Function() fn) setState2) {
+  void onTapInit(void Function(void Function() fn) setState2) {
     contentsList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
-    isReadIndex = 0;
-    list.forEach((element) => contentsList.add(element));
+    readStatesIndex = 0;
+    isSearchActive = false;
+    (isOrderActive)
+        ? list.reversed.forEach((element) => contentsList.add(element))
+        : list.forEach((element) => contentsList.add(element));
     setState2.call(() {});
     Get.back();
   }
 
   void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
-    final _userId = userIdController.text;
-    final _userName = userNameController.text;
-    final _deviceId = deviceIdController.text;
-    final _pushTitle = pushTitleController.text;
-    final _state = (isReadIndex == 0)
+    final _userId = userIdController.text.toLowerCase();
+    final _userName = userNameController.text.toLowerCase();
+    final _deviceId = deviceIdController.text.toLowerCase();
+    final _pushTitle = pushTitleController.text.toLowerCase();
+    final _state = (readStatesIndex == 0)
         ? ""
-        : (isReadIndex == 1)
-            ? "Y"
-            : "N";
+        : (readStatesIndex == 1)
+            ? "y"
+            : "n";
 
     contentsList.clear();
-    list.forEach((element) {
-      if (element.userId.contains(_userId) &&
-          element.userName.contains(_userName) &&
-          element.deviceId.contains(_deviceId) &&
-          element.pushTitle.contains(_pushTitle) &&
-          element.sentState.contains(_state)) {
-        contentsList.add(element);
-      }
-    });
+    if (isOrderActive) {
+      list.reversed.forEach((element) {
+        if (element.userId.toLowerCase().contains(_userId) &&
+            element.userName.toLowerCase().contains(_userName) &&
+            element.deviceId.toLowerCase().contains(_deviceId) &&
+            element.pushTitle.toLowerCase().contains(_pushTitle) &&
+            element.sentState.toLowerCase().contains(_state)) {
+          contentsList.add(element);
+        }
+      });
+    } else {
+      list.forEach((element) {
+        print("element state:  ${element.sentState}");
+        if (element.userId.toLowerCase().contains(_userId) &&
+            element.userName.toLowerCase().contains(_userName) &&
+            element.deviceId.toLowerCase().contains(_deviceId) &&
+            element.pushTitle.toLowerCase().contains(_pushTitle) &&
+            element.sentState.toLowerCase().contains(_state)) {
+          contentsList.add(element);
+        }
+      });
+    }
+
+    isSearchActive = true;
+    if (_userId == "" &&
+        _userName == "" &&
+        _deviceId == "" &&
+        _pushTitle == "" &&
+        _state == "") {
+      isSearchActive = false;
+    }
+
     setState2.call(() {});
     Get.back();
   }
@@ -62,16 +90,16 @@ class PushHistoryController extends BaseController {
   }
 
   void onTapSearchFilterAll(void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 0);
+    setState2(() => readStatesIndex = 0);
   }
 
   void onTapSearchFilterStateTrue(void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 1);
+    setState2(() => readStatesIndex = 1);
   }
 
   void onTapSearchFilterStateFalse(
       void Function(void Function() fn) setState2) {
-    setState2(() => isReadIndex = 2);
+    setState2(() => readStatesIndex = 2);
   }
 
   final List<PushHistoryDto> list = [

@@ -8,6 +8,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     Key? key,
     this.title,
     this.middleAsset,
+    this.hasBack = false,
+    this.hasNoti = true,
     this.hasStar = false,
     this.onTapStar,
     this.onTapNoti,
@@ -19,6 +21,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final String? title;
   final String? middleAsset;
+  final bool hasBack;
+  final bool hasNoti;
   final bool hasStar;
   final VoidCallback? onTapStar;
   final BaseController? baseController;
@@ -71,11 +75,16 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget _leading() {
     return Container(
       margin: EdgeInsets.only(left: _appBarLeadingMargin),
-      child: _customIconButton(
-        icon: Icon(Icons.menu),
-        onPressed: baseController?.openDrawer ??
-            () => Get.snackbar("Error", "base controller error"),
-      ),
+      child: (hasBack)
+          ? _customIconButton(
+              onPressed: () => Get.back(),
+              icon: Icon(Icons.arrow_back_ios),
+            )
+          : _customIconButton(
+              icon: Icon(Icons.menu),
+              onPressed: baseController?.openDrawer ??
+                  () => Get.snackbar("Error", "base controller error"),
+            ),
     );
   }
 
@@ -108,11 +117,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         onPressed: onTapStar ?? () {},
       ));
     }
-    _list.add(SizedBox(width: _appBarTrailingInnerMargin));
-    _list.add(_customIconButton(
-      icon: Icon(Icons.notifications),
-      onPressed: onTapNoti ?? () {},
-    ));
+    if (hasNoti) {
+      _list.add(SizedBox(width: _appBarTrailingInnerMargin));
+      _list.add(_customIconButton(
+        icon: Icon(Icons.notifications),
+        onPressed: onTapNoti ?? () {},
+      ));
+    }
     return _list;
   }
 

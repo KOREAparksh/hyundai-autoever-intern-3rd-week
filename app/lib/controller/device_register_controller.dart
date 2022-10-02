@@ -1,5 +1,8 @@
 import 'package:app/controller/base_controller.dart';
+import 'package:app/controller/device_add_controller.dart';
 import 'package:app/dto/device_dto.dart';
+import 'package:app/screen/device_add_screen.dart';
+import 'package:app/screen/device_modify_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,31 +11,43 @@ class DeviceRegisterController extends BaseController {
   final userIdController = TextEditingController();
   final deviceIdController = TextEditingController();
   final deviceController = TextEditingController();
+  bool isSearchActive = false;
 
-  void onTapAddButton() {}
+  void onTapTile(int i) {
+    Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
+  }
+
+  void onTapAddButton() {
+    Get.to(() => DeviceAddScreen());
+  }
 
   void onTapSearchInit(void Function(void Function() fn) setState2) {
     contentList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceController.clear();
+    isSearchActive = false;
     list.forEach((element) => contentList.add(element));
     setState2.call(() {});
     Get.back();
   }
 
   void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
-    String _userId = userIdController.text;
-    String _deviceId = deviceIdController.text;
-    String _deviceKind = deviceController.text;
+    String _userId = userIdController.text.toLowerCase();
+    String _deviceId = deviceIdController.text.toLowerCase();
+    String _deviceKind = deviceController.text.toLowerCase();
     contentList.clear();
     list.forEach((element) {
-      if (element.userId.contains(_userId) &&
-          element.deviceId.contains(_deviceId) &&
-          element.deviceKind.contains(_deviceKind)) {
+      if (element.userId.toLowerCase().contains(_userId) &&
+          element.deviceId.toLowerCase().contains(_deviceId) &&
+          element.deviceKind.toLowerCase().contains(_deviceKind)) {
         contentList.add(element);
       }
     });
+    isSearchActive = true;
+    if (_userId == "" && _deviceId == "" && _deviceKind == "") {
+      isSearchActive = false;
+    }
     setState2.call(() {});
     Get.back();
   }

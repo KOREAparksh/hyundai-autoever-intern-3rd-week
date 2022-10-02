@@ -59,27 +59,41 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           Container(
             margin:
                 EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-            child: GroupedListView<PushHistoryDto, DateTime>(
-              elements: controller.contentsList,
-              groupBy: (element) => element.pushDateTime,
-              cacheExtent: controller.contentsList.length + 5,
-              itemBuilder: _itemBuilder,
-              groupHeaderBuilder: (element) => _groupHeader(element),
-              useStickyGroupSeparators: true,
-            ),
+            child: _listView(),
           ),
           Container(
             alignment: Alignment.topRight,
             child: ListFilterHeader(
               height: _headerHeight,
               margin: _bodySideMargin,
-              onTapDetail: controller.onTapDetail,
-              onTapOrder: controller.onTapOrder,
+              isSearchActive: controller.isSearchActive,
+              isOrderActive: controller.isOrderActive,
+              onTapOrder: () => controller.onTapOrder(setState),
               onTapSearch: _searchDialog,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _listView() {
+    if (controller.contentsList.isEmpty) {
+      return Center(
+        child: Text(
+          "푸시알림이력이 없습니다.",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+        ),
+      );
+    }
+    return GroupedListView<PushHistoryDto, DateTime>(
+      elements: controller.contentsList,
+      groupBy: (element) => element.pushDateTime,
+      sort: false,
+      cacheExtent: controller.contentsList.length + 5,
+      itemBuilder: _itemBuilder,
+      groupHeaderBuilder: (element) => _groupHeader(element),
+      useStickyGroupSeparators: true,
     );
   }
 
@@ -112,7 +126,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               _radioButtons(),
               SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () => controller.onTapInitail(setState),
+                onPressed: () => controller.onTapInit(setState),
                 child: Text("초기화"),
               ),
             ],
@@ -151,8 +165,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("전체"),
-                value: controller.isRead[0],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[0],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) => controller.onTapSearchFilterAll(setState2),
               ),
             ),
@@ -160,8 +174,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("수신"),
-                value: controller.isRead[1],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[1],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) =>
                     controller.onTapSearchFilterStateTrue(setState2),
               ),
@@ -170,8 +184,8 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
               flex: 1,
               child: RadioListTile<String>(
                 title: Text("미수신"),
-                value: controller.isRead[2],
-                groupValue: controller.isRead[controller.isReadIndex],
+                value: controller.readStates[2],
+                groupValue: controller.readStates[controller.readStatesIndex],
                 onChanged: (_) =>
                     controller.onTapSearchFilterStateFalse(setState2),
               ),
@@ -182,8 +196,9 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
     );
   }
 
-  Widget _itemBuilder(context, PushHistoryDto element) =>
-      PushHistoryListDetailTile(data: element);
+  Widget _itemBuilder(context, PushHistoryDto element) {
+    return PushHistoryListTile(data: element);
+  }
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
@@ -205,14 +220,16 @@ class ListFilterHeader extends StatelessWidget {
     required this.margin,
     required this.onTapSearch,
     required this.onTapOrder,
-    required this.onTapDetail,
+    required this.isSearchActive,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final double height;
   final double margin;
   final VoidCallback onTapSearch;
   final VoidCallback onTapOrder;
-  final VoidCallback onTapDetail;
+  final bool isSearchActive;
+  final bool isOrderActive;
 
   @override
   Widget build(BuildContext context) {
@@ -225,15 +242,13 @@ class ListFilterHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _iconButtonForm(
-            onPressed: onTapDetail,
-            icon: Icon(Icons.format_line_spacing),
-          ),
-          _iconButtonForm(
             onPressed: onTapOrder,
+            isActive: isOrderActive,
             icon: Icon(Icons.sort_by_alpha),
           ),
           _iconButtonForm(
             onPressed: onTapSearch,
+            isActive: isSearchActive,
             icon: Icon(Icons.search_outlined),
           ),
         ],
@@ -242,21 +257,25 @@ class ListFilterHeader extends StatelessWidget {
   }
 
   Widget _iconButtonForm(
-      {required VoidCallback onPressed, required Icon icon}) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: icon,
-      disabledColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
+      {required VoidCallback onPressed, required Icon icon, isActive = false}) {
+    return Container(
+      color: (isActive) ? mainColor : null,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: icon,
+        color: (isActive) ? Colors.white : null,
+        disabledColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+      ),
     );
   }
 }
 
-class PushHistoryListDetailTile extends StatelessWidget {
-  const PushHistoryListDetailTile({
+class PushHistoryListTile extends StatelessWidget {
+  const PushHistoryListTile({
     Key? key,
     required this.data,
   }) : super(key: key);
