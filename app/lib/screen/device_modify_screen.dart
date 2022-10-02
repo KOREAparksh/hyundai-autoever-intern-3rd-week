@@ -1,3 +1,4 @@
+import 'package:app/const/Color.dart';
 import 'package:app/controller/device_modify_controller.dart';
 import 'package:app/dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
@@ -15,6 +16,8 @@ class DeviceModifyScreen extends StatelessWidget {
   final DeviceDto deviceDto;
   final controller = Get.put(DeviceModifyController());
 
+  final _infoHeight = 500.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -22,21 +25,52 @@ class DeviceModifyScreen extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: _title, hasBack: true, hasNoti: false),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              flex: 1,
-              child: DeviceInfoField(
-                deviceDto: deviceDto,
-                buttonText: "수정",
-                onTapButton: (newDto) =>
-                    controller.onTapAddButton(deviceDto, newDto),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: _infoHeight,
+                child: DeviceInfoField(
+                  deviceDto: deviceDto,
+                  buttonText: "수정",
+                  onTapButton: (newDto) =>
+                      controller.onTapInfoModifiedButton(deviceDto, newDto),
+                ),
               ),
-            ),
-          ],
+              Container(height: 1, color: boxBorderLight),
+              SizedBox(height: 20),
+              _pushGroupList(),
+              SizedBox(
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: controller.onTapPushGroupModifiedButton,
+                  child: Text("수정"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _pushGroupList() {
+    return StatefulBuilder(
+      builder: (context, setState2) {
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: controller.list.length,
+          itemBuilder: (_, i) => ListTile(
+            title: Text(controller.list[i].pushGroupName),
+            subtitle: Text(controller.list[i].pushGroupId),
+            trailing: Checkbox(
+              value: controller.list[i].isCheck,
+              onChanged: (v) => controller.onChangeCheckbox(v, i, setState2),
+            ),
+          ),
+        );
+      },
     );
   }
 }
