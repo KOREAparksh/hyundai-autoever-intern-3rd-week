@@ -8,6 +8,7 @@ class DeviceRegisterController extends BaseController {
   final userIdController = TextEditingController();
   final deviceIdController = TextEditingController();
   final deviceController = TextEditingController();
+  bool isSearchActive = false;
 
   void onTapAddButton() {}
 
@@ -16,6 +17,7 @@ class DeviceRegisterController extends BaseController {
     userIdController.clear();
     deviceIdController.clear();
     deviceController.clear();
+    isSearchActive = false;
     list.forEach((element) => contentList.add(element));
     setState2.call(() {});
     Get.back();
@@ -33,6 +35,10 @@ class DeviceRegisterController extends BaseController {
         contentList.add(element);
       }
     });
+    isSearchActive = true;
+    if (_userId == "" && _deviceId == "" && _deviceKind == "") {
+      isSearchActive = false;
+    }
     setState2.call(() {});
     Get.back();
   }
