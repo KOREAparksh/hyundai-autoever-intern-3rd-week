@@ -49,16 +49,15 @@ class DeviceModifyController extends BaseController {
     return;
   }
 
-  void onChangeCheckbox(
-      bool? v, int i, void Function(void Function() fn) setState2) {
+  void onChangeCheckbox(bool? v, int i) {
     if (v != null) list[i].isCheck = v;
-    setState2.call(() {});
+    list.refresh();
   }
 
   //Todo:더미
-  List<PushGroupDto> list = [
+  RxList<PushGroupDto> list = <PushGroupDto>[
     PushGroupDto("1", "pushGroup1", true),
     PushGroupDto("2", "pushGroup2", false),
     PushGroupDto("3", "pushGroup3", true),
-  ];
+  ].obs;
 }
