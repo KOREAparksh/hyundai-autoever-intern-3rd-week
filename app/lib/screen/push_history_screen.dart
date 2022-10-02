@@ -59,15 +59,7 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           Container(
             margin:
                 EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-            child: GroupedListView<PushHistoryDto, DateTime>(
-              elements: controller.contentsList,
-              groupBy: (element) => element.pushDateTime,
-              sort: false,
-              // cacheExtent: controller.contentsList.length + 5,
-              itemBuilder: _itemBuilder,
-              groupHeaderBuilder: (element) => _groupHeader(element),
-              useStickyGroupSeparators: true,
-            ),
+            child: _listView(),
           ),
           Container(
             alignment: Alignment.topRight,
@@ -82,6 +74,26 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _listView() {
+    if (controller.contentsList.isEmpty) {
+      return Center(
+        child: Text(
+          "푸시알림이력이 없습니다.",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+        ),
+      );
+    }
+    return GroupedListView<PushHistoryDto, DateTime>(
+      elements: controller.contentsList,
+      groupBy: (element) => element.pushDateTime,
+      sort: false,
+      cacheExtent: controller.contentsList.length + 5,
+      itemBuilder: _itemBuilder,
+      groupHeaderBuilder: (element) => _groupHeader(element),
+      useStickyGroupSeparators: true,
     );
   }
 
@@ -184,8 +196,9 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
     );
   }
 
-  Widget _itemBuilder(context, PushHistoryDto element) =>
-      PushHistoryListTile(data: element);
+  Widget _itemBuilder(context, PushHistoryDto element) {
+    return PushHistoryListTile(data: element);
+  }
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(

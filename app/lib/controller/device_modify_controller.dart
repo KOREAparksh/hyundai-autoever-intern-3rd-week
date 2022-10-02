@@ -22,6 +22,15 @@ class DeviceModifyController extends BaseController {
     }
 
     //Todo: 통신
+    showDialog(
+      context: Get.context!,
+      builder: (_) => CustomDialog(
+        mainTitle: "변경되었습니다.",
+        dialogType: DialogType.OK,
+        positiveButtonText: "확인",
+        onTapPositive: () => Get.back(),
+      ),
+    );
 
     //Todo: device_register 컨트롤러 setstate한번 해줘야함
   }
