@@ -24,14 +24,14 @@ class DeviceRegisterController extends BaseController {
   }
 
   void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
-    String _userId = userIdController.text;
-    String _deviceId = deviceIdController.text;
-    String _deviceKind = deviceController.text;
+    String _userId = userIdController.text.toLowerCase();
+    String _deviceId = deviceIdController.text.toLowerCase();
+    String _deviceKind = deviceController.text.toLowerCase();
     contentList.clear();
     list.forEach((element) {
-      if (element.userId.contains(_userId) &&
-          element.deviceId.contains(_deviceId) &&
-          element.deviceKind.contains(_deviceKind)) {
+      if (element.userId.toLowerCase().contains(_userId) &&
+          element.deviceId.toLowerCase().contains(_deviceId) &&
+          element.deviceKind.toLowerCase().contains(_deviceKind)) {
         contentList.add(element);
       }
     });

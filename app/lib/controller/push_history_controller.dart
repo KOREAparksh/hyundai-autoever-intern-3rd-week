@@ -38,10 +38,10 @@ class PushHistoryController extends BaseController {
   }
 
   void onTapSearchDialogPositive(void Function(void Function() fn) setState2) {
-    final _userId = userIdController.text;
-    final _userName = userNameController.text;
-    final _deviceId = deviceIdController.text;
-    final _pushTitle = pushTitleController.text;
+    final _userId = userIdController.text.toLowerCase();
+    final _userName = userNameController.text.toLowerCase();
+    final _deviceId = deviceIdController.text.toLowerCase();
+    final _pushTitle = pushTitleController.text.toLowerCase();
     final _state = (readStatesIndex == 0)
         ? ""
         : (readStatesIndex == 1)
@@ -51,21 +51,21 @@ class PushHistoryController extends BaseController {
     contentsList.clear();
     if (isOrderActive) {
       list.reversed.forEach((element) {
-        if (element.userId.contains(_userId) &&
-            element.userName.contains(_userName) &&
-            element.deviceId.contains(_deviceId) &&
-            element.pushTitle.contains(_pushTitle) &&
-            element.sentState.contains(_state)) {
+        if (element.userId.toLowerCase().contains(_userId) &&
+            element.userName.toLowerCase().contains(_userName) &&
+            element.deviceId.toLowerCase().contains(_deviceId) &&
+            element.pushTitle.toLowerCase().contains(_pushTitle) &&
+            element.sentState.toLowerCase().contains(_state)) {
           contentsList.add(element);
         }
       });
     } else {
       list.forEach((element) {
-        if (element.userId.contains(_userId) &&
-            element.userName.contains(_userName) &&
-            element.deviceId.contains(_deviceId) &&
-            element.pushTitle.contains(_pushTitle) &&
-            element.sentState.contains(_state)) {
+        if (element.userId.toLowerCase().contains(_userId) &&
+            element.userName.toLowerCase().contains(_userName) &&
+            element.deviceId.toLowerCase().contains(_deviceId) &&
+            element.pushTitle.toLowerCase().contains(_pushTitle) &&
+            element.sentState.toLowerCase().contains(_state)) {
           contentsList.add(element);
         }
       });
