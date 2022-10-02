@@ -4,16 +4,11 @@ import 'package:app/controller/base_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomDrawer extends StatefulWidget {
+class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key, this.baseController}) : super(key: key);
 
   final BaseController? baseController;
 
-  @override
-  State<CustomDrawer> createState() => _CustomDrawerState();
-}
-
-class _CustomDrawerState extends State<CustomDrawer> {
   //asset
   final _logo = "assets/autoever_logo.png";
 
@@ -68,12 +63,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             _ThirdTile(
               title: "모바일기기등록",
-              baseController: widget.baseController,
+              baseController: baseController,
               route: KRoute.DEVICE_REGISTER.name,
             ),
             _ThirdTile(
               title: "푸시알람전송이력",
-              baseController: widget.baseController,
+              baseController: baseController,
               route: KRoute.PUSH_HISTORY.name,
             ),
           ],
@@ -109,7 +104,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     Text(
-                      "123123",
+                      "ParkSeunghan",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -117,7 +112,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text("345345", overflow: TextOverflow.ellipsis),
+                    Text("tmdgks22222@gmail.com",
+                        overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ],
