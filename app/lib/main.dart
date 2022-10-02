@@ -10,8 +10,6 @@ import 'package:get/get.dart';
 
 void main() {
   Get.put(MainController());
-  Get.put(PushHistoryController());
-  Get.put(DeviceRegisterController());
   runApp(const MyApp());
 }
 

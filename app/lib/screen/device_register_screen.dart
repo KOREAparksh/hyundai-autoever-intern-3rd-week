@@ -18,45 +18,26 @@ class DeviceRegisterScreen extends StatefulWidget {
 class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   final _title = "모바일기기등록";
 
-  final List<DeviceDto> _list = const [
-    DeviceDto("WJKIM", "note10", "device1", "Android", 3, "Y"),
-    DeviceDto("WJKIM", "note11", "device2", "Android", 3, "N"),
-    DeviceDto("WJKIM", "note12", "device3", "Android", 3, "Y"),
-    DeviceDto("asdf", "note13", "device4", "Android", 3, "N"),
-    DeviceDto("asdf", "note14", "device5", "Android", 3, "Y"),
-    DeviceDto("asdfasdf", "note15", "device6", "Android", 3, "Y"),
-    DeviceDto("asdfasdf", "note16", "device7", "Android", 3, "N"),
-    DeviceDto("hyj", "note17", "device8", "Android", 3, "Y"),
-    DeviceDto("hyj", "note18", "device9", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note19", "1device1", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note20", "1device11", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note21", "1device111", "Android", 3, "Y"),
-  ];
-
-  final List<DeviceDto> _contentList = [];
-
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
   final _searchDialogContentsMargin = 30.0;
   final _searchDialogTextFieldPadding = 5.0;
-  final _userIdController = TextEditingController();
-  final _deviceIdController = TextEditingController();
-  final _deviceController = TextEditingController();
 
-  final controller = Get.find<DeviceRegisterController>();
+  final controller =
+      Get.put<DeviceRegisterController>(DeviceRegisterController());
 
   @override
   void initState() {
     super.initState();
-    _list.forEach((element) => _contentList.add(element));
+    controller.list.forEach((element) => controller.contentList.add(element));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _userIdController.dispose();
-    _deviceIdController.dispose();
-    _deviceController.dispose();
+    controller.userIdController.dispose();
+    controller.deviceIdController.dispose();
+    controller.deviceController.dispose();
   }
 
   @override
@@ -91,7 +72,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   _ListFilterHeader _header() {
     return _ListFilterHeader(
       height: _headerHeight,
-      onTapAdd: () {},
+      onTapAdd: controller.onTapAddButton,
       onTapSearch: () => _showDialog(
         CustomDialog(
           mainTitle: "검색",
@@ -99,43 +80,28 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
             margin: EdgeInsets.all(_searchDialogContentsMargin),
             child: Column(
               children: [
-                _textField(hint: "사용자ID", controller: _userIdController),
-                _textField(hint: "Device명", controller: _deviceIdController),
-                _textField(hint: "Device Kind", controller: _deviceController),
+                _textField(
+                  hint: "사용자ID",
+                  controller: controller.userIdController,
+                ),
+                _textField(
+                  hint: "Device명",
+                  controller: controller.deviceIdController,
+                ),
+                _textField(
+                  hint: "Device Kind",
+                  controller: controller.deviceController,
+                ),
                 SizedBox(height: 10),
                 OutlinedButton(
-                  onPressed: () {
-                    _contentList.clear();
-                    _userIdController.clear();
-                    _deviceIdController.clear();
-                    _deviceController.clear();
-                    _list.forEach((element) => _contentList.add(element));
-                    setState(() {});
-                    Get.back();
-                  },
+                  onPressed: () => controller.onTapSearchInit(setState),
                   child: Text("초기화"),
                 ),
               ],
             ),
           ),
-          onTapPositive: () {
-            String _userId = _userIdController.text;
-            String _deviceId = _deviceIdController.text;
-            String _deviceKind = _deviceController.text;
-            _contentList.clear();
-            _list.forEach((element) {
-              if (element.userId.contains(_userId) &&
-                  element.deviceId.contains(_deviceId) &&
-                  element.deviceKind.contains(_deviceKind)) {
-                _contentList.add(element);
-              }
-            });
-            setState(() {});
-            Get.back();
-          },
-          onTabNegative: () {
-            Get.back();
-          },
+          onTapPositive: () => controller.onTapSearchDialogPositive(setState),
+          onTabNegative: controller.onTapSearchDialogNegative,
         ),
       ),
     );
@@ -152,7 +118,7 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
   }
 
   Widget _listView() {
-    if (_contentList.isEmpty) {
+    if (controller.contentList.isEmpty) {
       return Center(
         child: Text(
           "등록된 모바일 기기가 없습니다.",
@@ -165,15 +131,11 @@ class _DeviceRegisterScreenState extends State<DeviceRegisterScreen> {
     }
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: _contentList.length,
-      cacheExtent: _contentList.length + 5,
+      itemCount: controller.contentList.length,
+      cacheExtent: controller.contentList.length + 5,
       itemBuilder: (_, int i) => DeviceRegisterListTile(
-        data: _contentList[i],
-        onDelete: () {
-          //Todo: Device Delete 통신 필요
-          _contentList.removeAt(i);
-          setState(() {});
-        },
+        data: controller.contentList[i],
+        onDelete: () => controller.onTapDelete(setState, i),
       ),
     );
   }
