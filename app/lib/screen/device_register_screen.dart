@@ -28,6 +28,7 @@ class DeviceRegisterScreen extends StatelessWidget {
         hasStar: true,
         baseController: controller,
       ),
+      resizeToAvoidBottomInset: false,
       drawer: CustomDrawer(),
       body: Container(
         margin: EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
