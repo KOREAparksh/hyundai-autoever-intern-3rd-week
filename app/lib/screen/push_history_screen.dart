@@ -31,6 +31,7 @@ class PushHistoryScreen extends StatelessWidget {
         hasStar: true,
         baseController: controller,
       ),
+      resizeToAvoidBottomInset: false,
       drawer: CustomDrawer(),
       body: Stack(
         children: [
