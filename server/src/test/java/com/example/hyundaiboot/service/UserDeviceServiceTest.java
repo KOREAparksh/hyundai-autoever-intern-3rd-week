@@ -53,6 +53,48 @@ class UserDeviceServiceTest {
 	}
 
 	@Test
+	void testUpdateDevice() throws Exception {
+
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("seunpark");
+		deviceDto.setDeviceDescription("testtest123123");
+		deviceDto.setDeviceId("device1");
+		deviceDto.setDeviceKind("test macbook 123123");
+		deviceDto.setMaxSentCount(2);
+		deviceDto.setIsUsed("Y");
+
+		userDeviceService.updateDevice(deviceDto);
+	}
+
+	@Test
+	void testUpdateDeviceErrorByUserId() throws Exception {
+
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("seunpark123123");
+		deviceDto.setDeviceDescription("testtest123123");
+		deviceDto.setDeviceId("device1");
+		deviceDto.setDeviceKind("test macbook 123123");
+		deviceDto.setMaxSentCount(2);
+		deviceDto.setIsUsed("Y");
+
+		userDeviceService.updateDevice(deviceDto);
+	}
+
+	@Test
+	void testUpdateDeviceErrorByDeviceId() throws Exception {
+
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("seunpark");
+		deviceDto.setDeviceDescription("testtest123123");
+		deviceDto.setDeviceId("device100");
+		deviceDto.setDeviceKind("test macbook 123123");
+		deviceDto.setMaxSentCount(2);
+		deviceDto.setIsUsed("Y");
+
+		userDeviceService.updateDevice(deviceDto);
+	}
+
+	@Test
 	void testPostDeviceErrorBySameDeviceId(){
 		DeviceDto deviceDto = new DeviceDto();
 		deviceDto.setUserId("1");

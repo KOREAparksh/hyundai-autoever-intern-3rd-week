@@ -84,6 +84,28 @@ class ApiControllerTest {
 	}
 
 	@Test
+	void testUpdateDevices() throws Exception {
+		DeviceDto deviceDto = new DeviceDto();
+		deviceDto.setUserId("seunpark");
+		deviceDto.setDeviceDescription("testtest123");
+		deviceDto.setDeviceId("device1");
+		deviceDto.setDeviceKind("test macbook123");
+		deviceDto.setMaxSentCount(3);
+		deviceDto.setIsUsed("Y");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String content = mapper.writeValueAsString(deviceDto);
+
+		System.out.println(content);
+		mockMvc.perform(MockMvcRequestBuilders.put("/devices")
+						.content(content)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
 	void testDeleteDevice() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.delete("/devices?user_id=1&device_id=3"))
 				.andDo(print())

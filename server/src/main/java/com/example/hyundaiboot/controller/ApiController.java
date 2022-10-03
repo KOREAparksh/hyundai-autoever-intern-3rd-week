@@ -72,6 +72,20 @@ public class ApiController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
+
+	@PutMapping("/devices")
+	public ResponseEntity updateDevice(@RequestBody DeviceDto deviceDto){
+		try {
+			userDeviceService.updateDevice(deviceDto);
+			return ResponseEntity.ok().build();
+		} catch (NoSuchFieldException e){
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
 	@DeleteMapping("/devices")
 	public ResponseEntity deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
 		try{
