@@ -2,6 +2,7 @@ package com.example.hyundaiboot.controller;
 
 import com.example.hyundaiboot.dto.DeviceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,35 @@ class ApiControllerTest {
 	@Test
 	void putPushGroup() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.put("/push-groups?user_id=1&group_id_list=2,3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void getFavoriteScreen() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/favorite?user_id=seunpark"))
+				.andDo(print())
+				.andExpect(status().isOk());
+
+	}
+
+	@Test
+	void getFavoriteScreenError() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/favorite?user_id=abab"))
+				.andDo(print())
+				.andExpect(status().is4xxClientError());
+	}
+
+	@Test
+	void postFavoriteScreen() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post("/favorite?user_id=seunpark&screen_id=3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void deleteFavoriteScreen() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete("/favorite?user_id=seunpark&screen_id=3"))
 				.andDo(print())
 				.andExpect(status().isOk());
 	}

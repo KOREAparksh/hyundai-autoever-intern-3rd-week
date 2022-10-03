@@ -5,6 +5,7 @@ import com.example.hyundaiboot.domain.PushMessageQueue;
 import com.example.hyundaiboot.domain.User;
 import com.example.hyundaiboot.domain.UserDevice;
 import com.example.hyundaiboot.dto.DeviceDto;
+import com.example.hyundaiboot.dto.FavoriteDto;
 import com.example.hyundaiboot.dto.PushGroupDto;
 import com.example.hyundaiboot.dto.PushHistoryDto;
 import com.example.hyundaiboot.service.*;
@@ -28,6 +29,8 @@ public class ApiController {
 	private PushMessageHistoryService pushMessageHistoryService;
 	@Autowired
 	private UserMessageGroupService userMessageGroupService;
+	@Autowired
+	private UserFavoriteScreenService userFavoriteScreenService;
 
 
 	@GetMapping("/txt")
@@ -108,5 +111,42 @@ public class ApiController {
 		}catch (Exception e){
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
+	@GetMapping("/favorite")
+	public ResponseEntity<List<FavoriteDto>> getFavoriteScreen(@RequestParam("user_id") String userId){
+		try {
+			List<FavoriteDto> list = userFavoriteScreenService.getAllFavoriteScreen(userId);
+			return ResponseEntity.ok(list);
+		}  catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
+	@PostMapping("/favorite")
+	public ResponseEntity postFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+		try {
+			userFavoriteScreenService.postFavoriteScreen(userId, screenId);
+			return ResponseEntity.ok().build();
+		}  catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
+
+	@DeleteMapping("/favorite")
+	public ResponseEntity deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+		try {
+			userFavoriteScreenService.deleteFavoriteScreen(userId, screenId);
+			return ResponseEntity.ok().build();
+		}  catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 }
