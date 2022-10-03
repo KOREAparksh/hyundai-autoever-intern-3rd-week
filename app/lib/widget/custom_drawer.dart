@@ -19,6 +19,7 @@ class CustomDrawer extends StatelessWidget {
 
   //marginpadding
   final _bodySideMargin = 15.0;
+  final _bodyBottomMargin = 50.0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class CustomDrawer extends StatelessWidget {
                     _Dummy(title: "Quality"),
                     _Dummy(title: "Equipment"),
                     _Dummy(title: "공통"),
+                    SizedBox(height: _bodyBottomMargin),
                   ],
                 ),
               ),
