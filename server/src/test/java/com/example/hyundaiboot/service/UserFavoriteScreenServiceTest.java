@@ -1,5 +1,6 @@
 package com.example.hyundaiboot.service;
 
+import com.example.hyundaiboot.dto.FavoriteDto;
 import com.example.hyundaiboot.repository.UserFavoriteScreenRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,19 @@ class UserFavoriteScreenServiceTest {
 	public void testGetAllFavoriteScreenServiceUserIdError() throws NoSuchFieldException {
 		Assertions.assertThrows(NoSuchFieldException.class, () -> {
 			userFavoriteScreenService.getAllFavoriteScreen("1111111");
+		});
+	}
+
+	@Test
+	public void testPostFavoriteScreen() throws NoSuchFieldException {
+
+		userFavoriteScreenService.postFavoriteScreen("seunpark", "3");
+	}
+
+	@Test
+	public void testPostFavoriteScreenErrorByAlreadyRegisted() throws NoSuchFieldException {
+		Assertions.assertThrows(NoSuchFieldException.class, () -> {
+			userFavoriteScreenService.postFavoriteScreen("seunpark", "1");
 		});
 	}
 }

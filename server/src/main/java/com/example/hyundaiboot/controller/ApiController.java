@@ -124,4 +124,16 @@ public class ApiController {
 		}
 		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
+
+	@PostMapping("/favorite")
+	public ResponseEntity postFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+		try {
+			userFavoriteScreenService.postFavoriteScreen(userId, screenId);
+			return ResponseEntity.ok().build();
+		}  catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
 }

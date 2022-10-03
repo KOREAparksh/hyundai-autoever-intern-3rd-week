@@ -140,4 +140,11 @@ class ApiControllerTest {
 				.andDo(print())
 				.andExpect(status().is4xxClientError());
 	}
+
+	@Test
+	void postFavoriteScreen() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post("/favorite?user_id=seunpark&screen_id=3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
 }
