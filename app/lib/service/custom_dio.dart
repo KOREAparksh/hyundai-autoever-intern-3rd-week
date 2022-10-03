@@ -2,13 +2,19 @@ import 'package:app/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 enum CustomDioError { notInternetConnected }
 
-class CustomDto {
+class CustomDio {
   final Dio dio = Dio();
 
-  CustomDto() {
+  CustomDio() {
+    dio.options = BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 5000,
+      baseUrl: dotenv.get("BASE_URL"),
+    );
     dio.interceptors.clear();
     dio.interceptors.add(CustomInterceptor());
   }
