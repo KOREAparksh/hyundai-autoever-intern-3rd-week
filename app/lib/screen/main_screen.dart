@@ -88,6 +88,7 @@ class _ButtonComplex extends StatelessWidget {
       child: GridView.builder(
         shrinkWrap: true,
         itemCount: _itemCount,
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: _crossAxisCount,
           crossAxisSpacing: _gridAxisSpacing,
