@@ -136,4 +136,17 @@ public class ApiController {
 		}
 		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
+
+
+	@DeleteMapping("/favorite")
+	public ResponseEntity deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+		try {
+			userFavoriteScreenService.deleteFavoriteScreen(userId, screenId);
+			return ResponseEntity.ok().build();
+		}  catch (NoSuchFieldException e) {
+			return ResponseEntity.badRequest().build();
+		}catch (Exception e){
+		}
+		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
 }

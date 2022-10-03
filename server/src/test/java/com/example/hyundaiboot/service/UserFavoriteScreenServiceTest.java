@@ -37,4 +37,16 @@ class UserFavoriteScreenServiceTest {
 			userFavoriteScreenService.postFavoriteScreen("seunpark", "1");
 		});
 	}
+
+	@Test
+	public void testDeleteFavoriteScreen() throws NoSuchFieldException {
+		userFavoriteScreenService.deleteFavoriteScreen("seunpark", "3");
+	}
+
+	@Test
+	public void testDeleteFavoriteScreenError() throws NoSuchFieldException {
+		Assertions.assertThrows(NoSuchFieldException.class, () -> {
+			userFavoriteScreenService.deleteFavoriteScreen("seunpark", "1");
+		});
+	}
 }

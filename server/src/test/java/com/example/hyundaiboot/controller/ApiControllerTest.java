@@ -147,4 +147,11 @@ class ApiControllerTest {
 				.andDo(print())
 				.andExpect(status().isOk());
 	}
+
+	@Test
+	void deleteFavoriteScreen() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete("/favorite?user_id=seunpark&screen_id=3"))
+				.andDo(print())
+				.andExpect(status().isOk());
+	}
 }

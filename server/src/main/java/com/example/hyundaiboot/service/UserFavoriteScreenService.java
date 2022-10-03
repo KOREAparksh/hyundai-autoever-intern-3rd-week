@@ -62,4 +62,24 @@ public class UserFavoriteScreenService {
 
 		return;
 	}
+
+	@Transactional
+	public void deleteFavoriteScreen(String userId, String screenId) throws NoSuchFieldException {
+		User user = userRepository.findById(userId).orElseThrow(()->new NoSuchFieldException("없는 유저입니다."));
+		ScreenDefine screenDefine = screenDefineRepository.findByScreenId(screenId).orElseThrow(()->new NoSuchFieldException("없는 스크린입니다."));
+		List<UserFavoriteScreen> temp =  userFavoriteScreenRepository.findByUser(user);
+		boolean flag = false;
+
+		for(UserFavoriteScreen ele : temp){
+			if (ele.getScreenDefine().getScreenId().equals(screenId))
+				flag = true;
+		}
+
+		if (flag == false)
+			throw new NoSuchFieldException("즐겨찾기에 등록되지 않은 스크린입니다");
+
+
+		userFavoriteScreenRepository.deleteByUserAndScreenDefine(user, screenDefine);
+		return;
+	}
 }
