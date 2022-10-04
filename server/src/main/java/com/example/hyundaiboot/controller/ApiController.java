@@ -60,12 +60,12 @@ public class ApiController {
 	}
 
 	@PostMapping("/devices")
-	public ResponseEntity postDevice(@RequestBody DeviceDto deviceDto){
+	public ResponseEntity<String> postDevice(@RequestBody DeviceDto deviceDto){
 		try {
 			userDeviceService.postDevice(deviceDto);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("정상등록 되었습니다");
 		} catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 

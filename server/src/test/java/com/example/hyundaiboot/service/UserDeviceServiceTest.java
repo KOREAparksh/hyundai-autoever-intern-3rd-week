@@ -111,7 +111,7 @@ class UserDeviceServiceTest {
 
 	@Test
 	void deleteDevice() throws Exception {
-		userDeviceService.deleteDevice("1", "3");
+		userDeviceService.deleteDevice("seunpark", "device2");
 	}
 
 }
