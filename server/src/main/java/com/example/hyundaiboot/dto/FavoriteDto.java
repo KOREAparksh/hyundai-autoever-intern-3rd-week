@@ -14,4 +14,5 @@ import lombok.*;
 public class FavoriteDto {
 	String screenId;
 	String screenUrl;
+	String screenName;
 }

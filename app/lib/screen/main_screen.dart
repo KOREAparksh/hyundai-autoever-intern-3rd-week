@@ -74,7 +74,7 @@ class _DashBoard extends StatelessWidget {
       );
 }
 
-class _ButtonComplex extends StatelessWidget {
+class _ButtonComplex extends GetView<MainController> {
   const _ButtonComplex({Key? key}) : super(key: key);
 
   final int _itemCount = 6;
@@ -95,7 +95,16 @@ class _ButtonComplex extends StatelessWidget {
           crossAxisSpacing: _gridAxisSpacing,
           mainAxisSpacing: _gridAxisSpacing,
         ),
-        itemBuilder: (context, int i) => SizedBox(child: _FavoriteButton()),
+        itemBuilder: (context, int i) => Obx(
+          () => _FavoriteButton(
+            title: (controller.favoriteDtoList.length > i)
+                ? controller.favoriteDtoList[i].screenName
+                : null,
+            onTap: (controller.favoriteDtoList.length > i)
+                ? () => controller.onTapButton(i)
+                : null,
+          ),
+        ),
       ),
     );
   }
@@ -105,6 +114,7 @@ class _FavoriteButton extends StatelessWidget {
   const _FavoriteButton({
     Key? key,
     this.title,
+    this.onTap,
   }) : super(key: key);
 
   final _width = 136.0;
@@ -113,27 +123,31 @@ class _FavoriteButton extends StatelessWidget {
   final _padding = 10.0;
 
   final String? title;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      height: _height,
-      padding: EdgeInsets.all(_padding),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: (title == null) ? boxBorderDisable : mainColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: _width,
+        height: _height,
+        padding: EdgeInsets.all(_padding),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: (title == null) ? boxBorderDisable : mainColor,
+          ),
+          borderRadius: BorderRadius.circular(_radius),
         ),
-        borderRadius: BorderRadius.circular(_radius),
-      ),
-      child: Center(
-        child: Text(
-          title ?? "Blank",
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: (title != null) ? null : textDisable,
-            fontWeight: (title != null) ? FontWeight.bold : null,
-            fontSize: 16,
+        child: Center(
+          child: Text(
+            title ?? "Blank",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: (title != null) ? null : textDisable,
+              fontWeight: (title != null) ? FontWeight.bold : null,
+              fontSize: 16,
+            ),
           ),
         ),
       ),

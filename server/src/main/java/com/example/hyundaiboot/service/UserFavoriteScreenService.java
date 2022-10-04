@@ -38,6 +38,7 @@ public class UserFavoriteScreenService {
 			FavoriteDto temp = new FavoriteDto();
 			temp.setScreenId(ufs.getScreenDefine().getScreenId());
 			temp.setScreenUrl(ufs.getScreenDefine().getUrl());
+			temp.setScreenName(ufs.getScreenDefine().getName());
 			result.add(temp);
 		}
 		return result;
