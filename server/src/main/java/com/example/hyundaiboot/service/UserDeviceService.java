@@ -48,7 +48,7 @@ public class UserDeviceService {
 	}
 
 	@Transactional
-	public void postDevice(DeviceDto deviceDto) throws Exception{
+	public void postDevice(DeviceDto deviceDto) throws NoSuchFieldException {
 		// 유저는 있어야 하고 DeviceId는 없어야 정상.
 		// 유저가 없다 -> 계정 만들고 와야 함.
 		// 유저가 있는데 이미 DeviceId가 있다 -> 중복
@@ -73,6 +73,9 @@ public class UserDeviceService {
 		userDevice.setDescription(deviceDto.getDeviceDescription());
 		userDevice.setUseState(deviceDto.getIsUsed());
 		userDeviceRepository.save(userDevice);
+
+		System.out.println(deviceMaster);
+		System.out.println(userDevice);
 	}
 
 
@@ -108,8 +111,9 @@ public class UserDeviceService {
 			throw new NoSuchFieldException("없는 기기입니다.");
 		DeviceMaster deviceMaster = deviceMasterRepository.findById(deviceId).get();
 
-		userDeviceRepository.deleteByUserAndDeviceMaster(user, deviceMaster);
-		deviceMasterRepository.deleteById(deviceId);
+		UserDevice userDevice = userDeviceRepository.findByUserAndDeviceMaster(user, deviceMaster);
+		userDevice.setUseState("N");
+		userDeviceRepository.save(userDevice);
 	}
 
 }

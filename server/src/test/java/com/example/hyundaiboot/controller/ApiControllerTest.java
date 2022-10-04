@@ -42,9 +42,9 @@ class ApiControllerTest {
 	@Test
 	void testPostDevices() throws Exception {
 		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("1");
+		deviceDto.setUserId("seunpark");
 		deviceDto.setDeviceDescription("testtest");
-		deviceDto.setDeviceId("3");
+		deviceDto.setDeviceId("33333");
 		deviceDto.setDeviceKind("test macbook");
 		deviceDto.setMaxSentCount(3);
 		deviceDto.setIsUsed("Y");
@@ -107,7 +107,7 @@ class ApiControllerTest {
 
 	@Test
 	void testDeleteDevice() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.delete("/devices?user_id=1&device_id=3"))
+		mockMvc.perform(MockMvcRequestBuilders.delete("/devices?user_id=seunpark&device_id=2"))
 				.andDo(print())
 				.andExpect(status().isOk());
 	}

@@ -1,6 +1,6 @@
 import 'package:app/const/Color.dart';
 import 'package:app/controller/screen/device_modify_controller.dart';
-import 'package:app/dto/device_dto.dart';
+import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/device_info_field.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +10,12 @@ class DeviceModifyScreen extends StatelessWidget {
   DeviceModifyScreen({
     Key? key,
     required this.deviceDto,
-  }) : super(key: key);
+  })  : controller = Get.put(DeviceModifyController(deviceDto.userId)),
+        super(key: key);
 
   final _title = "모바일기기 수정하기";
   final DeviceDto deviceDto;
-  final controller = Get.put(DeviceModifyController());
+  final controller;
 
   final _infoHeight = 500.0;
 
@@ -56,15 +57,15 @@ class DeviceModifyScreen extends StatelessWidget {
   }
 
   Widget _pushGroupList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: controller.list.length,
-      itemBuilder: (_, i) => ListTile(
-        title: Text(controller.list[i].pushGroupName),
-        subtitle: Text(controller.list[i].pushGroupId),
-        trailing: Obx(
-          () => Checkbox(
+    return Obx(
+      () => ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.list.length,
+        itemBuilder: (_, i) => ListTile(
+          title: Text(controller.list[i].pushGroupName),
+          subtitle: Text(controller.list[i].pushGroupId),
+          trailing: Checkbox(
             value: controller.list[i].isCheck,
             onChanged: (v) => controller.onChangeCheckbox(v, i),
           ),

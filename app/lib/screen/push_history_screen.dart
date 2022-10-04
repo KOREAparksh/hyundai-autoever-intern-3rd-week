@@ -1,6 +1,6 @@
 import 'package:app/const/Color.dart';
 import 'package:app/controller/screen/push_history_controller.dart';
-import 'package:app/dto/push_history_dto.dart';
+import 'package:app/dto/push_history/push_history_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/custom_dialog.dart';
 import 'package:app/widget/custom_drawer.dart';

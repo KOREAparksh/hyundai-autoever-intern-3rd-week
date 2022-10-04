@@ -56,6 +56,7 @@ public class UserMessageGroupService {
 		List<PushMessageGroup> pushMessageGroupList = pushMessageGroupRepository.findAll();
 
 		userMessageGroupRepository.deleteAllByUserId(userId);
+		if (groupList.isEmpty()) return ;
 		for(String pushMessageGroupId : groupList){
 			PushMessageGroup pushMessageGroup = pushMessageGroupRepository
 						.findById(pushMessageGroupId).orElseThrow(()->new NoSuchFieldException());

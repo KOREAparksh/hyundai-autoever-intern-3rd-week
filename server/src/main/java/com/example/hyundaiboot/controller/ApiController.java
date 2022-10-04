@@ -60,12 +60,12 @@ public class ApiController {
 	}
 
 	@PostMapping("/devices")
-	public ResponseEntity postDevice(@RequestBody DeviceDto deviceDto){
+	public ResponseEntity<String> postDevice(@RequestBody DeviceDto deviceDto){
 		try {
 			userDeviceService.postDevice(deviceDto);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("정상등록 되었습니다");
 		} catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 
@@ -74,12 +74,12 @@ public class ApiController {
 
 
 	@PutMapping("/devices")
-	public ResponseEntity updateDevice(@RequestBody DeviceDto deviceDto){
+	public ResponseEntity<String> updateDevice(@RequestBody DeviceDto deviceDto){
 		try {
 			userDeviceService.updateDevice(deviceDto);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("수정되었습니다.");
 		} catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 
@@ -87,12 +87,12 @@ public class ApiController {
 	}
 
 	@DeleteMapping("/devices")
-	public ResponseEntity deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
+	public ResponseEntity<String> deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
 		try{
 			userDeviceService.deleteDevice(userId, deviceId);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("사용안함으로 상태를 수정하였습니다.");
 		}catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -116,12 +116,12 @@ public class ApiController {
 	}
 
 	@PutMapping("/push-groups")
-	public ResponseEntity  putPushGroup(@RequestParam("user_id") String userId, @RequestParam("group_id_list") List<String> groupIdList){
+	public ResponseEntity<String>  putPushGroup(@RequestParam("user_id") String userId, @RequestParam("group_id_list") List<String> groupIdList){
 		try {
 			userMessageGroupService.updatePushMessageGroup(userId, groupIdList);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("수정되었습니다.");
 		} catch (NoSuchFieldException e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

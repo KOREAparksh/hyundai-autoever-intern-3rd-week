@@ -1,9 +1,14 @@
 import 'package:app/controller/base_controller.dart';
-import 'package:app/dto/push_history_dto.dart';
+import 'package:app/dto/push_history/push_history_dto.dart';
+import 'package:app/service/api/push_history/push_history_api.dart';
+import 'package:app/service/custom_dio.dart';
+import 'package:app/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart';
 
 class PushHistoryController extends BaseController {
+  final List<PushHistoryDto> list = <PushHistoryDto>[];
   final List<PushHistoryDto> contentsList = <PushHistoryDto>[].obs;
   final userIdController = TextEditingController();
   final userNameController = TextEditingController();
@@ -15,9 +20,10 @@ class PushHistoryController extends BaseController {
   RxBool isSearchActive = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    list.forEach((element) => contentsList.add(element));
+    await getPushHistoryData();
+    contentsList.addAll(list);
   }
 
   @override
@@ -29,6 +35,39 @@ class PushHistoryController extends BaseController {
     pushTitleController.dispose();
   }
 
+  Future<void> getPushHistoryData() async {
+    CustomDio customDio = CustomDio();
+    PushHistoryApi pushHistoryApi = PushHistoryApi(customDio.dio);
+    try {
+      final result = await pushHistoryApi.getPushHistory();
+      list.addAll(result.data);
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.message);
+      _showDialog();
+    } catch (e) {
+      print("Error: " + e.toString());
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialog() {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: "이력정보를 받아오지 못했습니다",
+          subTitle: "메인화면으로 이동합니다",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
+        );
+      },
+    );
+  }
+
   void onTapOrder() {
     final temp = List.from(contentsList.reversed);
     contentsList.clear();
@@ -36,13 +75,14 @@ class PushHistoryController extends BaseController {
     (isOrderActive.isTrue) ? isOrderActive(false) : isOrderActive(true);
   }
 
-  void onTapInit() {
+  void onTapInit() async {
     contentsList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
     readStatesIndex(0);
+    await getPushHistoryData();
     isSearchActive(false);
     (isOrderActive.isTrue)
         ? list.reversed.forEach((element) => contentsList.add(element))
@@ -104,194 +144,4 @@ class PushHistoryController extends BaseController {
   void onTapSearchFilterStateTrue() => readStatesIndex(1);
 
   void onTapSearchFilterStateFalse() => readStatesIndex(2);
-
-  final List<PushHistoryDto> list = [
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-  ];
 }

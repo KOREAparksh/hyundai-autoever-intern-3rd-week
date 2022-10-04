@@ -1,5 +1,5 @@
 import 'package:app/controller/widget/DeviceInfoFieldController.dart';
-import 'package:app/dto/device_dto.dart';
+import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
