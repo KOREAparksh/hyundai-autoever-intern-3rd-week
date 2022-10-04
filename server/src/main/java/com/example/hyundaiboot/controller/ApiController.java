@@ -74,12 +74,12 @@ public class ApiController {
 
 
 	@PutMapping("/devices")
-	public ResponseEntity updateDevice(@RequestBody DeviceDto deviceDto){
+	public ResponseEntity<String> updateDevice(@RequestBody DeviceDto deviceDto){
 		try {
 			userDeviceService.updateDevice(deviceDto);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("수정되었습니다.");
 		} catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 
