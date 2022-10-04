@@ -77,22 +77,19 @@ class DeviceRegisterController extends BaseController {
     if (result == 2) await getAllDeviceData();
     contentList.clear();
     contentList.addAll(list);
-    Get.reload();
   }
 
-  void onTapSearchInit(/*void Function(void Function() fn) setState2*/) {
+  void onTapSearchInit() {
     contentList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceController.clear();
     isSearchActive(false);
     list.forEach((element) => contentList.add(element));
-    // setState2.call(() {});
     Get.back();
   }
 
-  void onTapSearchDialogPositive(
-      /*void Function(void Function() fn) setState2*/) {
+  void onTapSearchDialogPositive() {
     String _userId = userIdController.text.toLowerCase();
     String _deviceId = deviceIdController.text.toLowerCase();
     String _deviceKind = deviceController.text.toLowerCase();
@@ -108,8 +105,6 @@ class DeviceRegisterController extends BaseController {
     if (_userId == "" && _deviceId == "" && _deviceKind == "") {
       isSearchActive(false);
     }
-    // setState2.call(() {});
-
     Get.back();
   }
 
@@ -117,9 +112,7 @@ class DeviceRegisterController extends BaseController {
     Get.back();
   }
 
-  void onTapDelete(/*void Function(void Function() fn) setState2,*/ int i) {
-    //Todo: Device Delete 통신 필요
+  void onTapDelete(int i) {
     contentList.removeAt(i);
-    // setState2.call(() {});
   }
 }
