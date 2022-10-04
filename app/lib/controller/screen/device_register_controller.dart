@@ -53,8 +53,11 @@ class DeviceRegisterController extends BaseController {
     }
   }
 
-  void onTapTile(int i) {
-    Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
+  void onTapTile(int i) async {
+    await Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
+    await getAllDeviceData();
+    contentList.clear();
+    contentList.addAll(list);
   }
 
   void onTapAddButton() async {

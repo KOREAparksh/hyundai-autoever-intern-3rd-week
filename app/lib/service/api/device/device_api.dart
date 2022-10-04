@@ -18,4 +18,7 @@ abstract class DeviceApi {
   @DELETE("/devices")
   Future<HttpResponse<String>> deleteDevice(
       @Query("user_id") String userId, @Query("device_id") String deviceId);
+
+  @PUT("/devices")
+  Future<HttpResponse<String>> updateDevice(@Body() DeviceDto dto);
 }
