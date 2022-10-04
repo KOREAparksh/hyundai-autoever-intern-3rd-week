@@ -65,17 +65,25 @@ class DeviceModifyController extends BaseController {
   }
 
   void onTapPushGroupModifiedButton() async {
-    //통신
-    showDialog(
-      context: Get.context!,
-      builder: (_) => CustomDialog(
-        mainTitle: "변경되었습니다.",
-        dialogType: DialogType.OK,
-        positiveButtonText: "확인",
-        onTapPositive: () => Get.back(),
-      ),
-    );
-    return;
+    List<String> idList = [];
+    list.forEach((element) {
+      if (element.isCheck) idList.add(element.pushGroupId);
+    });
+    print(idList);
+    CustomDio customDio = CustomDio(autoDialog: false);
+    PushGroupApi pushGroupApi = PushGroupApi(customDio.dio);
+    try {
+      await pushGroupApi.updatePushGroup(userId, idList);
+      _showDialog(main: "변경되었습니다.");
+    } on DioError catch (e) {
+      print(e.response);
+      _showDialog(main: e.response?.data ?? "PushGroup을 수정할 수 없습니다");
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialog(main: e.toString());
+    } finally {
+      customDio.dio.close();
+    }
   }
 
   void onChangeCheckbox(bool? v, int i) {

@@ -11,4 +11,8 @@ abstract class PushGroupApi {
   @GET("/push-groups")
   Future<HttpResponse<List<PushGroupDto>>> getPushGroup(
       @Query("user_id") String userId);
+
+  @PUT("/push-groups")
+  Future<HttpResponse<String>> updatePushGroup(@Query("user_id") String userId,
+      @Query("group_id_list") List<String> list);
 }
