@@ -116,12 +116,12 @@ public class ApiController {
 	}
 
 	@PutMapping("/push-groups")
-	public ResponseEntity  putPushGroup(@RequestParam("user_id") String userId, @RequestParam("group_id_list") List<String> groupIdList){
+	public ResponseEntity<String>  putPushGroup(@RequestParam("user_id") String userId, @RequestParam("group_id_list") List<String> groupIdList){
 		try {
 			userMessageGroupService.updatePushMessageGroup(userId, groupIdList);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("수정되었습니다.");
 		} catch (NoSuchFieldException e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
