@@ -45,7 +45,7 @@ class DeviceRegisterController extends BaseController {
           (e.response?.statusCode.toString() ?? "") +
           " : " +
           e.message);
-      _showDialog();
+      _showDialog(mainTitle: e.message);
     } catch (e) {
       print("Error: " + e.toString());
     } finally {
@@ -113,7 +113,7 @@ class DeviceRegisterController extends BaseController {
           (e.response?.statusCode.toString() ?? "") +
           " : " +
           e.message);
-      await _showDialog();
+      await _showDialog(mainTitle: e.message);
     } catch (e) {
       print("Error: " + e.toString());
     } finally {
@@ -121,13 +121,13 @@ class DeviceRegisterController extends BaseController {
     }
   }
 
-  dynamic _showDialog() {
+  dynamic _showDialog({required String mainTitle, String? subTitle}) {
     return showDialog(
       context: Get.context!,
       builder: (context) {
         return CustomDialog(
-          mainTitle: "모바일기기정보를 받아오지 못했습니다",
-          subTitle: "메인화면으로 이동합니다",
+          mainTitle: mainTitle,
+          subTitle: subTitle,
           dialogType: DialogType.OK,
           onTapPositive: () => Get.back(),
         );
