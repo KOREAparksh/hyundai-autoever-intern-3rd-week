@@ -3,10 +3,15 @@ import 'package:app/controller/screen/device_add_controller.dart';
 import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:app/screen/device_add_screen.dart';
 import 'package:app/screen/device_modify_screen.dart';
+import 'package:app/service/api/device/device_api.dart';
+import 'package:app/service/custom_dio.dart';
+import 'package:app/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
 class DeviceRegisterController extends BaseController {
+  final List<DeviceDto> list = <DeviceDto>[];
   final RxList<DeviceDto> contentList = <DeviceDto>[].obs;
   final userIdController = TextEditingController();
   final deviceIdController = TextEditingController();
@@ -14,10 +19,10 @@ class DeviceRegisterController extends BaseController {
   RxBool isSearchActive = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-
-    list.forEach((element) => contentList.add(element));
+    await getAllDeviceData();
+    contentList.addAll(list);
   }
 
   @override
@@ -28,12 +33,51 @@ class DeviceRegisterController extends BaseController {
     deviceController.dispose();
   }
 
+  Future<void> getAllDeviceData() async {
+    CustomDio customDio = CustomDio();
+    DeviceApi deviceApi = DeviceApi(customDio.dio);
+    try {
+      final result = await deviceApi.getAllDevice();
+      list.clear();
+      list.addAll(result.data);
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.message);
+      _showDialog();
+    } catch (e) {
+      print("Error: " + e.toString());
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialog() {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: "모바일기기정보를 받아오지 못했습니다",
+          subTitle: "메인화면으로 이동합니다",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
+        );
+      },
+    );
+  }
+
   void onTapTile(int i) {
     Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
   }
 
-  void onTapAddButton() {
-    Get.to(() => DeviceAddScreen());
+  void onTapAddButton() async {
+    int result = await Get.to(() => DeviceAddScreen());
+    print("d");
+    if (result == 2) await getAllDeviceData();
+    contentList.clear();
+    contentList.addAll(list);
+    Get.reload();
   }
 
   void onTapSearchInit(/*void Function(void Function() fn) setState2*/) {
@@ -78,19 +122,4 @@ class DeviceRegisterController extends BaseController {
     contentList.removeAt(i);
     // setState2.call(() {});
   }
-
-  final List<DeviceDto> list = const [
-    DeviceDto("WJKIM", "note10", "device1", "Android", 3, "Y"),
-    DeviceDto("WJKIM", "note11", "device2", "Android", 3, "N"),
-    DeviceDto("WJKIM", "note12", "device3", "Android", 3, "Y"),
-    DeviceDto("asdf", "note13", "device4", "Android", 3, "N"),
-    DeviceDto("asdf", "note14", "device5", "Android", 3, "Y"),
-    DeviceDto("asdfasdf", "note15", "device6", "Android", 3, "Y"),
-    DeviceDto("asdfasdf", "note16", "device7", "Android", 3, "N"),
-    DeviceDto("hyj", "note17", "device8", "Android", 3, "Y"),
-    DeviceDto("hyj", "note18", "device9", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note19", "1device1", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note20", "1device11", "Android", 3, "Y"),
-    DeviceDto("parkseunghan", "note21", "1device111", "Android", 3, "Y"),
-  ];
 }

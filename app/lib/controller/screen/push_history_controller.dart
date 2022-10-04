@@ -22,7 +22,7 @@ class PushHistoryController extends BaseController {
   @override
   void onInit() async {
     super.onInit();
-    await getFavoriteData();
+    await getPushHistoryData();
     contentsList.addAll(list);
   }
 
@@ -35,7 +35,7 @@ class PushHistoryController extends BaseController {
     pushTitleController.dispose();
   }
 
-  Future<void> getFavoriteData() async {
+  Future<void> getPushHistoryData() async {
     CustomDio customDio = CustomDio();
     PushHistoryApi pushHistoryApi = PushHistoryApi(customDio.dio);
     try {
@@ -46,7 +46,7 @@ class PushHistoryController extends BaseController {
           (e.response?.statusCode.toString() ?? "") +
           " : " +
           e.message);
-      _showDialogByUser();
+      _showDialog();
     } catch (e) {
       print("Error: " + e.toString());
     } finally {
@@ -54,7 +54,7 @@ class PushHistoryController extends BaseController {
     }
   }
 
-  dynamic _showDialogByUser() {
+  dynamic _showDialog() {
     return showDialog(
       context: Get.context!,
       builder: (context) {
@@ -82,7 +82,7 @@ class PushHistoryController extends BaseController {
     deviceIdController.clear();
     pushTitleController.clear();
     readStatesIndex(0);
-    await getFavoriteData();
+    await getPushHistoryData();
     isSearchActive(false);
     (isOrderActive.isTrue)
         ? list.reversed.forEach((element) => contentsList.add(element))
