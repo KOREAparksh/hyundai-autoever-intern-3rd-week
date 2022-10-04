@@ -87,12 +87,12 @@ public class ApiController {
 	}
 
 	@DeleteMapping("/devices")
-	public ResponseEntity deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
+	public ResponseEntity<String> deleteDevice(@RequestParam("user_id") String userId, @RequestParam("device_id") String deviceId){
 		try{
 			userDeviceService.deleteDevice(userId, deviceId);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("사용안함으로 상태를 수정하였습니다.");
 		}catch (NoSuchFieldException e){
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -111,8 +111,9 @@ public class UserDeviceService {
 			throw new NoSuchFieldException("없는 기기입니다.");
 		DeviceMaster deviceMaster = deviceMasterRepository.findById(deviceId).get();
 
-		userDeviceRepository.deleteByUserAndDeviceMaster(user, deviceMaster);
-		deviceMasterRepository.deleteById(deviceId);
+		UserDevice userDevice = userDeviceRepository.findByUserAndDeviceMaster(user, deviceMaster);
+		userDevice.setUseState("N");
+		userDeviceRepository.save(userDevice);
 	}
 
 }
