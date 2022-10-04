@@ -2,6 +2,7 @@ import 'package:app/controller/base_controller.dart';
 import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:app/dto/push_group_dto/push_group_dto.dart';
 import 'package:app/service/api/device/device_api.dart';
+import 'package:app/service/api/push_group/push_group_api.dart';
 import 'package:app/service/custom_dio.dart';
 import 'package:app/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,35 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
 class DeviceModifyController extends BaseController {
+  RxList<PushGroupDto> list = <PushGroupDto>[].obs;
+  final String userId;
+
+  DeviceModifyController(this.userId);
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await initPushGroup(userId);
+  }
+
+  Future<void> initPushGroup(String userId) async {
+    CustomDio customDio = CustomDio(autoDialog: false);
+    PushGroupApi pushGroupApi = PushGroupApi(customDio.dio);
+    try {
+      final result = await pushGroupApi.getPushGroup(userId);
+      list.addAll(result.data);
+    } on DioError catch (e) {
+      _showDialog(main: e.response?.data ?? "PushGroup을 가져올 수 없습니다");
+      Get.back();
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialog(main: e.toString());
+      Get.back();
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
   void onTapInfoModifiedButton(DeviceDto deviceDto, DeviceDto newDto) async {
     if (deviceDto == newDto) {
       _showDialog(main: "수정된 항목이 없습니다", sub: "변경되지 않았습니다");
@@ -34,7 +64,7 @@ class DeviceModifyController extends BaseController {
     }
   }
 
-  void onTapPushGroupModifiedButton() {
+  void onTapPushGroupModifiedButton() async {
     //통신
     showDialog(
       context: Get.context!,
@@ -65,11 +95,4 @@ class DeviceModifyController extends BaseController {
       ),
     );
   }
-
-  //Todo:더미
-  RxList<PushGroupDto> list = <PushGroupDto>[
-    PushGroupDto("1", "pushGroup1", true),
-    PushGroupDto("2", "pushGroup2", false),
-    PushGroupDto("3", "pushGroup3", true),
-  ].obs;
 }
