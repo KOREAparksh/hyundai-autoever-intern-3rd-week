@@ -1,6 +1,8 @@
 import 'package:app/controller/base_controller.dart';
+import 'package:app/dto/favorite_dto.dart';
 import 'package:app/models/user/user.dart';
 import 'package:app/screen/login_dummy_screen.dart';
+import 'package:app/service/api/favorite/favorite_api.dart';
 import 'package:app/service/api/user/user_api.dart';
 import 'package:app/service/custom_dio.dart';
 import 'package:app/widget/custom_dialog.dart';
@@ -9,12 +11,14 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
 class MainController extends BaseController {
-  late final User? user;
+  User? user;
+  List<FavoriteDto> favoriteDtoList = [];
 
   @override
   void onInit() async {
     super.onInit();
     await getUserData();
+    await getFavoriteData();
   }
 
   Future<void> getUserData() async {
@@ -33,12 +37,31 @@ class MainController extends BaseController {
     } finally {
       customDio.dio.close();
       if (user == null) {
-        _showDialog();
+        _showDialogByUser();
       }
     }
   }
 
-  dynamic _showDialog() {
+  Future<void> getFavoriteData() async {
+    CustomDio customDio = CustomDio();
+    FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
+    try {
+      final result = await favoriteApi.getFavoriteScreen(user!.id);
+      favoriteDtoList.addAll(result.data);
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.message);
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialogByFavorite();
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialogByUser() {
     return showDialog(
       context: Get.context!,
       builder: (context) {
@@ -47,6 +70,19 @@ class MainController extends BaseController {
           subTitle: "로그인화면으로 이동합니다",
           dialogType: DialogType.OK,
           onTapPositive: () => Get.offAll(() => LoginDummyScreen()),
+        );
+      },
+    );
+  }
+
+  dynamic _showDialogByFavorite() {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: "즐겨찾기정보를 받아오지 못했습니다",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
         );
       },
     );
