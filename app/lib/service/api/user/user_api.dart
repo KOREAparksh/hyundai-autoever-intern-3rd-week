@@ -1,3 +1,4 @@
+import 'package:app/models/user/user.dart';
 import 'package:app/service/custom_dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -9,5 +10,5 @@ abstract class UserApi {
   factory UserApi(Dio dio, {String baseUrl}) = _UserApi;
 
   @GET("/user")
-  Future<HttpResponse> getUserData();
+  Future<HttpResponse<User>> getUserData(@Query("id") String id);
 }
