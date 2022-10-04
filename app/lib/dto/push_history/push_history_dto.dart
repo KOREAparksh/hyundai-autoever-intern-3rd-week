@@ -22,7 +22,7 @@ class PushHistoryDto {
   @JsonKey(name: "push_content")
   final String pushContent;
 
-  @JsonKey(name: "push_data_time")
+  @JsonKey(name: "push_date_time")
   final DateTime pushDateTime;
 
   @JsonKey(name: "sent_state")

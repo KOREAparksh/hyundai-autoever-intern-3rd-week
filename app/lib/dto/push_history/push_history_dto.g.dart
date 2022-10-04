@@ -14,7 +14,7 @@ PushHistoryDto _$PushHistoryDtoFromJson(Map<String, dynamic> json) =>
       deviceDescription: json['device_description'] as String,
       pushTitle: json['push_title'] as String,
       pushContent: json['push_content'] as String,
-      pushDateTime: DateTime.parse(json['push_data_time'] as String),
+      pushDateTime: DateTime.parse(json['push_date_time'] as String),
       sentState: json['sent_state'] as String,
       sentDateTime: DateTime.parse(json['sent_date_time'] as String),
     );
@@ -27,7 +27,7 @@ Map<String, dynamic> _$PushHistoryDtoToJson(PushHistoryDto instance) =>
       'device_description': instance.deviceDescription,
       'push_title': instance.pushTitle,
       'push_content': instance.pushContent,
-      'push_data_time': instance.pushDateTime.toIso8601String(),
+      'push_date_time': instance.pushDateTime.toIso8601String(),
       'sent_state': instance.sentState,
       'sent_date_time': instance.sentDateTime.toIso8601String(),
     };
