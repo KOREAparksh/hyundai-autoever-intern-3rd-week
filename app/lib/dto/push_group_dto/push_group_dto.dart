@@ -14,6 +14,10 @@ class PushGroupDto {
 
   PushGroupDto(this.pushGroupId, this.pushGroupName, this.isCheck);
 
+  factory PushGroupDto.fromJson(Map<String, dynamic> json) =>
+      _$PushGroupDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$PushGroupDtoToJson(this);
+
   @override
   String toString() {
     return 'PushGroupDto{pushGroupId: $pushGroupId, pushGroupName: $pushGroupName, isCheck: $isCheck}';
