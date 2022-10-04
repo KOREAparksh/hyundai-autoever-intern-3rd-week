@@ -53,20 +53,6 @@ class DeviceRegisterController extends BaseController {
     }
   }
 
-  dynamic _showDialog() {
-    return showDialog(
-      context: Get.context!,
-      builder: (context) {
-        return CustomDialog(
-          mainTitle: "모바일기기정보를 받아오지 못했습니다",
-          subTitle: "메인화면으로 이동합니다",
-          dialogType: DialogType.OK,
-          onTapPositive: () => Get.back(),
-        );
-      },
-    );
-  }
-
   void onTapTile(int i) {
     Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
   }
@@ -112,7 +98,40 @@ class DeviceRegisterController extends BaseController {
     Get.back();
   }
 
-  void onTapDelete(int i) {
-    contentList.removeAt(i);
+  void onTapDelete(int i) async {
+    String userId = contentList[i].userId;
+    String deviceId = contentList[i].deviceId;
+    CustomDio customDio = CustomDio();
+    DeviceApi deviceApi = DeviceApi(customDio.dio);
+    try {
+      await deviceApi.deleteDevice(userId, deviceId);
+      await getAllDeviceData();
+      contentList.clear();
+      contentList.addAll(list);
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.message);
+      await _showDialog();
+    } catch (e) {
+      print("Error: " + e.toString());
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialog() {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: "모바일기기정보를 받아오지 못했습니다",
+          subTitle: "메인화면으로 이동합니다",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
+        );
+      },
+    );
   }
 }
