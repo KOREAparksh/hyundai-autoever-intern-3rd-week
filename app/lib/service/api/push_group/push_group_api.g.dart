@@ -15,6 +15,25 @@ class _PushGroupApi implements PushGroupApi {
 
   String? baseUrl;
 
+  @override
+  Future<HttpResponse<List<PushGroupDto>>> getPushGroup(userId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'user_id': userId};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<HttpResponse<List<PushGroupDto>>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/push-groups',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => PushGroupDto.fromJson(i as Map<String, dynamic>))
+        .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
@@ -26,10 +45,5 @@ class _PushGroupApi implements PushGroupApi {
       }
     }
     return requestOptions;
-  }
-
-  @override
-  void test() {
-    // TODO: implement test
   }
 }

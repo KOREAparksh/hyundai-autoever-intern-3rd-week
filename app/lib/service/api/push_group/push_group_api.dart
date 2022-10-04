@@ -1,3 +1,4 @@
+import 'package:app/dto/push_group_dto/push_group_dto.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
@@ -8,5 +9,6 @@ abstract class PushGroupApi {
   factory PushGroupApi(Dio dio, {String baseUrl}) = _PushGroupApi;
 
   @GET("/push-groups")
-  void test();
+  Future<HttpResponse<List<PushGroupDto>>> getPushGroup(
+      @Query("user_id") String userId);
 }
