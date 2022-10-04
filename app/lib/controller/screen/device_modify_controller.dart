@@ -1,6 +1,6 @@
 import 'package:app/controller/base_controller.dart';
-import 'package:app/dto/device_dto.dart';
-import 'package:app/dto/push_group_dto.dart';
+import 'package:app/dto/device_dto/device_dto.dart';
+import 'package:app/dto/push_group_dto/push_group_dto.dart';
 import 'package:app/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

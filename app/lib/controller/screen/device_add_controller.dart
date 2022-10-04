@@ -1,5 +1,5 @@
 import 'package:app/controller/base_controller.dart';
-import 'package:app/dto/device_dto.dart';
+import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:get/get.dart';
 
 class DeviceAddController extends BaseController {

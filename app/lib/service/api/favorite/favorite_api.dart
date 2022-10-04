@@ -1,4 +1,4 @@
-import 'package:app/dto/favorite_dto.dart';
+import 'package:app/dto/favorite_dto/favorite_dto.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 

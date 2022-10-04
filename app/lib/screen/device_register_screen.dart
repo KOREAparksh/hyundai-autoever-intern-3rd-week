@@ -1,6 +1,6 @@
 import 'package:app/const/Color.dart';
 import 'package:app/controller/screen/device_register_controller.dart';
-import 'package:app/dto/device_dto.dart';
+import 'package:app/dto/device_dto/device_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/custom_dialog.dart';
 import 'package:app/widget/custom_drawer.dart';

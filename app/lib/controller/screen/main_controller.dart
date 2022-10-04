@@ -1,5 +1,5 @@
 import 'package:app/controller/base_controller.dart';
-import 'package:app/dto/favorite_dto.dart';
+import 'package:app/dto/favorite_dto/favorite_dto.dart';
 import 'package:app/models/user/user.dart';
 import 'package:app/screen/login_dummy_screen.dart';
 import 'package:app/service/api/favorite/favorite_api.dart';
