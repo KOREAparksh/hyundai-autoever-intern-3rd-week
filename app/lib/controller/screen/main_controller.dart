@@ -99,8 +99,13 @@ class MainController extends BaseController {
     update();
   }
 
+  void onTapStarRemove(String screenId) async {
+    await deleteFavoriteData(screenId);
+    update();
+  }
+
   Future<void> postFavoriteData(String screenUrl) async {
-    CustomDio customDio = CustomDio();
+    CustomDio customDio = CustomDio(autoDialog: false);
     FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
     try {
       await favoriteApi.postFavoriteScreen(user!.id, screenUrl);
@@ -109,12 +114,47 @@ class MainController extends BaseController {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
           " : " +
-          e.message);
+          e.response?.data);
+      _showDialogByFavoriteConnected("등록되지 않았습니다.");
     } catch (e) {
       print("Error: " + e.toString());
-      _showDialogByFavorite();
+      _showDialogByFavoriteConnected("등록되지 않았습니다.");
     } finally {
       customDio.dio.close();
     }
+  }
+
+  Future<void> deleteFavoriteData(String screenId) async {
+    CustomDio customDio = CustomDio(autoDialog: false);
+    FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
+    try {
+      await favoriteApi.deleteFavoriteScreen(user!.id, screenId);
+      await getFavoriteData();
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.response?.data);
+      _showDialogByFavoriteConnected("삭제되지 않았습니다.");
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialogByFavoriteConnected("삭제되지 않았습니다.");
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialogByFavoriteConnected(String title) {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: title,
+          subTitle: "잠시 후 다시 시도해주세요.",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
+        );
+      },
+    );
   }
 }

@@ -15,4 +15,8 @@ abstract class FavoriteApi {
   @POST("/favorite")
   Future<HttpResponse<String>> postFavoriteScreen(
       @Query("user_id") String userId, @Query("screen_url") String screenUrl);
+
+  @DELETE("/favorite")
+  Future<HttpResponse<String>> deleteFavoriteScreen(
+      @Query("user_id") String userId, @Query("screen_id") String screenId);
 }

@@ -130,7 +130,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           color: (dto == null) ? null : Colors.yellow,
         ),
         onPressed: () {
-          if (dto == null) controller.onTapStarAdd(Get.currentRoute);
+          if (dto == null)
+            controller.onTapStarAdd(Get.currentRoute);
+          else
+            controller.onTapStarRemove(dto.screenId);
         },
       ));
     }
