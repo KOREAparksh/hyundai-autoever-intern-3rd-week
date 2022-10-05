@@ -26,7 +26,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool hasNoti;
   final bool hasStar;
 
-  //Todo: 외부주입
   final BaseController? baseController;
 
   //Size
@@ -112,7 +111,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   List<Widget> _trailingList() {
     final controller = Get.find<MainController>();
-    print(controller.favoriteDtoList);
+
     FavoriteDto? dto = controller.favoriteDtoList.firstWhere(
       (element) => (element.screenUrl == Get.currentRoute),
       orElse: () => FavoriteDto("", "", ""),

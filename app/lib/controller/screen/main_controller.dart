@@ -12,14 +12,13 @@ import 'package:dio/dio.dart';
 
 class MainController extends BaseController {
   User? user;
-  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[].obs;
+  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[];
 
   @override
   void onInit() async {
     super.onInit();
     await getUserData();
     await getFavoriteData();
-    print(favoriteDtoList);
   }
 
   Future<void> getUserData() async {

@@ -95,16 +95,17 @@ class _ButtonComplex extends GetView<MainController> {
           crossAxisSpacing: _gridAxisSpacing,
           mainAxisSpacing: _gridAxisSpacing,
         ),
-        itemBuilder: (context, int i) => Obx(
-          () => _FavoriteButton(
+        itemBuilder: (context, int i) =>
+            GetBuilder<MainController>(builder: (_) {
+          return _FavoriteButton(
             title: (controller.favoriteDtoList.length > i)
                 ? controller.favoriteDtoList[i].screenName
                 : null,
             onTap: (controller.favoriteDtoList.length > i)
                 ? () => controller.onTapButton(i)
                 : null,
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
