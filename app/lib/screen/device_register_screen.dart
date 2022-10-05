@@ -170,7 +170,9 @@ class _ListFilterHeader extends StatelessWidget {
               _iconButtonForm(
                 onPressed: onTapExpand,
                 isActive: isExpandActive,
-                icon: Icon(Icons.expand_outlined),
+                icon: (isExpandActive)
+                    ? Icon(Icons.expand_outlined)
+                    : Icon(Icons.compress_outlined),
               ),
               _iconButtonForm(
                 onPressed: onTapSearch,
@@ -260,6 +262,8 @@ class DeviceRegisterListTile extends StatelessWidget {
   Widget _textForm(String str, {Color? color}) {
     return Text(
       str,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: color,
