@@ -54,8 +54,10 @@ class DeviceRegisterScreen extends StatelessWidget {
       () => _ListFilterHeader(
         height: _headerHeight,
         isSearchActive: controller.isSearchActive.value,
+        isExpandActive: controller.isExpandActive.value,
         onTapAdd: controller.onTapAddButton,
         onTapSearch: _onTapSearchDialog,
+        onTapExpand: controller.onTapExpand,
       ),
     );
   }
@@ -139,13 +141,17 @@ class _ListFilterHeader extends StatelessWidget {
     required this.height,
     required this.onTapAdd,
     required this.onTapSearch,
+    required this.onTapExpand,
     required this.isSearchActive,
+    required this.isExpandActive,
   }) : super(key: key);
 
   final double height;
   final VoidCallback onTapAdd;
   final VoidCallback onTapSearch;
+  final VoidCallback onTapExpand;
   final bool isSearchActive;
+  final bool isExpandActive;
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +165,19 @@ class _ListFilterHeader extends StatelessWidget {
             onPressed: onTapAdd,
             icon: Icon(Icons.add_box_rounded),
           ),
-          _iconButtonForm(
-            onPressed: onTapSearch,
-            isActive: isSearchActive,
-            icon: Icon(Icons.search_outlined),
+          Row(
+            children: [
+              _iconButtonForm(
+                onPressed: onTapExpand,
+                isActive: isExpandActive,
+                icon: Icon(Icons.expand_outlined),
+              ),
+              _iconButtonForm(
+                onPressed: onTapSearch,
+                isActive: isSearchActive,
+                icon: Icon(Icons.search_outlined),
+              ),
+            ],
           ),
         ],
       ),
