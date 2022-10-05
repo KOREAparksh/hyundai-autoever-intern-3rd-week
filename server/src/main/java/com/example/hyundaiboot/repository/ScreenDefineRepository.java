@@ -7,5 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScreenDefineRepository extends JpaRepository<ScreenDefine, String> {
-	Optional<ScreenDefine> findByScreenId(String screenId);
+	Optional<ScreenDefine> findByScreenId(String screenUrl);
+	Optional<ScreenDefine> findByUrl(String screenUrl);
 }
