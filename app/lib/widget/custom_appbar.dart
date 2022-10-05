@@ -1,6 +1,7 @@
 import 'package:app/controller/base_controller.dart';
 import 'package:app/controller/screen/main_controller.dart';
 import 'package:app/dto/favorite_dto/favorite_dto.dart';
+import 'package:app/screen/noti_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.hasBack = false,
     this.hasNoti = true,
     this.hasStar = false,
-    this.onTapNoti,
     this.baseController,
   }) : super(key: key);
 
@@ -28,9 +28,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   //Todo: 외부주입
   final BaseController? baseController;
-
-  //Todo: 외부 주입 말고 내부적으로 구현
-  final VoidCallback? onTapNoti;
 
   //Size
   final _logoWidth = 100.0;
@@ -141,7 +138,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       _list.add(SizedBox(width: _appBarTrailingInnerMargin));
       _list.add(_customIconButton(
         icon: Icon(Icons.notifications),
-        onPressed: onTapNoti ?? () {},
+        onPressed: () => Get.to(() => NotiScreen()),
       ));
     }
     return _list;
