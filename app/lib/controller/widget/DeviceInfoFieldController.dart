@@ -22,7 +22,7 @@ class DeviceInfoFieldController extends BaseController {
     maxCountController.dispose();
   }
 
-  void initText(DeviceDto deviceDto) {
+  void initData(DeviceDto deviceDto) {
     userIdController.text = deviceDto.userId;
     deviceIdController.text = deviceDto.deviceId;
     deviceDescController.text = deviceDto.deviceDescription;
@@ -30,6 +30,7 @@ class DeviceInfoFieldController extends BaseController {
     if (deviceDto.maxSentCount != 0) {
       maxCountController.text = deviceDto.maxSentCount.toString();
     }
+    (deviceDto.isUsed == "Y") ? state(true) : state(false);
   }
 
   void onChangeRadioButton(v) {

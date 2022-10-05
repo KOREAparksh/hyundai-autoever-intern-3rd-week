@@ -22,7 +22,7 @@ class DeviceInfoField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.initText(deviceDto);
+    controller.initData(deviceDto);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -125,7 +125,7 @@ class DeviceInfoField extends StatelessWidget {
     return Obx(
       () => Row(
         children: [
-          _radio(title: "사용", value: true),
+          _radio(title: "사용 중", value: true),
           _radio(title: "사용안함", value: false),
         ],
       ),
