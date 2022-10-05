@@ -23,6 +23,7 @@ class PushHistoryController extends BaseController {
   void onInit() async {
     super.onInit();
     await getPushHistoryData();
+    contentsList.clear();
     contentsList.addAll(list);
   }
 
@@ -40,6 +41,7 @@ class PushHistoryController extends BaseController {
     PushHistoryApi pushHistoryApi = PushHistoryApi(customDio.dio);
     try {
       final result = await pushHistoryApi.getPushHistory();
+      list.clear();
       list.addAll(result.data);
     } on DioError catch (e) {
       print("DioError: " +
@@ -78,7 +80,7 @@ class PushHistoryController extends BaseController {
   void onTapInit() async {
     contentsList.clear();
     userIdController.clear();
-    deviceIdController.clear();
+    userNameController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
     readStatesIndex(0);

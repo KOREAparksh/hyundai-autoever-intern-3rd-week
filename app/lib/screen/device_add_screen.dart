@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DeviceAddScreen extends StatelessWidget {
-  DeviceAddScreen({
+  const DeviceAddScreen({
     Key? key,
   }) : super(key: key);
 
   final _title = "모바일기기 등록하기";
-  final controller = Get.put(DeviceAddController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +19,14 @@ class DeviceAddScreen extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: _title, hasBack: true, hasNoti: false),
-        body: DeviceInfoField(
-          onTapButton: controller.onTapAddButton,
-          buttonText: "추가",
-        ),
+        body: GetBuilder<DeviceAddController>(
+            init: DeviceAddController(),
+            builder: (controller) {
+              return DeviceInfoField(
+                onTapButton: controller.onTapAddButton,
+                buttonText: "추가",
+              );
+            }),
       ),
     );
   }

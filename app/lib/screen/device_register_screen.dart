@@ -14,8 +14,6 @@ class DeviceRegisterScreen extends StatelessWidget {
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
-  final _searchDialogContentsMargin = 30.0;
-  final _searchDialogTextFieldPadding = 5.0;
 
   final controller = Get.put(DeviceRegisterController());
 
@@ -42,13 +40,6 @@ class DeviceRegisterScreen extends StatelessWidget {
     );
   }
 
-  void _showDialog(Widget dialog) {
-    showDialog(
-      context: Get.context!,
-      builder: (_) => dialog,
-    );
-  }
-
   Widget _header() {
     return Obx(
       () => _ListFilterHeader(
@@ -63,46 +54,9 @@ class DeviceRegisterScreen extends StatelessWidget {
   }
 
   void _onTapSearchDialog() {
-    _showDialog(
-      CustomDialog(
-        mainTitle: "검색",
-        contents: Container(
-          margin: EdgeInsets.all(_searchDialogContentsMargin),
-          child: Column(
-            children: [
-              _textField(
-                hint: "사용자ID",
-                controller: controller.userIdController,
-              ),
-              _textField(
-                hint: "Device명",
-                controller: controller.deviceIdController,
-              ),
-              _textField(
-                hint: "Device Kind",
-                controller: controller.deviceController,
-              ),
-              SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: controller.onTapSearchInit,
-                child: Text("초기화"),
-              ),
-            ],
-          ),
-        ),
-        onTapPositive: controller.onTapSearchDialogPositive,
-        onTabNegative: controller.onTapSearchDialogNegative,
-      ),
-    );
-  }
-
-  Widget _textField({required String hint, required controller}) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
-        hintText: hint,
-      ),
+    showDialog(
+      context: Get.context!,
+      builder: (_) => _SearchDialog(),
     );
   }
 
@@ -131,6 +85,56 @@ class DeviceRegisterScreen extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class _SearchDialog extends GetView<DeviceRegisterController> {
+  const _SearchDialog({Key? key}) : super(key: key);
+
+  final _searchDialogContentsMargin = 30.0;
+  final _searchDialogTextFieldPadding = 5.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      mainTitle: "검색",
+      contents: Container(
+        margin: EdgeInsets.all(_searchDialogContentsMargin),
+        child: Column(
+          children: [
+            _textField(
+              hint: "사용자ID",
+              controller: controller.userIdController,
+            ),
+            _textField(
+              hint: "Device명",
+              controller: controller.deviceIdController,
+            ),
+            _textField(
+              hint: "Device Kind",
+              controller: controller.deviceController,
+            ),
+            SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: controller.onTapSearchInit,
+              child: const Text("초기화"),
+            ),
+          ],
+        ),
+      ),
+      onTapPositive: controller.onTapSearchDialogPositive,
+      onTabNegative: controller.onTapSearchDialogNegative,
+    );
+  }
+
+  Widget _textField({required String hint, required controller}) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
+        hintText: hint,
+      ),
     );
   }
 }
