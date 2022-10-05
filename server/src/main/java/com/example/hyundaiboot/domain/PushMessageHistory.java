@@ -27,16 +27,6 @@ public class PushMessageHistory {
 	@Column(name = "PUSH_MSG_ID")
 	private long pushMessageMaster;
 
-//	@Id
-//	@ManyToOne
-//	@JoinColumns({
-//			@JoinColumn(name = "PUSH_GEN_DT"),
-//			@JoinColumn(name = "USER_ID"),
-//			@JoinColumn(name = "DEVICE_ID"),
-//			@JoinColumn(name = "PUSH_MSG_ID")
-//	})
-//	private PushMessageQueue pushMessageQueue;
-
 	@Column(name = "SENT_STAT")
 	private String sentState;
 

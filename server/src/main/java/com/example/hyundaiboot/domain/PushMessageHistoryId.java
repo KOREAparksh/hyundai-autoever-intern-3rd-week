@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PushMessageHistoryId implements Serializable {
 	private LocalDateTime generateTime;
+	private LocalDateTime sentDateTime;
 	private String user;
 	private String userDevice;
 	private long pushMessageMaster;

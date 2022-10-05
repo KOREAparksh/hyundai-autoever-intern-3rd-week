@@ -35,7 +35,13 @@ public class PushMessageHistoryService {
 		List<PushMessageHistory> list =  pushMessageHistoryRepository.findAll();
 		List<PushHistoryDto> dtoList = new ArrayList<>();
 
+		System.out.println("=================================");
+		System.out.println(list + "\n");
+		System.out.println("=================================");
+
 		for(PushMessageHistory e : list){
+			System.out.println("=================================");
+			System.out.println((e));
 			User user = userRepository.findById(e.getUser()).get();
 			String deviceId = e.getUserDevice();
 			String deviceDescription = "@@@";
