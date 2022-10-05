@@ -47,7 +47,7 @@ class PushHistoryScreen extends StatelessWidget {
                 height: _headerHeight,
                 margin: _bodySideMargin,
                 isSearchActive: controller.isSearchActive.value,
-                isOrderActive: controller.isOrderActive.value,
+                isOrderActive: controller.isDescActive.value,
                 onTapOrder: controller.onTapOrder,
                 onTapSearch: _searchDialog,
               ),
@@ -69,8 +69,12 @@ class PushHistoryScreen extends StatelessWidget {
             )
           : GroupedListView<PushHistoryDto, DateTime>(
               elements: controller.contentsList,
-              groupBy: (element) => element.pushDateTime,
-              sort: false,
+              groupBy: (element) => DateTime.parse(
+                  DateFormat("yyyyMMdd").format(element.sentDateTime)),
+              // sort: false,
+              order: (controller.isDescActive.value)
+                  ? GroupedListOrder.DESC
+                  : GroupedListOrder.ASC,
               cacheExtent: controller.contentsList.length + 5,
               itemBuilder: _itemBuilder,
               groupHeaderBuilder: (element) => _groupHeader(element),
@@ -190,7 +194,7 @@ class PushHistoryScreen extends StatelessWidget {
       color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Text(
-        DateFormat(_dateFormat).format(element.pushDateTime),
+        DateFormat(_dateFormat).format(element.sentDateTime),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
     );
@@ -274,7 +278,7 @@ class PushHistoryListTile extends StatelessWidget {
   final _titleFormHeight = 30.0;
   final _stateWidth = 20.0;
   final _stateHeight = 15.0;
-  final _dateFormat = "yy/MM/dd hh:mm:ss";
+  final _dateFormat = "yy/MM/dd HH:mm:ss";
 
   @override
   Widget build(BuildContext context) {
