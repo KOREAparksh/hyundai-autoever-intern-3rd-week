@@ -154,12 +154,12 @@ public class ApiController {
 
 
 	@DeleteMapping("/favorite")
-	public ResponseEntity deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+	public ResponseEntity<String> deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
 		try {
 			userFavoriteScreenService.deleteFavoriteScreen(userId, screenId);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("삭제되었습니다.");
 		}  catch (NoSuchFieldException e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
