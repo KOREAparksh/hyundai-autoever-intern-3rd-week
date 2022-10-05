@@ -1,17 +1,18 @@
 import 'package:app/controller/base_controller.dart';
+import 'package:app/controller/screen/main_controller.dart';
+import 'package:app/dto/favorite_dto/favorite_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  CustomAppBar({
+  const CustomAppBar({
     Key? key,
     this.title,
     this.middleAsset,
     this.hasBack = false,
     this.hasNoti = true,
     this.hasStar = false,
-    this.onTapStar,
     this.onTapNoti,
     this.baseController,
   }) : super(key: key);
@@ -24,7 +25,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool hasBack;
   final bool hasNoti;
   final bool hasStar;
-  final VoidCallback? onTapStar;
+
+  //Todo: 외부주입
   final BaseController? baseController;
 
   //Todo: 외부 주입 말고 내부적으로 구현
@@ -103,18 +105,33 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget _trailing() {
     return Container(
       margin: EdgeInsets.only(right: _appBarTrailingMargin),
-      child: Row(
-        children: _trailingList(),
+      child: GetBuilder<MainController>(
+        builder: (_) => Row(
+          children: _trailingList(),
+        ),
       ),
     );
   }
 
   List<Widget> _trailingList() {
+    final controller = Get.find<MainController>();
+    print(controller.favoriteDtoList);
+    FavoriteDto? dto = controller.favoriteDtoList.firstWhere(
+      (element) => (element.screenUrl == Get.currentRoute),
+      orElse: () => FavoriteDto("", "", ""),
+    );
+    if (dto.screenId == "") dto = null;
+
     List<Widget> _list = [];
     if (hasStar) {
       _list.add(_customIconButton(
-        icon: Icon(Icons.star_border),
-        onPressed: onTapStar ?? () {},
+        icon: Icon(
+          (dto == null) ? Icons.star_border : Icons.star,
+          color: (dto == null) ? null : Colors.yellow,
+        ),
+        onPressed: () {
+          if (dto == null) controller.onTapStarAdd(Get.currentRoute);
+        },
       ));
     }
     if (hasNoti) {

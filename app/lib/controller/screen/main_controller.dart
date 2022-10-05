@@ -48,6 +48,7 @@ class MainController extends BaseController {
     FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
     try {
       final result = await favoriteApi.getFavoriteScreen(user!.id);
+      favoriteDtoList.clear();
       favoriteDtoList.addAll(result.data);
     } on DioError catch (e) {
       print("DioError: " +
@@ -91,5 +92,29 @@ class MainController extends BaseController {
 
   void onTapButton(int i) {
     Get.toNamed(favoriteDtoList[i].screenUrl);
+  }
+
+  void onTapStarAdd(String screenUrl) async {
+    await postFavoriteData(screenUrl);
+    update();
+  }
+
+  Future<void> postFavoriteData(String screenUrl) async {
+    CustomDio customDio = CustomDio();
+    FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
+    try {
+      await favoriteApi.postFavoriteScreen(user!.id, screenUrl);
+      await getFavoriteData();
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.message);
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialogByFavorite();
+    } finally {
+      customDio.dio.close();
+    }
   }
 }
