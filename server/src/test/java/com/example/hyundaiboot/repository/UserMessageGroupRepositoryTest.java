@@ -15,7 +15,7 @@ class UserMessageGroupRepositoryTest {
 
 	@Test
 	void testGetAllWithId(){
-		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "1"));
-		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "2"));
+//		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "1"));
+//		System.out.println(userMessageGroupRepository.findByUserIdAndPushMessageGroupId("1", "2"));
 	}
 }

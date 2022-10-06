@@ -34,84 +34,84 @@ class UserDeviceServiceTest {
 
 	@Test
 	void testPostDevice() throws Exception{
-		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("1");
-		deviceDto.setDeviceDescription("testtest");
-		deviceDto.setDeviceId("3");
-		deviceDto.setDeviceKind("test macbook");
-		deviceDto.setMaxSentCount(3);
-		deviceDto.setIsUsed("Y");
-
-		userDeviceService.postDevice(deviceDto);
-
-		System.out.println("User=============");
-		System.out.println(userService.getAllUser());
-		System.out.println("UserDevice=============");
-		System.out.println(userDeviceService.getAllDevice());
-		System.out.println("Device=============");
-		System.out.println(deviceMasterRepository.findAll());
+//		DeviceDto deviceDto = new DeviceDto();
+//		deviceDto.setUserId("1");
+//		deviceDto.setDeviceDescription("testtest");
+//		deviceDto.setDeviceId("3");
+//		deviceDto.setDeviceKind("test macbook");
+//		deviceDto.setMaxSentCount(3);
+//		deviceDto.setIsUsed("Y");
+//
+//		userDeviceService.postDevice(deviceDto);
+//
+//		System.out.println("User=============");
+//		System.out.println(userService.getAllUser());
+//		System.out.println("UserDevice=============");
+//		System.out.println(userDeviceService.getAllDevice());
+//		System.out.println("Device=============");
+//		System.out.println(deviceMasterRepository.findAll());
 	}
 
 	@Test
 	void testUpdateDevice() throws Exception {
 
-		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("seunpark");
-		deviceDto.setDeviceDescription("testtest123123");
-		deviceDto.setDeviceId("device1");
-		deviceDto.setDeviceKind("test macbook 123123");
-		deviceDto.setMaxSentCount(2);
-		deviceDto.setIsUsed("Y");
-
-		userDeviceService.updateDevice(deviceDto);
+//		DeviceDto deviceDto = new DeviceDto();
+//		deviceDto.setUserId("seunpark");
+//		deviceDto.setDeviceDescription("testtest123123");
+//		deviceDto.setDeviceId("device1");
+//		deviceDto.setDeviceKind("test macbook 123123");
+//		deviceDto.setMaxSentCount(2);
+//		deviceDto.setIsUsed("Y");
+//
+//		userDeviceService.updateDevice(deviceDto);
 	}
 
 	@Test
 	void testUpdateDeviceErrorByUserId() throws Exception {
 
 		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("seunpark123123");
-		deviceDto.setDeviceDescription("testtest123123");
-		deviceDto.setDeviceId("device1");
-		deviceDto.setDeviceKind("test macbook 123123");
-		deviceDto.setMaxSentCount(2);
-		deviceDto.setIsUsed("Y");
-
-		userDeviceService.updateDevice(deviceDto);
+//		deviceDto.setUserId("seunpark123123");
+//		deviceDto.setDeviceDescription("testtest123123");
+//		deviceDto.setDeviceId("device1");
+//		deviceDto.setDeviceKind("test macbook 123123");
+//		deviceDto.setMaxSentCount(2);
+//		deviceDto.setIsUsed("Y");
+//
+//		userDeviceService.updateDevice(deviceDto);
 	}
 
 	@Test
 	void testUpdateDeviceErrorByDeviceId() throws Exception {
 
-		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("seunpark");
-		deviceDto.setDeviceDescription("testtest123123");
-		deviceDto.setDeviceId("device100");
-		deviceDto.setDeviceKind("test macbook 123123");
-		deviceDto.setMaxSentCount(2);
-		deviceDto.setIsUsed("Y");
-
-		userDeviceService.updateDevice(deviceDto);
+//		DeviceDto deviceDto = new DeviceDto();
+//		deviceDto.setUserId("seunpark");
+//		deviceDto.setDeviceDescription("testtest123123");
+//		deviceDto.setDeviceId("device100");
+//		deviceDto.setDeviceKind("test macbook 123123");
+//		deviceDto.setMaxSentCount(2);
+//		deviceDto.setIsUsed("Y");
+//
+//		userDeviceService.updateDevice(deviceDto);
 	}
 
 	@Test
 	void testPostDeviceErrorBySameDeviceId(){
-		DeviceDto deviceDto = new DeviceDto();
-		deviceDto.setUserId("1");
-		deviceDto.setDeviceDescription("testtest");
-		deviceDto.setDeviceId("2");
-		deviceDto.setDeviceKind("test macbook");
-		deviceDto.setMaxSentCount(3);
-		deviceDto.setIsUsed("Y");
-
-		Assertions.assertThrows(NoSuchFieldException.class, () -> {
-			userDeviceService.postDevice(deviceDto);
-		});
+//		DeviceDto deviceDto = new DeviceDto();
+//		deviceDto.setUserId("1");
+//		deviceDto.setDeviceDescription("testtest");
+//		deviceDto.setDeviceId("2");
+//		deviceDto.setDeviceKind("test macbook");
+//		deviceDto.setMaxSentCount(3);
+//		deviceDto.setIsUsed("Y");
+//
+//		Assertions.assertThrows(NoSuchFieldException.class, () -> {
+//			userDeviceService.postDevice(deviceDto);
+//		});
 	}
 
 	@Test
 	void deleteDevice() throws Exception {
-		userDeviceService.deleteDevice("seunpark", "device2");
+//		userDeviceService.deleteDevice("seunpark", "device2");
 	}
 
 }
