@@ -29,21 +29,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Hyundai Auto-ever App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      getPages: [
-        GetPage(
-          name: KRoute.HOME.name,
-          page: () => MainScreen(),
-        ),
-        GetPage(
-          name: KRoute.PUSH_HISTORY.name,
-          page: () => PushHistoryScreen(),
-        ),
-        GetPage(
-          name: KRoute.DEVICE_REGISTER.name,
-          page: () => DeviceRegisterScreen(),
-        ),
-      ],
-      initialRoute: KRoute.HOME.name,
+      getPages: kRoute.pageRoute,
+      initialRoute: kRoute.HOME,
     );
   }
 }

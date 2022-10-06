@@ -28,7 +28,7 @@ class PushHistoryScreen extends StatelessWidget {
         baseController: controller,
       ),
       resizeToAvoidBottomInset: false,
-      drawer: CustomDrawer(),
+      drawer: (Get.context!.isPhone) ? CustomDrawer() : null,
       body: Stack(
         children: [
           Container(
@@ -292,7 +292,7 @@ class PushHistoryListTile extends StatelessWidget {
   final _width = 330.0;
   final _topBottomMargin = 10.0;
   final _radius = 20.0;
-  final _infoMainWidth = 100.0;
+  final _infoMainWidth = 150.0;
   final _formHeight = 25.0;
   final _titleFormHeight = 30.0;
   final _stateWidth = 20.0;
@@ -313,23 +313,61 @@ class PushHistoryListTile extends StatelessWidget {
         child: Container(
           width: _width,
           padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+          child: (Get.context!.isPhone) ? _mobileForm() : _tabletForm(),
+        ),
+      ),
+    );
+  }
+
+  Widget _mobileForm() {
+    return Column(
+      children: [
+        _form(child: _timeContainer()),
+        Container(height: 1, color: Colors.black),
+        _form(child: _infoForm(name: data.userName, id: data.userId)),
+        _form(
+          child: _infoForm(name: data.deviceDescription, id: data.deviceId),
+        ),
+        Container(height: 1, color: Colors.black),
+        SizedBox(height: 5),
+        _pushTitle(),
+        _form(child: _pushContents()),
+      ],
+    );
+  }
+
+  Widget _tabletForm() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
           child: Column(
             children: [
-              _form(child: _timeContainer()),
-              Container(height: 1, color: Colors.black),
+              _form(child: _pushTime()),
+              _form(child: _sentTime()),
               _form(child: _infoForm(name: data.userName, id: data.userId)),
               _form(
-                child:
-                    _infoForm(name: data.deviceDescription, id: data.deviceId),
+                child: _infoForm(
+                  name: data.deviceDescription,
+                  id: data.deviceId,
+                ),
               ),
-              Container(height: 1, color: Colors.black),
-              SizedBox(height: 5),
+            ],
+          ),
+        ),
+        SizedBox(width: 50),
+        Container(width: 1, height: 100, color: Colors.black),
+        SizedBox(width: 50),
+        Expanded(
+          flex: 5,
+          child: Column(
+            children: [
               _pushTitle(),
               _form(child: _pushContents()),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -350,29 +388,38 @@ class PushHistoryListTile extends StatelessWidget {
   Widget _timeContainer() {
     return Row(
       children: [
-        Expanded(
-          flex: 1,
-          child: _timeForm(
-              title: "푸시",
-              time: DateFormat(_dateFormat).format(data.pushDateTime)),
-        ),
-        Expanded(
-          flex: 1,
-          child: _timeForm(
-              title: "수신",
-              time: DateFormat(_dateFormat).format(data.sentDateTime)),
-        ),
-        Container(
-          width: _stateWidth,
-          height: _stateHeight,
-          color: data.sentState == "Y" ? Colors.green : Colors.red,
-          alignment: Alignment.center,
-          child: Text(
-            data.sentState,
-            style: TextStyle(color: Colors.white, fontSize: 10),
-          ),
-        ),
+        Expanded(child: _pushTime()),
+        SizedBox(width: 10),
+        Expanded(child: _sentTime()),
+        _stateBox(),
       ],
+    );
+  }
+
+  Widget _pushTime() {
+    return _timeForm(
+      title: "푸시",
+      time: DateFormat(_dateFormat).format(data.pushDateTime),
+    );
+  }
+
+  Widget _sentTime() {
+    return _timeForm(
+      title: "수신",
+      time: DateFormat(_dateFormat).format(data.sentDateTime),
+    );
+  }
+
+  Widget _stateBox() {
+    return Container(
+      width: _stateWidth,
+      height: _stateHeight,
+      color: data.sentState == "Y" ? Colors.green : Colors.red,
+      alignment: Alignment.center,
+      child: Text(
+        data.sentState,
+        style: TextStyle(color: Colors.white, fontSize: 10),
+      ),
     );
   }
 
@@ -386,7 +433,7 @@ class PushHistoryListTile extends StatelessWidget {
 
   Widget _timeForm({required String title, required String time}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
@@ -403,7 +450,7 @@ class PushHistoryListTile extends StatelessWidget {
 
   Widget _infoForm({required String name, required String id}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
           width: _infoMainWidth,

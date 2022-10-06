@@ -1,6 +1,9 @@
-import 'package:app/const/Color.dart';
+import 'package:app/const/color.dart';
 import 'package:app/const/route.dart';
 import 'package:app/controller/base_controller.dart';
+import 'package:app/controller/screen/device_register_controller.dart';
+import 'package:app/controller/screen/push_history_controller.dart';
+import 'package:app/screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +36,13 @@ class CustomDrawer extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    (Get.context!.isPhone)
+                        ? Container()
+                        : _ThirdTile(
+                            route: TabletNavigator.homeScreen,
+                            title: "홈",
+                            baseController: baseController,
+                          ),
                     _pushTile(),
                     _Dummy(title: "Production"),
                     _Dummy(title: "Order"),
@@ -66,12 +76,12 @@ class CustomDrawer extends StatelessWidget {
             _ThirdTile(
               title: "모바일기기등록",
               baseController: baseController,
-              route: KRoute.DEVICE_REGISTER.name,
+              route: kRoute.DEVICE_REGISTER,
             ),
             _ThirdTile(
               title: "푸시알람전송이력",
               baseController: baseController,
-              route: KRoute.PUSH_HISTORY.name,
+              route: kRoute.PUSH_HISTORY,
             ),
           ],
         ),
@@ -141,24 +151,69 @@ class _ThirdTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return (Get.context!.isPhone) ? _mobile() : _tablet();
+  }
+
+  Widget _mobile() {
     return Container(
-      color: (Get.currentRoute == route) ? mainColor : null,
+      color: _color(),
       child: ListTile(
         title: Text(
           title,
           style: TextStyle(
-            color: (Get.currentRoute == route) ? Colors.white : null,
+            color: (Get.currentRoute == route ||
+                    BaseController.route.value == route)
+                ? Colors.white
+                : null,
           ),
         ),
         contentPadding: EdgeInsets.only(left: 50),
-        onTap: () {
-          (Get.currentRoute == KRoute.HOME.name)
-              ? Get.toNamed(route)
-              : Get.offNamed(route);
-          baseController?.closeDrawer();
+        onTap: () async {
+          if (Get.context!.isPhone) {
+            (Get.currentRoute == kRoute.HOME)
+                ? Get.toNamed(route)
+                : Get.offNamed(route);
+            baseController?.closeDrawer();
+          } else {
+            if (route == kRoute.PUSH_HISTORY) {
+              if (Get.isRegistered<PushHistoryController>() == false) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                BaseController.route(TabletNavigator.pushHistoryScreen);
+              }
+            } else if (route == kRoute.DEVICE_REGISTER) {
+              if (Get.isRegistered<DeviceRegisterController>() == false) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                BaseController.route(TabletNavigator.deviceRegisterScreen);
+              }
+            } else {
+              if (BaseController.route.value != route) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                BaseController.route(TabletNavigator.homeScreen);
+              }
+            }
+          }
         },
       ),
     );
+  }
+
+  Widget _tablet() {
+    return Obx(() => _mobile());
+  }
+
+  Color? _color() {
+    // (Get.currentRoute == route || BaseController.route.value == route)
+    //     ? mainColor
+    //     : null
+    if (Get.context!.isPhone) {
+      if (Get.currentRoute == route) {
+        return mainColor;
+      }
+      return null;
+    } else if (BaseController.route.value == route) {
+      return mainColor;
+    }
+    return null;
   }
 }
 
