@@ -13,12 +13,19 @@ import 'package:dio/dio.dart';
 class MainController extends BaseController {
   User? user;
   List<FavoriteDto> favoriteDtoList = <FavoriteDto>[];
+  final RxBool isLoading = true.obs;
 
   @override
   void onInit() async {
     super.onInit();
+    initData();
+  }
+
+  void initData() async {
     await getUserData();
     await getFavoriteData();
+    isLoading(false);
+    update();
   }
 
   Future<void> getUserData() async {
@@ -27,7 +34,9 @@ class MainController extends BaseController {
     try {
       final result = await userApi.getUserData("seunpark");
       // final result = await userApi.getUserData("dummy");
+      await Future.delayed(Duration(milliseconds: 500));
       user = result.data;
+      update();
     } on DioError catch (e) {
       print(e.response?.statusCode.toString() ?? "" " : " + e.message);
       user = null;
@@ -49,6 +58,7 @@ class MainController extends BaseController {
       final result = await favoriteApi.getFavoriteScreen(user!.id);
       favoriteDtoList.clear();
       favoriteDtoList.addAll(result.data);
+      await Future.delayed(Duration(milliseconds: 500));
     } on DioError catch (e) {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
