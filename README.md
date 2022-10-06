@@ -4,7 +4,7 @@
 ## local server setting
 
 1. server/src/main/resources로 이동
-2. `.env.sample`파일을 cp하여 `.env`파일 생성
+2. `.env.sample`파일을 cp하여 `env`파일 생성 (env 앞에 `.` 삭제)
 3. URL, PW, NAME 작성
 4. `chmod 777 gradlew` 
 5. `./gradlew build`
