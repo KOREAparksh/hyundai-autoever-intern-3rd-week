@@ -38,7 +38,8 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 400),
       child: Dialog(
         insetPadding: EdgeInsets.all(dialogInsetPadding),
         clipBehavior: Clip.antiAliasWithSaveLayer,
