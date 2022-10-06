@@ -15,7 +15,7 @@ class MainWrapper extends GetView<MainController> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, __) {
       if (Get.context!.isPhone) {
-        return MainScreenScreen();
+        return MainScreen();
       }
       return Row(
         children: [
@@ -41,7 +41,7 @@ class MainWrapper extends GetView<MainController> {
                   return GetPageRoute(
                     fullscreenDialog: true,
                     routeName: TabletNavigator.homeScreen,
-                    page: () => MainScreenScreen(),
+                    page: () => MainScreen(),
                   );
                 }
               },

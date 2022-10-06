@@ -3,6 +3,7 @@ import 'package:app/const/route.dart';
 import 'package:app/controller/base_controller.dart';
 import 'package:app/controller/screen/device_register_controller.dart';
 import 'package:app/controller/screen/push_history_controller.dart';
+import 'package:app/screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -144,7 +145,9 @@ class _ThirdTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(route);
-    return (Get.context!.isPhone) ? _mobile() : _tablet();
+    return (Get.context!.isPhone || route == TabletNavigator.homeScreen)
+        ? _mobile()
+        : _tablet();
   }
 
   Widget _mobile() {

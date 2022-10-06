@@ -8,8 +8,8 @@ import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MainScreenScreen extends GetView<MainController> {
-  const MainScreenScreen({Key? key}) : super(key: key);
+class MainScreen extends GetView<MainController> {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
