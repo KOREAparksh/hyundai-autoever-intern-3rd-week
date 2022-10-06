@@ -36,9 +36,7 @@ class PushHistoryScreen extends StatelessWidget {
               left: _bodySideMargin,
               right: _bodySideMargin,
             ),
-            child: _ListView(
-              headerHeight: _headerHeight,
-            ),
+            child: _ListView(headerHeight: _headerHeight),
           ),
           Container(
             alignment: Alignment.topRight,
@@ -173,8 +171,11 @@ class _ListView extends GetView<PushHistoryController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Obx(
-        () => (controller.contentsList.isEmpty)
+      child: Obx(() {
+        if (controller.isLoading.isTrue) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return (controller.contentsList.isEmpty)
             ? _nothing()
             : GroupedListView<PushHistoryDto, DateTime>(
                 elements: controller.contentsList,
@@ -188,8 +189,8 @@ class _ListView extends GetView<PushHistoryController> {
                 itemBuilder: (_, element) => PushHistoryListTile(data: element),
                 groupHeaderBuilder: (element) => _groupHeader(element),
                 useStickyGroupSeparators: true,
-              ),
-      ),
+              );
+      }),
     );
   }
 

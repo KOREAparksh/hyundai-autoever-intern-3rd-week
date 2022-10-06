@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
 class PushHistoryController extends BaseController {
+  RxBool isLoading = true.obs;
   final List<PushHistoryDto> list = <PushHistoryDto>[];
   final List<PushHistoryDto> contentsList = <PushHistoryDto>[].obs;
   final userIdController = TextEditingController();
@@ -20,11 +21,9 @@ class PushHistoryController extends BaseController {
   RxBool isSearchActive = false.obs;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await getPushHistoryData();
-    contentsList.clear();
-    contentsList.addAll(list);
+    initData();
   }
 
   @override
@@ -36,6 +35,13 @@ class PushHistoryController extends BaseController {
     pushTitleController.dispose();
   }
 
+  void initData() async {
+    await getPushHistoryData();
+    contentsList.clear();
+    contentsList.addAll(list);
+    isLoading(false);
+  }
+
   Future<void> getPushHistoryData() async {
     CustomDio customDio = CustomDio();
     PushHistoryApi pushHistoryApi = PushHistoryApi(customDio.dio);
@@ -43,6 +49,7 @@ class PushHistoryController extends BaseController {
       final result = await pushHistoryApi.getPushHistory();
       list.clear();
       list.addAll(result.data);
+      await Future.delayed(Duration(milliseconds: 500));
     } on DioError catch (e) {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
@@ -71,13 +78,17 @@ class PushHistoryController extends BaseController {
   }
 
   void onTapOrder() {
+    isLoading(true);
     final temp = List.from(contentsList.reversed);
     contentsList.clear();
     temp.forEach((element) => contentsList.add(element));
     (isDescActive.isTrue) ? isDescActive(false) : isDescActive(true);
+    isLoading(false);
   }
 
   void onTapInit() async {
+    isLoading(true);
+    Get.back();
     contentsList.clear();
     userIdController.clear();
     userNameController.clear();
@@ -89,10 +100,13 @@ class PushHistoryController extends BaseController {
     (isDescActive.isTrue)
         ? list.reversed.forEach((element) => contentsList.add(element))
         : list.forEach((element) => contentsList.add(element));
-    Get.back();
+    isLoading(false);
   }
 
   void onTapSearchDialogPositive() {
+    isLoading(true);
+    Get.back();
+
     final _userId = userIdController.text.toLowerCase();
     final _userName = userNameController.text.toLowerCase();
     final _deviceId = deviceIdController.text.toLowerCase();
@@ -134,7 +148,7 @@ class PushHistoryController extends BaseController {
         _state == "") {
       isSearchActive(false);
     }
-    Get.back();
+    isLoading(false);
   }
 
   void onTapSearchDialogNegative() {
