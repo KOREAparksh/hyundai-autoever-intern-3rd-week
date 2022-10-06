@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BaseController extends GetxController {
-  static RxString route = kRoute.HOME.obs;
+  static RxString route = TabletNavigator.homeScreen.obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

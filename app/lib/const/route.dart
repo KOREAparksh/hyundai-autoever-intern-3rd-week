@@ -30,7 +30,7 @@ class kRoute {
 class TabletNavigator {
   TabletNavigator._();
   static const int key = 123;
-  static const String homeScreen = "/";
+  static const String homeScreen = "/home";
   static const String pushHistoryScreen = kRoute.PUSH_HISTORY;
   static const String deviceRegisterScreen = kRoute.DEVICE_REGISTER;
 }

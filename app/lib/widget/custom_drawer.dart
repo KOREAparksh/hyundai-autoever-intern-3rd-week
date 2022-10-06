@@ -1,4 +1,4 @@
-import 'package:app/const/Color.dart';
+import 'package:app/const/color.dart';
 import 'package:app/const/route.dart';
 import 'package:app/controller/base_controller.dart';
 import 'package:app/controller/screen/device_register_controller.dart';
@@ -36,6 +36,13 @@ class CustomDrawer extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    (Get.context!.isPhone)
+                        ? Container()
+                        : _ThirdTile(
+                            route: TabletNavigator.homeScreen,
+                            title: "홈",
+                            baseController: baseController,
+                          ),
                     _pushTile(),
                     _Dummy(title: "Production"),
                     _Dummy(title: "Order"),
@@ -145,16 +152,12 @@ class _ThirdTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(route);
-    return (Get.context!.isPhone || route == TabletNavigator.homeScreen)
-        ? _mobile()
-        : _tablet();
+    return (Get.context!.isPhone) ? _mobile() : _tablet();
   }
 
   Widget _mobile() {
     return Container(
-      color: (Get.currentRoute == route || BaseController.route.value == route)
-          ? mainColor
-          : null,
+      color: _color(),
       child: ListTile(
         title: Text(
           title,
@@ -173,14 +176,22 @@ class _ThirdTile extends StatelessWidget {
                 : Get.offNamed(route);
             baseController?.closeDrawer();
           } else {
-            if (route == kRoute.PUSH_HISTORY &&
-                Get.isRegistered<PushHistoryController>() == false) {
-              Get.offNamed(route, id: TabletNavigator.key);
-              baseController?.changeRoute(kRoute.PUSH_HISTORY);
-            } else if (route == kRoute.DEVICE_REGISTER &&
-                Get.isRegistered<DeviceRegisterController>() == false) {
-              Get.offNamed(route, id: TabletNavigator.key);
-              baseController?.changeRoute(kRoute.DEVICE_REGISTER);
+            if (route == kRoute.PUSH_HISTORY) {
+              if (Get.isRegistered<PushHistoryController>() == false) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                baseController?.changeRoute(TabletNavigator.pushHistoryScreen);
+              }
+            } else if (route == kRoute.DEVICE_REGISTER) {
+              if (Get.isRegistered<DeviceRegisterController>() == false) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                baseController
+                    ?.changeRoute(TabletNavigator.deviceRegisterScreen);
+              }
+            } else {
+              if (BaseController.route.value != route) {
+                Get.offNamed(route, id: TabletNavigator.key);
+                baseController?.changeRoute(TabletNavigator.homeScreen);
+              }
             }
           }
         },
@@ -190,6 +201,21 @@ class _ThirdTile extends StatelessWidget {
 
   Widget _tablet() {
     return Obx(() => _mobile());
+  }
+
+  Color? _color() {
+    // (Get.currentRoute == route || BaseController.route.value == route)
+    //     ? mainColor
+    //     : null
+    if (Get.context!.isPhone) {
+      if (Get.currentRoute == route) {
+        return mainColor;
+      }
+      return null;
+    } else if (BaseController.route.value == route) {
+      return mainColor;
+    }
+    return null;
   }
 }
 
