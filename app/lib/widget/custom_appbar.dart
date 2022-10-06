@@ -78,11 +78,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               onPressed: () => Get.back(),
               icon: Icon(Icons.arrow_back_ios),
             )
-          : _customIconButton(
-              icon: Icon(Icons.menu),
-              onPressed: baseController?.openDrawer ??
-                  () => Get.snackbar("Error", "base controller error"),
-            ),
+          : (Get.context!.isPhone)
+              ? _customIconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: baseController?.openDrawer ??
+                      () => Get.snackbar("Error", "base controller error"),
+                )
+              : Container(),
     );
   }
 
@@ -101,8 +103,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget _trailing() {
     return Container(
       margin: EdgeInsets.only(right: _appBarTrailingMargin),
-      child: GetBuilder<MainController>(
-        builder: (_) => Row(
+      child: Obx(
+        () => Row(
           children: _trailingList(),
         ),
       ),
@@ -113,7 +115,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     final controller = Get.find<MainController>();
 
     FavoriteDto? dto = controller.favoriteDtoList.firstWhere(
-      (element) => (element.screenUrl == Get.currentRoute),
+      (element) => ((element.screenUrl == Get.currentRoute) ||
+          (element.screenUrl == BaseController.route.value)),
       orElse: () => FavoriteDto("", "", ""),
     );
     if (dto.screenId == "") dto = null;
@@ -126,9 +129,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           color: (dto == null) ? null : Colors.yellow,
         ),
         onPressed: () {
-          if (dto == null)
-            controller.onTapStarAdd(Get.currentRoute);
-          else
+          if (dto == null) {
+            if (Get.context!.isPhone) {
+              controller.onTapStarAdd(Get.currentRoute);
+            } else {
+              controller.onTapStarAdd(BaseController.route.value);
+            }
+          } else
             controller.onTapStarRemove(dto.screenId);
         },
       ));

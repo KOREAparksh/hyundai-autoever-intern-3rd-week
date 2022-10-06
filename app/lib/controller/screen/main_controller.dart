@@ -1,3 +1,4 @@
+import 'package:app/const/route.dart';
 import 'package:app/controller/base_controller.dart';
 import 'package:app/dto/favorite_dto/favorite_dto.dart';
 import 'package:app/models/user/user.dart';
@@ -12,7 +13,7 @@ import 'package:dio/dio.dart';
 
 class MainController extends BaseController {
   User? user;
-  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[];
+  RxList<FavoriteDto> favoriteDtoList = <FavoriteDto>[].obs;
   final RxBool isLoading = true.obs;
 
   @override
@@ -99,7 +100,12 @@ class MainController extends BaseController {
   }
 
   void onTapButton(int i) {
-    Get.toNamed(favoriteDtoList[i].screenUrl);
+    if (Get.context!.isPhone) {
+      Get.toNamed(favoriteDtoList[i].screenUrl);
+      return;
+    }
+    Get.offNamed(favoriteDtoList[i].screenUrl, id: TabletNavigator.key);
+    changeRoute(favoriteDtoList[i].screenUrl);
   }
 
   void onTapStarAdd(String screenUrl) async {

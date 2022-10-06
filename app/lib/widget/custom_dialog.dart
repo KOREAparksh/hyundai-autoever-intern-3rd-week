@@ -35,10 +35,12 @@ class CustomDialog extends StatelessWidget {
   final _buttonRadius = 20.0;
   final _buttonBetweenPadding = 12.0;
   final _buttonSideMargin = 24.0;
+  final _maxWidth = 500.0;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: _maxWidth),
       child: Dialog(
         insetPadding: EdgeInsets.all(dialogInsetPadding),
         clipBehavior: Clip.antiAliasWithSaveLayer,
