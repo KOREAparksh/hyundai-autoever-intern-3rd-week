@@ -109,6 +109,9 @@ class DeviceInfoField extends StatelessWidget {
         if (data == null || data.isEmpty) {
           return "값이 비었습니다";
         }
+        if (isNumber && data.isNumericOnly == false) {
+          return "숫자만 입력하세요";
+        }
         return null;
       },
       enabled: isEnable,
