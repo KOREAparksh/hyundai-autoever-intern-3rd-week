@@ -72,41 +72,45 @@ class _SearchDialog extends GetView<PushHistoryController> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomDialog(
-      mainTitle: "검색",
-      positiveButtonText: "검색",
-      negativeButtonText: "취소",
-      contents: Container(
-        margin: EdgeInsets.all(_searchDialogContentsMargin),
-        child: Column(
-          children: [
-            _textField(
-              hint: "사용자ID",
-              controller: controller.userIdController,
+    return Center(
+      child: SingleChildScrollView(
+        child: CustomDialog(
+          mainTitle: "검색",
+          positiveButtonText: "검색",
+          negativeButtonText: "취소",
+          contents: Container(
+            margin: EdgeInsets.all(_searchDialogContentsMargin),
+            child: Column(
+              children: [
+                _textField(
+                  hint: "사용자ID",
+                  controller: controller.userIdController,
+                ),
+                _textField(
+                  hint: "사용자이름",
+                  controller: controller.userNameController,
+                ),
+                _textField(
+                  hint: "DeviceID",
+                  controller: controller.deviceIdController,
+                ),
+                _textField(
+                  hint: "푸시제목",
+                  controller: controller.pushTitleController,
+                ),
+                RadioButtons(),
+                SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: controller.onTapInit,
+                  child: Text("초기화"),
+                ),
+              ],
             ),
-            _textField(
-              hint: "사용자이름",
-              controller: controller.userNameController,
-            ),
-            _textField(
-              hint: "DeviceID",
-              controller: controller.deviceIdController,
-            ),
-            _textField(
-              hint: "푸시제목",
-              controller: controller.pushTitleController,
-            ),
-            RadioButtons(),
-            SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: controller.onTapInit,
-              child: Text("초기화"),
-            ),
-          ],
+          ),
+          onTapPositive: controller.onTapSearchDialogPositive,
+          onTabNegative: controller.onTapSearchDialogNegative,
         ),
       ),
-      onTapPositive: controller.onTapSearchDialogPositive,
-      onTabNegative: controller.onTapSearchDialogNegative,
     );
   }
 
