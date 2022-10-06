@@ -15,10 +15,6 @@ class PushHistoryScreen extends StatelessWidget {
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
-  final _dateFormat = "yyyy-MM-dd";
-  final _searchDialogTextFieldPadding = 5.0;
-  final _searchDialogContentsMargin = 30.0;
-  final _radioButtonsHeight = 100.0;
 
   final controller = Get.put<PushHistoryController>(PushHistoryController());
 
@@ -36,9 +32,13 @@ class PushHistoryScreen extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            margin:
-                EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-            child: _listView(),
+            margin: EdgeInsets.only(
+              left: _bodySideMargin,
+              right: _bodySideMargin,
+            ),
+            child: _ListView(
+              headerHeight: _headerHeight,
+            ),
           ),
           Container(
             alignment: Alignment.topRight,
@@ -47,7 +47,7 @@ class PushHistoryScreen extends StatelessWidget {
                 height: _headerHeight,
                 margin: _bodySideMargin,
                 isSearchActive: controller.isSearchActive.value,
-                isOrderActive: controller.isOrderActive.value,
+                isOrderActive: controller.isDescActive.value,
                 onTapOrder: controller.onTapOrder,
                 onTapSearch: _searchDialog,
               ),
@@ -58,72 +58,57 @@ class PushHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _listView() {
-    return Obx(
-      () => (controller.contentsList.isEmpty)
-          ? Center(
-              child: Text(
-                "푸시알림이력이 없습니다.",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-              ),
-            )
-          : GroupedListView<PushHistoryDto, DateTime>(
-              elements: controller.contentsList,
-              groupBy: (element) => element.pushDateTime,
-              sort: false,
-              cacheExtent: controller.contentsList.length + 5,
-              itemBuilder: _itemBuilder,
-              groupHeaderBuilder: (element) => _groupHeader(element),
-              useStickyGroupSeparators: true,
-            ),
-    );
-  }
-
   void _searchDialog() {
-    _showDialog(
-      CustomDialog(
-        mainTitle: "검색",
-        positiveButtonText: "검색",
-        negativeButtonText: "취소",
-        contents: Container(
-          margin: EdgeInsets.all(_searchDialogContentsMargin),
-          child: Column(
-            children: [
-              _textField(
-                hint: "사용자ID",
-                controller: controller.userIdController,
-              ),
-              _textField(
-                hint: "사용자이름",
-                controller: controller.userNameController,
-              ),
-              _textField(
-                hint: "DeviceID",
-                controller: controller.deviceIdController,
-              ),
-              _textField(
-                hint: "푸시제목",
-                controller: controller.pushTitleController,
-              ),
-              _radioButtons(),
-              SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: controller.onTapInit,
-                child: Text("초기화"),
-              ),
-            ],
-          ),
-        ),
-        onTapPositive: controller.onTapSearchDialogPositive,
-        onTabNegative: controller.onTapSearchDialogNegative,
-      ),
-    );
-  }
-
-  void _showDialog(Widget dialog) {
     showDialog(
       context: Get.context!,
-      builder: (_) => dialog,
+      builder: (_) => _SearchDialog(),
+    );
+  }
+}
+
+class _SearchDialog extends GetView<PushHistoryController> {
+  const _SearchDialog({Key? key}) : super(key: key);
+
+  final _searchDialogTextFieldPadding = 5.0;
+  final _searchDialogContentsMargin = 30.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      mainTitle: "검색",
+      positiveButtonText: "검색",
+      negativeButtonText: "취소",
+      contents: Container(
+        margin: EdgeInsets.all(_searchDialogContentsMargin),
+        child: Column(
+          children: [
+            _textField(
+              hint: "사용자ID",
+              controller: controller.userIdController,
+            ),
+            _textField(
+              hint: "사용자이름",
+              controller: controller.userNameController,
+            ),
+            _textField(
+              hint: "DeviceID",
+              controller: controller.deviceIdController,
+            ),
+            _textField(
+              hint: "푸시제목",
+              controller: controller.pushTitleController,
+            ),
+            RadioButtons(),
+            SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: controller.onTapInit,
+              child: Text("초기화"),
+            ),
+          ],
+        ),
+      ),
+      onTapPositive: controller.onTapSearchDialogPositive,
+      onTabNegative: controller.onTapSearchDialogNegative,
     );
   }
 
@@ -136,61 +121,94 @@ class PushHistoryScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  //Todo: widget 분리
-  Widget _radioButtons() {
-    return Obx(
-      () => SizedBox(
-        height: _radioButtonsHeight,
-        child: Column(
+class RadioButtons extends GetView<PushHistoryController> {
+  const RadioButtons({Key? key}) : super(key: key);
+
+  final _radioButtonsHeight = 100.0;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: _radioButtonsHeight,
+      child: Obx(
+        () => Column(
           children: [
-            Expanded(
-              flex: 1,
-              child: RadioListTile<String>(
-                title: Text("전체"),
-                value: controller.readStates[0],
-                groupValue:
-                    controller.readStates[controller.readStatesIndex.value],
-                onChanged: (_) => controller.onTapSearchFilterAll(),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: RadioListTile<String>(
-                title: Text("수신"),
-                value: controller.readStates[1],
-                groupValue:
-                    controller.readStates[controller.readStatesIndex.value],
-                onChanged: (_) => controller.onTapSearchFilterStateTrue(),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: RadioListTile<String>(
-                title: Text("미수신"),
-                value: controller.readStates[2],
-                groupValue:
-                    controller.readStates[controller.readStatesIndex.value],
-                onChanged: (_) => controller.onTapSearchFilterStateFalse(),
-              ),
-            ),
+            _radioTile(0, "전체"),
+            _radioTile(1, "수신"),
+            _radioTile(2, "미수신"),
           ],
         ),
       ),
     );
   }
 
-  Widget _itemBuilder(context, PushHistoryDto element) {
-    return PushHistoryListTile(data: element);
+  Widget _radioTile(int i, String title) {
+    return Expanded(
+      flex: 1,
+      child: RadioListTile<String>(
+        title: Text(title),
+        value: controller.readStates[i],
+        groupValue: controller.readStates[controller.readStatesIndex.value],
+        onChanged: (_) {
+          if (i == 0) {
+            controller.onTapSearchFilterAll();
+          } else if (i == 1) {
+            controller.onTapSearchFilterStateTrue();
+          } else if (i == 2) {
+            controller.onTapSearchFilterStateFalse();
+          }
+        },
+      ),
+    );
+  }
+}
+
+class _ListView extends GetView<PushHistoryController> {
+  const _ListView({Key? key, required this.headerHeight}) : super(key: key);
+
+  final _dateFormat = "yyyy-MM-dd";
+  final headerHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Obx(
+        () => (controller.contentsList.isEmpty)
+            ? _nothing()
+            : GroupedListView<PushHistoryDto, DateTime>(
+                elements: controller.contentsList,
+                groupBy: (element) => DateTime.parse(
+                    DateFormat("yyyyMMdd").format(element.sentDateTime)),
+                // sort: false,
+                order: (controller.isDescActive.value)
+                    ? GroupedListOrder.DESC
+                    : GroupedListOrder.ASC,
+                cacheExtent: controller.contentsList.length + 5,
+                itemBuilder: (_, element) => PushHistoryListTile(data: element),
+                groupHeaderBuilder: (element) => _groupHeader(element),
+                useStickyGroupSeparators: true,
+              ),
+      ),
+    );
+  }
+
+  Widget _nothing() {
+    return Center(
+      child: Text(
+        "푸시알림이력이 없습니다.",
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+      ),
+    );
   }
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
-      height: _headerHeight,
+      height: headerHeight,
       color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Text(
-        DateFormat(_dateFormat).format(element.pushDateTime),
+        DateFormat(_dateFormat).format(element.sentDateTime),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
     );
@@ -274,7 +292,7 @@ class PushHistoryListTile extends StatelessWidget {
   final _titleFormHeight = 30.0;
   final _stateWidth = 20.0;
   final _stateHeight = 15.0;
-  final _dateFormat = "yy/MM/dd hh:mm:ss";
+  final _dateFormat = "yy/MM/dd HH:mm:ss";
 
   @override
   Widget build(BuildContext context) {

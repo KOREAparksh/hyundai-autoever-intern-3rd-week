@@ -14,8 +14,6 @@ class DeviceRegisterScreen extends StatelessWidget {
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
-  final _searchDialogContentsMargin = 30.0;
-  final _searchDialogTextFieldPadding = 5.0;
 
   final controller = Get.put(DeviceRegisterController());
 
@@ -42,65 +40,23 @@ class DeviceRegisterScreen extends StatelessWidget {
     );
   }
 
-  void _showDialog(Widget dialog) {
-    showDialog(
-      context: Get.context!,
-      builder: (_) => dialog,
-    );
-  }
-
   Widget _header() {
     return Obx(
       () => _ListFilterHeader(
         height: _headerHeight,
         isSearchActive: controller.isSearchActive.value,
+        isExpandActive: controller.isExpandActive.value,
         onTapAdd: controller.onTapAddButton,
         onTapSearch: _onTapSearchDialog,
+        onTapExpand: controller.onTapExpand,
       ),
     );
   }
 
   void _onTapSearchDialog() {
-    _showDialog(
-      CustomDialog(
-        mainTitle: "검색",
-        contents: Container(
-          margin: EdgeInsets.all(_searchDialogContentsMargin),
-          child: Column(
-            children: [
-              _textField(
-                hint: "사용자ID",
-                controller: controller.userIdController,
-              ),
-              _textField(
-                hint: "Device명",
-                controller: controller.deviceIdController,
-              ),
-              _textField(
-                hint: "Device Kind",
-                controller: controller.deviceController,
-              ),
-              SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: controller.onTapSearchInit,
-                child: Text("초기화"),
-              ),
-            ],
-          ),
-        ),
-        onTapPositive: controller.onTapSearchDialogPositive,
-        onTabNegative: controller.onTapSearchDialogNegative,
-      ),
-    );
-  }
-
-  Widget _textField({required String hint, required controller}) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
-        hintText: hint,
-      ),
+    showDialog(
+      context: Get.context!,
+      builder: (_) => _SearchDialog(),
     );
   }
 
@@ -133,19 +89,73 @@ class DeviceRegisterScreen extends StatelessWidget {
   }
 }
 
+class _SearchDialog extends GetView<DeviceRegisterController> {
+  const _SearchDialog({Key? key}) : super(key: key);
+
+  final _searchDialogContentsMargin = 30.0;
+  final _searchDialogTextFieldPadding = 5.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      mainTitle: "검색",
+      contents: Container(
+        margin: EdgeInsets.all(_searchDialogContentsMargin),
+        child: Column(
+          children: [
+            _textField(
+              hint: "사용자ID",
+              controller: controller.userIdController,
+            ),
+            _textField(
+              hint: "Device명",
+              controller: controller.deviceIdController,
+            ),
+            _textField(
+              hint: "Device Kind",
+              controller: controller.deviceController,
+            ),
+            SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: controller.onTapSearchInit,
+              child: const Text("초기화"),
+            ),
+          ],
+        ),
+      ),
+      onTapPositive: controller.onTapSearchDialogPositive,
+      onTabNegative: controller.onTapSearchDialogNegative,
+    );
+  }
+
+  Widget _textField({required String hint, required controller}) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
+        hintText: hint,
+      ),
+    );
+  }
+}
+
 class _ListFilterHeader extends StatelessWidget {
   const _ListFilterHeader({
     Key? key,
     required this.height,
     required this.onTapAdd,
     required this.onTapSearch,
+    required this.onTapExpand,
     required this.isSearchActive,
+    required this.isExpandActive,
   }) : super(key: key);
 
   final double height;
   final VoidCallback onTapAdd;
   final VoidCallback onTapSearch;
+  final VoidCallback onTapExpand;
   final bool isSearchActive;
+  final bool isExpandActive;
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +169,21 @@ class _ListFilterHeader extends StatelessWidget {
             onPressed: onTapAdd,
             icon: Icon(Icons.add_box_rounded),
           ),
-          _iconButtonForm(
-            onPressed: onTapSearch,
-            isActive: isSearchActive,
-            icon: Icon(Icons.search_outlined),
+          Row(
+            children: [
+              _iconButtonForm(
+                onPressed: onTapExpand,
+                isActive: isExpandActive,
+                icon: (isExpandActive)
+                    ? Icon(Icons.expand_outlined)
+                    : Icon(Icons.compress_outlined),
+              ),
+              _iconButtonForm(
+                onPressed: onTapSearch,
+                isActive: isSearchActive,
+                icon: Icon(Icons.search_outlined),
+              ),
+            ],
           ),
         ],
       ),
@@ -245,6 +266,8 @@ class DeviceRegisterListTile extends StatelessWidget {
   Widget _textForm(String str, {Color? color}) {
     return Text(
       str,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: color,

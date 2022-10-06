@@ -10,12 +10,11 @@ class DeviceModifyScreen extends StatelessWidget {
   DeviceModifyScreen({
     Key? key,
     required this.deviceDto,
-  })  : controller = Get.put(DeviceModifyController(deviceDto.userId)),
-        super(key: key);
+  }) : super(key: key);
 
   final _title = "모바일기기 수정하기";
   final DeviceDto deviceDto;
-  final controller;
+  late final controller = Get.put(DeviceModifyController(deviceDto.userId));
 
   final _infoHeight = 500.0;
 
@@ -39,7 +38,7 @@ class DeviceModifyScreen extends StatelessWidget {
                 ),
               ),
               Container(height: 1, color: boxBorderLight),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _pushGroupList(),
               SizedBox(
                 width: 100,
@@ -48,7 +47,7 @@ class DeviceModifyScreen extends StatelessWidget {
                   child: Text("수정"),
                 ),
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
             ],
           ),
         ),

@@ -12,17 +12,18 @@ import 'package:get/get.dart';
 
 class DeviceRegisterController extends BaseController {
   final List<DeviceDto> list = <DeviceDto>[];
-  final RxList<DeviceDto> contentList = <DeviceDto>[].obs;
+  final List<DeviceDto> contentList = <DeviceDto>[].obs;
   final userIdController = TextEditingController();
   final deviceIdController = TextEditingController();
   final deviceController = TextEditingController();
   RxBool isSearchActive = false.obs;
+  RxBool isExpandActive = false.obs;
 
   @override
   void onInit() async {
     super.onInit();
     await getAllDeviceData();
-    contentList.addAll(list);
+    _addAllContentsList();
   }
 
   @override
@@ -57,15 +58,14 @@ class DeviceRegisterController extends BaseController {
     await Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
     await getAllDeviceData();
     contentList.clear();
-    contentList.addAll(list);
+    _addAllContentsList();
   }
 
   void onTapAddButton() async {
-    int result = await Get.to(() => DeviceAddScreen());
-    print("d");
+    int result = await Get.to(() => DeviceAddScreen()) ?? 0;
     if (result == 2) await getAllDeviceData();
     contentList.clear();
-    contentList.addAll(list);
+    _addAllContentsList();
   }
 
   void onTapSearchInit() {
@@ -74,7 +74,7 @@ class DeviceRegisterController extends BaseController {
     deviceIdController.clear();
     deviceController.clear();
     isSearchActive(false);
-    list.forEach((element) => contentList.add(element));
+    _addAllContentsList();
     Get.back();
   }
 
@@ -83,13 +83,7 @@ class DeviceRegisterController extends BaseController {
     String _deviceId = deviceIdController.text.toLowerCase();
     String _deviceKind = deviceController.text.toLowerCase();
     contentList.clear();
-    list.forEach((element) {
-      if (element.userId.toLowerCase().contains(_userId) &&
-          element.deviceId.toLowerCase().contains(_deviceId) &&
-          element.deviceKind.toLowerCase().contains(_deviceKind)) {
-        contentList.add(element);
-      }
-    });
+    _addAllContentsList();
     isSearchActive(true);
     if (_userId == "" && _deviceId == "" && _deviceKind == "") {
       isSearchActive(false);
@@ -110,7 +104,7 @@ class DeviceRegisterController extends BaseController {
       await deviceApi.deleteDevice(userId, deviceId);
       await getAllDeviceData();
       contentList.clear();
-      contentList.addAll(list);
+      _addAllContentsList();
     } on DioError catch (e) {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
@@ -136,5 +130,26 @@ class DeviceRegisterController extends BaseController {
         );
       },
     );
+  }
+
+  void onTapExpand() {
+    contentList.clear();
+    (isExpandActive.isTrue) ? isExpandActive(false) : isExpandActive(true);
+    _addAllContentsList();
+  }
+
+  void _addAllContentsList() {
+    list.forEach((element) {
+      String _userId = userIdController.text.toLowerCase();
+      String _deviceId = deviceIdController.text.toLowerCase();
+      String _deviceKind = deviceController.text.toLowerCase();
+
+      if (element.userId.toLowerCase().contains(_userId) &&
+          element.deviceId.toLowerCase().contains(_deviceId) &&
+          element.deviceKind.toLowerCase().contains(_deviceKind) &&
+          (isExpandActive.isTrue || element.isUsed == "Y")) {
+        contentList.add(element);
+      }
+    });
   }
 }

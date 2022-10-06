@@ -22,7 +22,7 @@ class DeviceInfoField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.initText(deviceDto);
+    controller.initData(deviceDto);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -37,10 +37,14 @@ class DeviceInfoField extends StatelessWidget {
               _textFieldRow(
                 title: "사용자ID",
                 controller: controller.userIdController,
+                isEnable:
+                    (controller.userIdController.text == "") ? true : false,
               ),
               _textFieldRow(
                 title: "기기 ID",
                 controller: controller.deviceIdController,
+                isEnable:
+                    (controller.userIdController.text == "") ? true : false,
               ),
               _textFieldRow(
                 title: "기기 설명",
@@ -71,8 +75,12 @@ class DeviceInfoField extends StatelessWidget {
     );
   }
 
-  Widget _textFieldRow(
-      {required title, required controller, isNumber = false}) {
+  Widget _textFieldRow({
+    required title,
+    required controller,
+    isNumber = false,
+    isEnable = true,
+  }) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Row(
@@ -83,14 +91,18 @@ class DeviceInfoField extends StatelessWidget {
           ),
           Expanded(
             flex: 5,
-            child: _textField(controller: controller, isNumber: isNumber),
+            child: _textField(
+              controller: controller,
+              isNumber: isNumber,
+              isEnable: isEnable,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _textField({required controller, isNumber = false}) {
+  Widget _textField({required controller, isNumber = false, isEnable = true}) {
     return TextFormField(
       controller: controller,
       validator: (data) {
@@ -99,6 +111,7 @@ class DeviceInfoField extends StatelessWidget {
         }
         return null;
       },
+      enabled: isEnable,
       keyboardType: (isNumber) ? TextInputType.number : null,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -112,7 +125,7 @@ class DeviceInfoField extends StatelessWidget {
     return Obx(
       () => Row(
         children: [
-          _radio(title: "사용", value: true),
+          _radio(title: "사용 중", value: true),
           _radio(title: "사용안함", value: false),
         ],
       ),

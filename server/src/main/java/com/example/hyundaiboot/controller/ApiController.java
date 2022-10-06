@@ -140,12 +140,13 @@ public class ApiController {
 	}
 
 	@PostMapping("/favorite")
-	public ResponseEntity postFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+	public ResponseEntity<String> postFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_url") String screenUrl){
 		try {
-			userFavoriteScreenService.postFavoriteScreen(userId, screenId);
-			return ResponseEntity.ok().build();
+			userFavoriteScreenService.postFavoriteScreen(userId, screenUrl);
+			return ResponseEntity.ok("등록완료");
 		}  catch (NoSuchFieldException e) {
-			return ResponseEntity.badRequest().build();
+			System.out.println(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -153,12 +154,12 @@ public class ApiController {
 
 
 	@DeleteMapping("/favorite")
-	public ResponseEntity deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
+	public ResponseEntity<String> deleteFavoriteScreen(@RequestParam("user_id") String userId, @RequestParam("screen_id") String screenId){
 		try {
 			userFavoriteScreenService.deleteFavoriteScreen(userId, screenId);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok("삭제되었습니다.");
 		}  catch (NoSuchFieldException e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}catch (Exception e){
 		}
 		return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

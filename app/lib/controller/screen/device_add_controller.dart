@@ -46,7 +46,7 @@ class DeviceAddController extends BaseController {
     );
   }
 
-  dynamic _showDialogError({String msg = "등록을 완료하였습니다"}) async {
+  dynamic _showDialogError({String msg = "등록하지 못하였습니다."}) async {
     return await showDialog(
       context: Get.context!,
       builder: (context) {

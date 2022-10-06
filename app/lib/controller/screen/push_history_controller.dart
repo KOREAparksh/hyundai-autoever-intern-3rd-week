@@ -16,13 +16,14 @@ class PushHistoryController extends BaseController {
   final pushTitleController = TextEditingController();
   final readStates = ["전체", "확인", "미확인"];
   RxInt readStatesIndex = 0.obs;
-  RxBool isOrderActive = false.obs;
+  RxBool isDescActive = false.obs;
   RxBool isSearchActive = false.obs;
 
   @override
   void onInit() async {
     super.onInit();
     await getPushHistoryData();
+    contentsList.clear();
     contentsList.addAll(list);
   }
 
@@ -40,6 +41,7 @@ class PushHistoryController extends BaseController {
     PushHistoryApi pushHistoryApi = PushHistoryApi(customDio.dio);
     try {
       final result = await pushHistoryApi.getPushHistory();
+      list.clear();
       list.addAll(result.data);
     } on DioError catch (e) {
       print("DioError: " +
@@ -72,19 +74,19 @@ class PushHistoryController extends BaseController {
     final temp = List.from(contentsList.reversed);
     contentsList.clear();
     temp.forEach((element) => contentsList.add(element));
-    (isOrderActive.isTrue) ? isOrderActive(false) : isOrderActive(true);
+    (isDescActive.isTrue) ? isDescActive(false) : isDescActive(true);
   }
 
   void onTapInit() async {
     contentsList.clear();
     userIdController.clear();
-    deviceIdController.clear();
+    userNameController.clear();
     deviceIdController.clear();
     pushTitleController.clear();
     readStatesIndex(0);
     await getPushHistoryData();
     isSearchActive(false);
-    (isOrderActive.isTrue)
+    (isDescActive.isTrue)
         ? list.reversed.forEach((element) => contentsList.add(element))
         : list.forEach((element) => contentsList.add(element));
     Get.back();
@@ -102,7 +104,7 @@ class PushHistoryController extends BaseController {
             : "n";
 
     contentsList.clear();
-    if (isOrderActive.isTrue) {
+    if (isDescActive.isTrue) {
       list.reversed.forEach((element) {
         if (element.userId.toLowerCase().contains(_userId) &&
             element.userName.toLowerCase().contains(_userName) &&

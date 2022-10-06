@@ -12,14 +12,13 @@ import 'package:dio/dio.dart';
 
 class MainController extends BaseController {
   User? user;
-  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[].obs;
+  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[];
 
   @override
   void onInit() async {
     super.onInit();
     await getUserData();
     await getFavoriteData();
-    print(favoriteDtoList);
   }
 
   Future<void> getUserData() async {
@@ -48,6 +47,7 @@ class MainController extends BaseController {
     FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
     try {
       final result = await favoriteApi.getFavoriteScreen(user!.id);
+      favoriteDtoList.clear();
       favoriteDtoList.addAll(result.data);
     } on DioError catch (e) {
       print("DioError: " +
@@ -91,5 +91,69 @@ class MainController extends BaseController {
 
   void onTapButton(int i) {
     Get.toNamed(favoriteDtoList[i].screenUrl);
+  }
+
+  void onTapStarAdd(String screenUrl) async {
+    await postFavoriteData(screenUrl);
+    update();
+  }
+
+  void onTapStarRemove(String screenId) async {
+    await deleteFavoriteData(screenId);
+    update();
+  }
+
+  Future<void> postFavoriteData(String screenUrl) async {
+    CustomDio customDio = CustomDio(autoDialog: false);
+    FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
+    try {
+      await favoriteApi.postFavoriteScreen(user!.id, screenUrl);
+      await getFavoriteData();
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.response?.data);
+      _showDialogByFavoriteConnected("등록되지 않았습니다.");
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialogByFavoriteConnected("등록되지 않았습니다.");
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  Future<void> deleteFavoriteData(String screenId) async {
+    CustomDio customDio = CustomDio(autoDialog: false);
+    FavoriteApi favoriteApi = FavoriteApi(customDio.dio);
+    try {
+      await favoriteApi.deleteFavoriteScreen(user!.id, screenId);
+      await getFavoriteData();
+    } on DioError catch (e) {
+      print("DioError: " +
+          (e.response?.statusCode.toString() ?? "") +
+          " : " +
+          e.response?.data);
+      _showDialogByFavoriteConnected("삭제되지 않았습니다.");
+    } catch (e) {
+      print("Error: " + e.toString());
+      _showDialogByFavoriteConnected("삭제되지 않았습니다.");
+    } finally {
+      customDio.dio.close();
+    }
+  }
+
+  dynamic _showDialogByFavoriteConnected(String title) {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return CustomDialog(
+          mainTitle: title,
+          subTitle: "잠시 후 다시 시도해주세요.",
+          dialogType: DialogType.OK,
+          onTapPositive: () => Get.back(),
+        );
+      },
+    );
   }
 }

@@ -45,15 +45,15 @@ public class UserFavoriteScreenService {
 	}
 
 	@Transactional
-	public void postFavoriteScreen(String userId, String screenId) throws NoSuchFieldException {
+	public void postFavoriteScreen(String userId, String screenUrl) throws NoSuchFieldException {
 		User user = userRepository.findById(userId).orElseThrow(()->new NoSuchFieldException("없는 유저입니다."));
 		List<UserFavoriteScreen> temp =  userFavoriteScreenRepository.findByUser(user);
 		for (UserFavoriteScreen ele : temp){
-			if (ele.getScreenDefine().getScreenId().equals( screenId))
+			if (ele.getScreenDefine().getUrl().equals( screenUrl))
 				throw new NoSuchFieldException("이미 즐겨찾기된 스크린입니다.");
 		}
 		ScreenDefine screenDefine
-				= screenDefineRepository.findByScreenId(screenId).orElseThrow(()->new NoSuchFieldException("없는 스크린입니다."));
+				= screenDefineRepository.findByUrl(screenUrl).orElseThrow(()->new NoSuchFieldException("없는 스크린입니다."));
 
 		UserFavoriteScreen userFavoriteScreen = new UserFavoriteScreen();
 		userFavoriteScreen.setUser(user);
