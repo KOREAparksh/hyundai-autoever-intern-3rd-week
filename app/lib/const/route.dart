@@ -2,6 +2,7 @@
 
 import 'package:app/screen/device_register_screen.dart';
 import 'package:app/screen/main_screen.dart';
+import 'package:app/screen/main_wrapper.dart';
 import 'package:app/screen/push_history_screen.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class kRoute {
   static final List<GetPage<dynamic>> pageRoute = [
     GetPage(
       name: HOME,
-      page: () => MainScreen(),
+      page: () => MainWrapper(),
     ),
     GetPage(
       name: PUSH_HISTORY,
@@ -28,7 +29,8 @@ class kRoute {
 
 class TabletNavigator {
   TabletNavigator._();
-  static const String key = "12";
+  static const int key = 123;
+  static const String homeScreen = "/tablet";
   static const String pushHistoryScreen = kRoute.PUSH_HISTORY;
   static const String deviceRegisterScreen = kRoute.DEVICE_REGISTER;
 }

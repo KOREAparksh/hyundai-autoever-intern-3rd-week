@@ -1,35 +1,26 @@
 import 'package:app/const/Color.dart';
+import 'package:app/const/route.dart';
 import 'package:app/controller/screen/main_controller.dart';
+import 'package:app/screen/device_register_screen.dart';
+import 'package:app/screen/push_history_screen.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MainScreen extends GetView<MainController> {
-  const MainScreen({Key? key}) : super(key: key);
+class MainScreenScreen extends GetView<MainController> {
+  const MainScreenScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        (!Get.context!.isPhone)
-            ? Row(
-                children: [
-                  CustomDrawer(baseController: controller),
-                  Container(width: 1, color: Colors.black),
-                ],
-              )
-            : Container(),
-        Expanded(
-          child: Scaffold(
-            key: controller.scaffoldKey,
-            appBar: CustomAppBar(baseController: controller),
-            resizeToAvoidBottomInset: false,
-            drawer: CustomDrawer(baseController: controller),
-            body: _body(),
-          ),
-        ),
-      ],
+    return Scaffold(
+      key: controller.scaffoldKey,
+      appBar: CustomAppBar(baseController: controller),
+      resizeToAvoidBottomInset: false,
+      drawer: (Get.context!.isPhone)
+          ? CustomDrawer(baseController: controller)
+          : null,
+      body: _body(),
     );
   }
 
@@ -121,6 +112,7 @@ class _ButtonComplex extends GetView<MainController> {
   final int _itemCountMobile = 6;
   final int _crossAxisCountMobile = 2;
   final double _gridAxisSpacingMobile = 10;
+  final _widthMobile = 280.0;
   final int _itemCountTablet = 8;
   final double _maxCrossAxisExtent = 240;
   final double _crossAxisSpacingTablet = 20;
@@ -146,25 +138,29 @@ class _ButtonComplex extends GetView<MainController> {
   }
 
   Widget _gridViewMobile() {
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: _itemCountMobile,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _crossAxisCountMobile,
-        crossAxisSpacing: _gridAxisSpacingMobile,
-        mainAxisSpacing: _gridAxisSpacingMobile,
+    return SizedBox(
+      width: _widthMobile,
+      child: GridView.builder(
+        shrinkWrap: true,
+        itemCount: _itemCountMobile,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _crossAxisCountMobile,
+          crossAxisSpacing: _gridAxisSpacingMobile,
+          mainAxisSpacing: _gridAxisSpacingMobile,
+        ),
+        itemBuilder: (context, int i) =>
+            GetBuilder<MainController>(builder: (_) {
+          return _FavoriteButton(
+            title: (controller.favoriteDtoList.length > i)
+                ? controller.favoriteDtoList[i].screenName
+                : null,
+            onTap: (controller.favoriteDtoList.length > i)
+                ? () => controller.onTapButton(i)
+                : null,
+          );
+        }),
       ),
-      itemBuilder: (context, int i) => GetBuilder<MainController>(builder: (_) {
-        return _FavoriteButton(
-          title: (controller.favoriteDtoList.length > i)
-              ? controller.favoriteDtoList[i].screenName
-              : null,
-          onTap: (controller.favoriteDtoList.length > i)
-              ? () => controller.onTapButton(i)
-              : null,
-        );
-      }),
     );
   }
 
