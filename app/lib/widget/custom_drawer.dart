@@ -1,6 +1,8 @@
 import 'package:app/const/Color.dart';
 import 'package:app/const/route.dart';
 import 'package:app/controller/base_controller.dart';
+import 'package:app/controller/screen/device_register_controller.dart';
+import 'package:app/controller/screen/push_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -141,24 +143,50 @@ class _ThirdTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(route);
+    return (Get.context!.isPhone) ? _mobile() : _tablet();
+  }
+
+  Widget _mobile() {
     return Container(
-      color: (Get.currentRoute == route) ? mainColor : null,
+      color: (Get.currentRoute == route || BaseController.route.value == route)
+          ? mainColor
+          : null,
       child: ListTile(
         title: Text(
           title,
           style: TextStyle(
-            color: (Get.currentRoute == route) ? Colors.white : null,
+            color: (Get.currentRoute == route ||
+                    BaseController.route.value == route)
+                ? Colors.white
+                : null,
           ),
         ),
         contentPadding: EdgeInsets.only(left: 50),
-        onTap: () {
-          (Get.currentRoute == kRoute.HOME)
-              ? Get.toNamed(route)
-              : Get.offNamed(route);
-          baseController?.closeDrawer();
+        onTap: () async {
+          if (Get.context!.isPhone) {
+            (Get.currentRoute == kRoute.HOME)
+                ? Get.toNamed(route)
+                : Get.offNamed(route);
+            baseController?.closeDrawer();
+          } else {
+            if (route == kRoute.PUSH_HISTORY &&
+                Get.isRegistered<PushHistoryController>() == false) {
+              Get.offNamed(route, id: TabletNavigator.key);
+              baseController?.changeRoute(kRoute.PUSH_HISTORY);
+            } else if (route == kRoute.DEVICE_REGISTER &&
+                Get.isRegistered<DeviceRegisterController>() == false) {
+              Get.offNamed(route, id: TabletNavigator.key);
+              baseController?.changeRoute(kRoute.DEVICE_REGISTER);
+            }
+          }
         },
       ),
     );
+  }
+
+  Widget _tablet() {
+    return Obx(() => _mobile());
   }
 }
 

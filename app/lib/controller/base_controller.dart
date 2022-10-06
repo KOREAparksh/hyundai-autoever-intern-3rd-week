@@ -1,7 +1,9 @@
+import 'package:app/const/route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BaseController extends GetxController {
+  static RxString route = kRoute.HOME.obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -12,6 +14,10 @@ class BaseController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void changeRoute(String _route) {
+    route(_route);
   }
 
   void openDrawer() {
