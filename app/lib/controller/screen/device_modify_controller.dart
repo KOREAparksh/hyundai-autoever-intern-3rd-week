@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
 class DeviceModifyController extends BaseController {
+  RxBool isLoading = true.obs;
   RxList<PushGroupDto> list = <PushGroupDto>[].obs;
   final String userId;
 
@@ -18,7 +19,7 @@ class DeviceModifyController extends BaseController {
   @override
   void onInit() async {
     super.onInit();
-    await initPushGroup(userId);
+    initPushGroup(userId);
   }
 
   Future<void> initPushGroup(String userId) async {
@@ -27,6 +28,8 @@ class DeviceModifyController extends BaseController {
     try {
       final result = await pushGroupApi.getPushGroup(userId);
       list.addAll(result.data);
+      await Future.delayed(Duration(milliseconds: 300));
+      isLoading(false);
     } on DioError catch (e) {
       _showDialog(main: e.response?.data ?? "PushGroup을 가져올 수 없습니다");
       Get.back();
@@ -48,15 +51,20 @@ class DeviceModifyController extends BaseController {
     CustomDio customDio = CustomDio(autoDialog: false);
     DeviceApi deviceApi = DeviceApi(customDio.dio);
     try {
+      Get.dialog(Center(child: CircularProgressIndicator()));
+      await Future.delayed(Duration(milliseconds: 400));
       await deviceApi.updateDevice(newDto);
+      if (Get.isDialogOpen == true) Get.back();
       _showDialog(main: "변경되었습니다");
     } on DioError catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
           " : " +
           e.message);
       _showDialog(main: e.response?.data ?? "입력값이 올바르지 않습니다.");
     } catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print("Error: " + e.toString());
       _showDialog(main: e.toString());
     } finally {
@@ -73,12 +81,17 @@ class DeviceModifyController extends BaseController {
     CustomDio customDio = CustomDio(autoDialog: false);
     PushGroupApi pushGroupApi = PushGroupApi(customDio.dio);
     try {
+      Get.dialog(Center(child: CircularProgressIndicator()));
+      await Future.delayed(Duration(milliseconds: 400));
       await pushGroupApi.updatePushGroup(userId, idList);
+      if (Get.isDialogOpen == true) Get.back();
       _showDialog(main: "변경되었습니다.");
     } on DioError catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print(e.response);
       _showDialog(main: e.response?.data ?? "PushGroup을 수정할 수 없습니다");
     } catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print("Error: " + e.toString());
       _showDialog(main: e.toString());
     } finally {

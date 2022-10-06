@@ -39,20 +39,33 @@ class DeviceModifyScreen extends StatelessWidget {
               ),
               Container(height: 1, color: boxBorderLight),
               const SizedBox(height: 20),
-              _pushGroupList(),
-              SizedBox(
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: controller.onTapPushGroupModifiedButton,
-                  child: Text("수정"),
-                ),
-              ),
-              const SizedBox(height: 100),
+              _pushGroup(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _pushGroup() {
+    return Obx(() {
+      if (controller.isLoading.isTrue) {
+        return Center(child: CircularProgressIndicator());
+      }
+      return Column(
+        children: [
+          _pushGroupList(),
+          SizedBox(
+            width: 100,
+            child: ElevatedButton(
+              onPressed: controller.onTapPushGroupModifiedButton,
+              child: Text("수정"),
+            ),
+          ),
+          const SizedBox(height: 100),
+        ],
+      );
+    });
   }
 
   Widget _pushGroupList() {
