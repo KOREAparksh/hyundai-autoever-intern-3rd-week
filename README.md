@@ -12,6 +12,6 @@
 
 
 ## Flutter setting 및 실행
-1. 패키지 root 내 `.env-sample`파일을 cp하여 `.env`파일 생성
+1. 패키지 root 내 `.env-sample`파일을 cp하여 `env`파일 생성 (앞에 . 삭제))
 2. API주소 URL 작성
 3. 실행
