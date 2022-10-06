@@ -13,7 +13,7 @@ import 'package:dio/dio.dart';
 
 class MainController extends BaseController {
   User? user;
-  List<FavoriteDto> favoriteDtoList = <FavoriteDto>[];
+  RxList<FavoriteDto> favoriteDtoList = <FavoriteDto>[].obs;
   final RxBool isLoading = true.obs;
 
   @override

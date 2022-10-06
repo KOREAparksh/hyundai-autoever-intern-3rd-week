@@ -151,7 +151,6 @@ class _ThirdTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(route);
     return (Get.context!.isPhone) ? _mobile() : _tablet();
   }
 
@@ -179,18 +178,17 @@ class _ThirdTile extends StatelessWidget {
             if (route == kRoute.PUSH_HISTORY) {
               if (Get.isRegistered<PushHistoryController>() == false) {
                 Get.offNamed(route, id: TabletNavigator.key);
-                baseController?.changeRoute(TabletNavigator.pushHistoryScreen);
+                BaseController.route(TabletNavigator.pushHistoryScreen);
               }
             } else if (route == kRoute.DEVICE_REGISTER) {
               if (Get.isRegistered<DeviceRegisterController>() == false) {
                 Get.offNamed(route, id: TabletNavigator.key);
-                baseController
-                    ?.changeRoute(TabletNavigator.deviceRegisterScreen);
+                BaseController.route(TabletNavigator.deviceRegisterScreen);
               }
             } else {
               if (BaseController.route.value != route) {
                 Get.offNamed(route, id: TabletNavigator.key);
-                baseController?.changeRoute(TabletNavigator.homeScreen);
+                BaseController.route(TabletNavigator.homeScreen);
               }
             }
           }
