@@ -58,7 +58,6 @@ class MainController extends BaseController {
       final result = await favoriteApi.getFavoriteScreen(user!.id);
       favoriteDtoList.clear();
       favoriteDtoList.addAll(result.data);
-      await Future.delayed(Duration(milliseconds: 500));
     } on DioError catch (e) {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
