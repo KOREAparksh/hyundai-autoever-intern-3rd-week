@@ -17,6 +17,7 @@ class DeviceModifyScreen extends StatelessWidget {
   late final controller = Get.put(DeviceModifyController(deviceDto.userId));
 
   final _infoHeight = 500.0;
+  final _maxWidth = 700.0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +26,27 @@ class DeviceModifyScreen extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: _title, hasBack: true, hasNoti: false),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: _infoHeight,
-                child: DeviceInfoField(
-                  deviceDto: deviceDto,
-                  buttonText: "수정",
-                  onTapButton: (newDto) =>
-                      controller.onTapInfoModifiedButton(deviceDto, newDto),
-                ),
+        body: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: _maxWidth),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: _infoHeight,
+                    child: DeviceInfoField(
+                      deviceDto: deviceDto,
+                      buttonText: "수정",
+                      onTapButton: (newDto) =>
+                          controller.onTapInfoModifiedButton(deviceDto, newDto),
+                    ),
+                  ),
+                  Container(height: 1, color: boxBorderLight),
+                  const SizedBox(height: 20),
+                  _pushGroup(),
+                ],
               ),
-              Container(height: 1, color: boxBorderLight),
-              const SizedBox(height: 20),
-              _pushGroup(),
-            ],
+            ),
           ),
         ),
       ),

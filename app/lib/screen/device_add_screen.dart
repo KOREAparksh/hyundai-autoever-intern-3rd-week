@@ -11,6 +11,7 @@ class DeviceAddScreen extends StatelessWidget {
   }) : super(key: key);
 
   final _title = "모바일기기 등록하기";
+  final _maxWidth = 700.0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,19 @@ class DeviceAddScreen extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: _title, hasBack: true, hasNoti: false),
-        body: GetBuilder<DeviceAddController>(
-            init: DeviceAddController(),
-            builder: (controller) {
-              return DeviceInfoField(
-                onTapButton: controller.onTapAddButton,
-                buttonText: "추가",
-              );
-            }),
+        body: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: _maxWidth),
+            child: GetBuilder<DeviceAddController>(
+                init: DeviceAddController(),
+                builder: (controller) {
+                  return DeviceInfoField(
+                    onTapButton: controller.onTapAddButton,
+                    buttonText: "추가",
+                  );
+                }),
+          ),
+        ),
       ),
     );
   }
