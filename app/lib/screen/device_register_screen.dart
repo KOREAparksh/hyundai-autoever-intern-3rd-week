@@ -33,7 +33,7 @@ class DeviceRegisterScreen extends StatelessWidget {
         child: Column(
           children: [
             _header(),
-            Expanded(child: _listView()),
+            Expanded(child: _body()),
           ],
         ),
       ),
@@ -60,9 +60,12 @@ class DeviceRegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _listView() {
+  Widget _body() {
     return Obx(
       () {
+        if (controller.isLoading.isTrue) {
+          return Center(child: CircularProgressIndicator());
+        }
         if ((controller.contentList.isEmpty)) {
           return Center(
             child: Text(

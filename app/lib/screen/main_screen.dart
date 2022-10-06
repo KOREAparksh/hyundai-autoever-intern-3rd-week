@@ -10,21 +10,33 @@ class MainScreen extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.user == null;
     return Scaffold(
       key: controller.scaffoldKey,
       appBar: CustomAppBar(baseController: controller),
       resizeToAvoidBottomInset: false,
       drawer: CustomDrawer(baseController: controller),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            _DashBoard(),
-            _ButtonComplex(),
-          ],
-        ),
+      body: GetBuilder<MainController>(builder: (_) {
+        return (controller.user == null) ? _loading() : _body();
+      }),
+      // body: _body(),
+    );
+  }
+
+  Widget _loading() {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget _body() {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          _DashBoard(),
+          _ButtonComplex(),
+        ],
       ),
     );
   }
@@ -86,26 +98,30 @@ class _ButtonComplex extends GetView<MainController> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: _gridViewWidth,
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: _itemCount,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _crossAxisCount,
-          crossAxisSpacing: _gridAxisSpacing,
-          mainAxisSpacing: _gridAxisSpacing,
-        ),
-        itemBuilder: (context, int i) =>
-            GetBuilder<MainController>(builder: (_) {
-          return _FavoriteButton(
-            title: (controller.favoriteDtoList.length > i)
-                ? controller.favoriteDtoList[i].screenName
-                : null,
-            onTap: (controller.favoriteDtoList.length > i)
-                ? () => controller.onTapButton(i)
-                : null,
-          );
-        }),
+      child: GetBuilder<MainController>(
+        builder: (_) => (controller.isLoading.value)
+            ? Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                shrinkWrap: true,
+                itemCount: _itemCount,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _crossAxisCount,
+                  crossAxisSpacing: _gridAxisSpacing,
+                  mainAxisSpacing: _gridAxisSpacing,
+                ),
+                itemBuilder: (context, int i) =>
+                    GetBuilder<MainController>(builder: (_) {
+                  return _FavoriteButton(
+                    title: (controller.favoriteDtoList.length > i)
+                        ? controller.favoriteDtoList[i].screenName
+                        : null,
+                    onTap: (controller.favoriteDtoList.length > i)
+                        ? () => controller.onTapButton(i)
+                        : null,
+                  );
+                }),
+              ),
       ),
     );
   }

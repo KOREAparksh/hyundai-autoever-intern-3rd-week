@@ -12,25 +12,28 @@ class DeviceAddController extends BaseController {
     CustomDio customDio = CustomDio(autoDialog: false);
     DeviceApi deviceApi = DeviceApi(customDio.dio);
     try {
+      Get.dialog(Center(
+          child: Center(
+        child: CircularProgressIndicator(),
+      )));
+      await Future.delayed(Duration(milliseconds: 300));
       await deviceApi.postDevice(newDto);
+      if (Get.isDialogOpen == true) Get.back();
       await _showDialogOk();
       Get.back(result: 2);
       return;
     } on DioError catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print(e.response);
       print(e.response?.statusCode ?? "???");
       await _showDialogError(msg: e.response?.data ?? " d");
     } catch (e) {
+      if (Get.isDialogOpen == true) Get.back();
       print("Error: " + e.toString());
       await _showDialogError(msg: e.toString());
     } finally {
       customDio.dio.close();
     }
-
-    //Todo: 통신 후 Dialog 띄우기
-
-    //200 잘 날라오면
-    // Get.back(result: 4);
   }
 
   dynamic _showDialogOk() async {

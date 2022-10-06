@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
 class DeviceRegisterController extends BaseController {
+  RxBool isLoading = true.obs;
   final List<DeviceDto> list = <DeviceDto>[];
   final List<DeviceDto> contentList = <DeviceDto>[].obs;
   final userIdController = TextEditingController();
@@ -22,8 +23,7 @@ class DeviceRegisterController extends BaseController {
   @override
   void onInit() async {
     super.onInit();
-    await getAllDeviceData();
-    _addAllContentsList();
+    initData();
   }
 
   @override
@@ -34,6 +34,12 @@ class DeviceRegisterController extends BaseController {
     deviceController.dispose();
   }
 
+  void initData() async {
+    await getAllDeviceData();
+    _addAllContentsList();
+    isLoading(false);
+  }
+
   Future<void> getAllDeviceData() async {
     CustomDio customDio = CustomDio();
     DeviceApi deviceApi = DeviceApi(customDio.dio);
@@ -41,6 +47,7 @@ class DeviceRegisterController extends BaseController {
       final result = await deviceApi.getAllDevice();
       list.clear();
       list.addAll(result.data);
+      await Future.delayed(Duration(milliseconds: 500));
     } on DioError catch (e) {
       print("DioError: " +
           (e.response?.statusCode.toString() ?? "") +
@@ -55,30 +62,39 @@ class DeviceRegisterController extends BaseController {
   }
 
   void onTapTile(int i) async {
+    isLoading(true);
     await Get.to(() => DeviceModifyScreen(deviceDto: contentList[i]));
     await getAllDeviceData();
     contentList.clear();
     _addAllContentsList();
+    isLoading(false);
   }
 
   void onTapAddButton() async {
     int result = await Get.to(() => DeviceAddScreen()) ?? 0;
+    isLoading(true);
     if (result == 2) await getAllDeviceData();
     contentList.clear();
     _addAllContentsList();
+    isLoading(false);
   }
 
-  void onTapSearchInit() {
+  void onTapSearchInit() async {
+    isLoading(true);
+    Get.back();
     contentList.clear();
     userIdController.clear();
     deviceIdController.clear();
     deviceController.clear();
     isSearchActive(false);
+    await getAllDeviceData();
     _addAllContentsList();
-    Get.back();
+    isLoading(false);
   }
 
   void onTapSearchDialogPositive() {
+    isLoading(true);
+    Get.back();
     String _userId = userIdController.text.toLowerCase();
     String _deviceId = deviceIdController.text.toLowerCase();
     String _deviceKind = deviceController.text.toLowerCase();
@@ -88,7 +104,7 @@ class DeviceRegisterController extends BaseController {
     if (_userId == "" && _deviceId == "" && _deviceKind == "") {
       isSearchActive(false);
     }
-    Get.back();
+    isLoading(false);
   }
 
   void onTapSearchDialogNegative() {
@@ -101,6 +117,7 @@ class DeviceRegisterController extends BaseController {
     CustomDio customDio = CustomDio();
     DeviceApi deviceApi = DeviceApi(customDio.dio);
     try {
+      isLoading(true);
       await deviceApi.deleteDevice(userId, deviceId);
       await getAllDeviceData();
       contentList.clear();
@@ -114,6 +131,7 @@ class DeviceRegisterController extends BaseController {
     } catch (e) {
       print("Error: " + e.toString());
     } finally {
+      isLoading(false);
       customDio.dio.close();
     }
   }
@@ -133,9 +151,11 @@ class DeviceRegisterController extends BaseController {
   }
 
   void onTapExpand() {
+    isLoading(true);
     contentList.clear();
     (isExpandActive.isTrue) ? isExpandActive(false) : isExpandActive(true);
     _addAllContentsList();
+    isLoading(false);
   }
 
   void _addAllContentsList() {
