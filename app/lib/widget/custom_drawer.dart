@@ -66,12 +66,12 @@ class CustomDrawer extends StatelessWidget {
             _ThirdTile(
               title: "모바일기기등록",
               baseController: baseController,
-              route: KRoute.DEVICE_REGISTER.name,
+              route: kRoute.DEVICE_REGISTER,
             ),
             _ThirdTile(
               title: "푸시알람전송이력",
               baseController: baseController,
-              route: KRoute.PUSH_HISTORY.name,
+              route: kRoute.PUSH_HISTORY,
             ),
           ],
         ),
@@ -152,7 +152,7 @@ class _ThirdTile extends StatelessWidget {
         ),
         contentPadding: EdgeInsets.only(left: 50),
         onTap: () {
-          (Get.currentRoute == KRoute.HOME.name)
+          (Get.currentRoute == kRoute.HOME)
               ? Get.toNamed(route)
               : Get.offNamed(route);
           baseController?.closeDrawer();
