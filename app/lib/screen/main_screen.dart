@@ -10,24 +10,40 @@ class MainScreen extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.user == null;
-    return Scaffold(
-      key: controller.scaffoldKey,
-      appBar: CustomAppBar(baseController: controller),
-      resizeToAvoidBottomInset: false,
-      drawer: CustomDrawer(baseController: controller),
-      body: GetBuilder<MainController>(builder: (_) {
-        return (controller.user == null) ? _loading() : _body();
-      }),
-      // body: _body(),
+    return Row(
+      children: [
+        (!Get.context!.isPhone)
+            ? Row(
+                children: [
+                  CustomDrawer(baseController: controller),
+                  Container(width: 1, color: Colors.black),
+                ],
+              )
+            : Container(),
+        Expanded(
+          child: Scaffold(
+            key: controller.scaffoldKey,
+            appBar: CustomAppBar(baseController: controller),
+            resizeToAvoidBottomInset: false,
+            drawer: CustomDrawer(baseController: controller),
+            body: _body(),
+          ),
+        ),
+      ],
     );
+  }
+
+  Widget _body() {
+    return GetBuilder<MainController>(builder: (_) {
+      return (controller.user == null) ? _loading() : _contents();
+    });
   }
 
   Widget _loading() {
     return Center(child: CircularProgressIndicator());
   }
 
-  Widget _body() {
+  Widget _contents() {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -45,17 +61,30 @@ class MainScreen extends GetView<MainController> {
 class _DashBoard extends StatelessWidget {
   const _DashBoard({Key? key}) : super(key: key);
 
-  final _width = 280.0;
-  final _height = 136.0;
+  final _widthMobile = 280.0;
+  final _heightMobile = 136.0;
+  final _widthTablet = double.infinity;
+  final _heightTablet = 200.0;
+  final _maxWidthLandScape = 800.0;
+  final _marginTablet = 50.0;
   final _radius = 20.0;
   final _innerPadding = 20.0;
 
   @override
   Widget build(BuildContext context) {
+    final isPhone = Get.context!.isPhone;
+    final _width = (isPhone) ? _widthMobile : _widthTablet;
+    final _height = (isPhone) ? _heightMobile : _heightTablet;
+    final _margin = (isPhone)
+        ? null
+        : EdgeInsets.only(left: _marginTablet, right: _marginTablet);
+
     return Container(
       width: _width,
       height: _height,
+      margin: _margin,
       padding: EdgeInsets.all(_innerPadding),
+      constraints: BoxConstraints(maxWidth: _maxWidthLandScape),
       decoration: BoxDecoration(
         border: Border.all(color: boxBorderDisable),
         borderRadius: BorderRadius.circular(_radius),
@@ -81,7 +110,7 @@ class _DashBoard extends StatelessWidget {
       );
 
   Widget _contents() => Text(
-        "이 편지는 영국에서부터 시작되어......",
+        "이 공지는 영국에서부터 시작되어......",
         overflow: TextOverflow.ellipsis,
       );
 }
@@ -89,40 +118,76 @@ class _DashBoard extends StatelessWidget {
 class _ButtonComplex extends GetView<MainController> {
   const _ButtonComplex({Key? key}) : super(key: key);
 
-  final int _itemCount = 6;
-  final double _gridViewWidth = 280;
-  final int _crossAxisCount = 2;
-  final double _gridAxisSpacing = 10;
+  final int _itemCountMobile = 6;
+  final int _crossAxisCountMobile = 2;
+  final double _gridAxisSpacingMobile = 10;
+  final int _itemCountTablet = 8;
+  final double _maxCrossAxisExtent = 240;
+  final double _crossAxisSpacingTablet = 20;
+  final double _mainAxisSpacing = 20;
+  final _marginTablet = 50.0;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _gridViewWidth,
+    final _margin = (Get.context!.isPhone)
+        ? null
+        : EdgeInsets.only(left: _marginTablet, right: _marginTablet);
+
+    return Container(
+      margin: _margin,
       child: GetBuilder<MainController>(
         builder: (_) => (controller.isLoading.value)
             ? Center(child: CircularProgressIndicator())
-            : GridView.builder(
-                shrinkWrap: true,
-                itemCount: _itemCount,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _crossAxisCount,
-                  crossAxisSpacing: _gridAxisSpacing,
-                  mainAxisSpacing: _gridAxisSpacing,
-                ),
-                itemBuilder: (context, int i) =>
-                    GetBuilder<MainController>(builder: (_) {
-                  return _FavoriteButton(
-                    title: (controller.favoriteDtoList.length > i)
-                        ? controller.favoriteDtoList[i].screenName
-                        : null,
-                    onTap: (controller.favoriteDtoList.length > i)
-                        ? () => controller.onTapButton(i)
-                        : null,
-                  );
-                }),
-              ),
+            : (Get.context!.isPhone)
+                ? _gridViewMobile()
+                : _gridViewTablet(),
       ),
+    );
+  }
+
+  Widget _gridViewMobile() {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: _itemCountMobile,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: _crossAxisCountMobile,
+        crossAxisSpacing: _gridAxisSpacingMobile,
+        mainAxisSpacing: _gridAxisSpacingMobile,
+      ),
+      itemBuilder: (context, int i) => GetBuilder<MainController>(builder: (_) {
+        return _FavoriteButton(
+          title: (controller.favoriteDtoList.length > i)
+              ? controller.favoriteDtoList[i].screenName
+              : null,
+          onTap: (controller.favoriteDtoList.length > i)
+              ? () => controller.onTapButton(i)
+              : null,
+        );
+      }),
+    );
+  }
+
+  Widget _gridViewTablet() {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: _itemCountTablet,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: _maxCrossAxisExtent,
+        crossAxisSpacing: _crossAxisSpacingTablet,
+        mainAxisSpacing: _mainAxisSpacing,
+      ),
+      itemBuilder: (context, int i) => GetBuilder<MainController>(builder: (_) {
+        return _FavoriteButton(
+          title: (controller.favoriteDtoList.length > i)
+              ? controller.favoriteDtoList[i].screenName
+              : null,
+          onTap: (controller.favoriteDtoList.length > i)
+              ? () => controller.onTapButton(i)
+              : null,
+        );
+      }),
     );
   }
 }
