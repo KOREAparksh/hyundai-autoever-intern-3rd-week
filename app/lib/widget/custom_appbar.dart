@@ -78,11 +78,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               onPressed: () => Get.back(),
               icon: Icon(Icons.arrow_back_ios),
             )
-          : _customIconButton(
-              icon: Icon(Icons.menu),
-              onPressed: baseController?.openDrawer ??
-                  () => Get.snackbar("Error", "base controller error"),
-            ),
+          : (Get.context!.isPhone)
+              ? _customIconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: baseController?.openDrawer ??
+                      () => Get.snackbar("Error", "base controller error"),
+                )
+              : Container(),
     );
   }
 
