@@ -1,239 +1,54 @@
 import 'package:app/const/Color.dart';
-import 'package:app/dto/push_history_dto.dart';
+import 'package:app/controller/screen/push_history_controller.dart';
+import 'package:app/dto/push_history/push_history_dto.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_dialog.dart';
+import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
-class PushHistoryScreen extends StatefulWidget {
-  const PushHistoryScreen({Key? key}) : super(key: key);
-
-  @override
-  State<PushHistoryScreen> createState() => _PushHistoryScreenState();
-}
-
-class _PushHistoryScreenState extends State<PushHistoryScreen> {
+class PushHistoryScreen extends StatelessWidget {
+  PushHistoryScreen({Key? key}) : super(key: key);
   final _title = "푸시알림전송이력";
-
-  final List<PushHistoryDto> _list = [
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter",
-      pushContent: "이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 05, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 05, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "2",
-      deviceDescription: "ipad",
-      pushTitle: "3This is letter",
-      pushContent: "3이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 06, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "1",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "note10",
-      pushTitle: "This is letter2",
-      pushContent: "2이 편지는 영국으로부터 시작되어 한국으로 온지 약 3년정도 된거 같기도 하고 아닌거 같기도 하고",
-      pushDateTime: DateTime.utc(2022, 08, 07, 12, 02, 43),
-      sentDateTime: DateTime.utc(2022, 08, 07, 12, 04, 00),
-      sentState: "Y",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-    PushHistoryDto(
-      userId: "2",
-      userName: "psh",
-      deviceId: "1",
-      deviceDescription: "iphone",
-      pushTitle: "iphone",
-      pushContent: "steve jobs",
-      pushDateTime: DateTime.utc(2022, 08, 15),
-      sentDateTime: DateTime.utc(2022, 08, 15),
-      sentState: "N",
-    ),
-  ];
 
   final _bodySideMargin = 27.0;
   final _headerHeight = 40.0;
 
+  final controller = Get.put<PushHistoryController>(PushHistoryController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: _title, hasStar: true),
+      key: controller.scaffoldKey,
+      appBar: CustomAppBar(
+        title: _title,
+        hasStar: true,
+        baseController: controller,
+      ),
+      resizeToAvoidBottomInset: false,
+      drawer: CustomDrawer(),
       body: Stack(
         children: [
           Container(
-            margin:
-                EdgeInsets.only(left: _bodySideMargin, right: _bodySideMargin),
-            child: GroupedListView<PushHistoryDto, DateTime>(
-              elements: _list,
-              groupBy: (element) => element.pushDateTime,
-              cacheExtent: _list.length + 5,
-              itemBuilder: _itemBuilder,
-              groupHeaderBuilder: (element) => _groupHeader(element),
-              useStickyGroupSeparators: true,
+            margin: EdgeInsets.only(
+              left: _bodySideMargin,
+              right: _bodySideMargin,
             ),
+            child: _ListView(headerHeight: _headerHeight),
           ),
           Container(
             alignment: Alignment.topRight,
-            child: ListFilterHeader(
-              height: _headerHeight,
-              margin: _bodySideMargin,
-              onTapDetail: () {},
-              onTapOrder: () {},
-              onTapSearch: () {},
+            child: Obx(
+              () => ListFilterHeader(
+                height: _headerHeight,
+                margin: _bodySideMargin,
+                isSearchActive: controller.isSearchActive.value,
+                isOrderActive: controller.isDescActive.value,
+                onTapOrder: controller.onTapOrder,
+                onTapSearch: _searchDialog,
+              ),
             ),
           ),
         ],
@@ -241,16 +56,164 @@ class _PushHistoryScreenState extends State<PushHistoryScreen> {
     );
   }
 
-  Widget _itemBuilder(context, PushHistoryDto element) =>
-      PushHistoryListDetailTile(data: element);
+  void _searchDialog() {
+    showDialog(
+      context: Get.context!,
+      builder: (_) => _SearchDialog(),
+    );
+  }
+}
+
+class _SearchDialog extends GetView<PushHistoryController> {
+  const _SearchDialog({Key? key}) : super(key: key);
+
+  final _searchDialogTextFieldPadding = 5.0;
+  final _searchDialogContentsMargin = 30.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: CustomDialog(
+          mainTitle: "검색",
+          positiveButtonText: "검색",
+          negativeButtonText: "취소",
+          contents: Container(
+            margin: EdgeInsets.all(_searchDialogContentsMargin),
+            child: Column(
+              children: [
+                _textField(
+                  hint: "사용자ID",
+                  controller: controller.userIdController,
+                ),
+                _textField(
+                  hint: "사용자이름",
+                  controller: controller.userNameController,
+                ),
+                _textField(
+                  hint: "DeviceID",
+                  controller: controller.deviceIdController,
+                ),
+                _textField(
+                  hint: "푸시제목",
+                  controller: controller.pushTitleController,
+                ),
+                RadioButtons(),
+                SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: controller.onTapInit,
+                  child: Text("초기화"),
+                ),
+              ],
+            ),
+          ),
+          onTapPositive: controller.onTapSearchDialogPositive,
+          onTabNegative: controller.onTapSearchDialogNegative,
+        ),
+      ),
+    );
+  }
+
+  Widget _textField({required String hint, required controller}) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(_searchDialogTextFieldPadding),
+        hintText: hint,
+      ),
+    );
+  }
+}
+
+class RadioButtons extends GetView<PushHistoryController> {
+  const RadioButtons({Key? key}) : super(key: key);
+
+  final _radioButtonsHeight = 100.0;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: _radioButtonsHeight,
+      child: Obx(
+        () => Column(
+          children: [
+            _radioTile(0, "전체"),
+            _radioTile(1, "수신"),
+            _radioTile(2, "미수신"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _radioTile(int i, String title) {
+    return Expanded(
+      flex: 1,
+      child: RadioListTile<String>(
+        title: Text(title),
+        value: controller.readStates[i],
+        groupValue: controller.readStates[controller.readStatesIndex.value],
+        onChanged: (_) {
+          if (i == 0) {
+            controller.onTapSearchFilterAll();
+          } else if (i == 1) {
+            controller.onTapSearchFilterStateTrue();
+          } else if (i == 2) {
+            controller.onTapSearchFilterStateFalse();
+          }
+        },
+      ),
+    );
+  }
+}
+
+class _ListView extends GetView<PushHistoryController> {
+  const _ListView({Key? key, required this.headerHeight}) : super(key: key);
+
+  final _dateFormat = "yyyy-MM-dd";
+  final headerHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Obx(() {
+        if (controller.isLoading.isTrue) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return (controller.contentsList.isEmpty)
+            ? _nothing()
+            : GroupedListView<PushHistoryDto, DateTime>(
+                elements: controller.contentsList,
+                groupBy: (element) => DateTime.parse(
+                    DateFormat("yyyyMMdd").format(element.sentDateTime)),
+                // sort: false,
+                order: (controller.isDescActive.value)
+                    ? GroupedListOrder.DESC
+                    : GroupedListOrder.ASC,
+                cacheExtent: controller.contentsList.length + 5,
+                itemBuilder: (_, element) => PushHistoryListTile(data: element),
+                groupHeaderBuilder: (element) => _groupHeader(element),
+                useStickyGroupSeparators: true,
+              );
+      }),
+    );
+  }
+
+  Widget _nothing() {
+    return Center(
+      child: Text(
+        "푸시알림이력이 없습니다.",
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+      ),
+    );
+  }
 
   Widget _groupHeader(PushHistoryDto element) {
     return Container(
-      height: _headerHeight,
+      height: headerHeight,
       color: Colors.transparent,
       alignment: Alignment.centerLeft,
       child: Text(
-        DateFormat("yyyy-MM-dd").format(element.pushDateTime),
+        DateFormat(_dateFormat).format(element.sentDateTime),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
       ),
     );
@@ -264,14 +227,16 @@ class ListFilterHeader extends StatelessWidget {
     required this.margin,
     required this.onTapSearch,
     required this.onTapOrder,
-    required this.onTapDetail,
+    required this.isSearchActive,
+    required this.isOrderActive,
   }) : super(key: key);
 
   final double height;
   final double margin;
   final VoidCallback onTapSearch;
   final VoidCallback onTapOrder;
-  final VoidCallback onTapDetail;
+  final bool isSearchActive;
+  final bool isOrderActive;
 
   @override
   Widget build(BuildContext context) {
@@ -284,15 +249,13 @@ class ListFilterHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _iconButtonForm(
-            onPressed: onTapDetail,
-            icon: Icon(Icons.format_line_spacing),
-          ),
-          _iconButtonForm(
             onPressed: onTapOrder,
+            isActive: isOrderActive,
             icon: Icon(Icons.sort_by_alpha),
           ),
           _iconButtonForm(
             onPressed: onTapSearch,
+            isActive: isSearchActive,
             icon: Icon(Icons.search_outlined),
           ),
         ],
@@ -301,15 +264,19 @@ class ListFilterHeader extends StatelessWidget {
   }
 
   Widget _iconButtonForm(
-      {required VoidCallback onPressed, required Icon icon}) {
-    return IconButton(
-      onPressed: onTapSearch,
-      icon: icon,
-      disabledColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
+      {required VoidCallback onPressed, required Icon icon, isActive = false}) {
+    return Container(
+      color: (isActive) ? mainColor : null,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: icon,
+        color: (isActive) ? Colors.white : null,
+        disabledColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+      ),
     );
   }
 }
@@ -325,134 +292,12 @@ class PushHistoryListTile extends StatelessWidget {
   final _width = 330.0;
   final _topBottomMargin = 10.0;
   final _radius = 20.0;
-  final _rowHeight = 25.0;
-  final _stateWidth = 50.0;
-  final _stateHeight = 15.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: _topBottomMargin, bottom: _topBottomMargin),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_radius),
-        ),
-        elevation: 5,
-        color: Colors.white,
-        shadowColor: Color(0x2b333333),
-        child: Container(
-          width: _width,
-          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _form(child: _times()),
-              _form(child: _info()),
-              Container(height: 1, color: Colors.black),
-              _form(child: _pushTitle()),
-              _form(child: _pushContents()),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _form({required Widget child}) {
-    return SizedBox(height: _rowHeight, child: child);
-  }
-
-  Widget _times() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Text("푸시", style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: 5),
-            Text(DateFormat("hh:mm:ss").format(data.pushDateTime)),
-          ],
-        ),
-        Row(
-          children: [
-            Text("수신", style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: 5),
-            Text(DateFormat("yy/MM/dd hh:mm:ss").format(data.sentDateTime)),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _info() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Text(
-            data.userName,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            data.deviceDescription,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        Container(
-          width: _stateWidth,
-          height: _stateHeight,
-          color: Colors.green,
-          alignment: Alignment.center,
-          child: Text(
-            data.sentState,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _pushTitle() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        data.pushTitle,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      ),
-    );
-  }
-
-  Widget _pushContents() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        data.pushContent,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-}
-
-class PushHistoryListDetailTile extends StatelessWidget {
-  const PushHistoryListDetailTile({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
-
-  final PushHistoryDto data;
-
-  final _width = 330.0;
-  final _topBottomMargin = 10.0;
-  final _radius = 20.0;
+  final _infoMainWidth = 100.0;
+  final _formHeight = 25.0;
+  final _titleFormHeight = 30.0;
   final _stateWidth = 20.0;
   final _stateHeight = 15.0;
+  final _dateFormat = "yy/MM/dd HH:mm:ss";
 
   @override
   Widget build(BuildContext context) {
@@ -493,7 +338,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
 
   Widget _pushTitle() {
     return Container(
-      height: 30,
+      height: _titleFormHeight,
       alignment: Alignment.centerLeft,
       child: Text(
         data.pushTitle,
@@ -509,18 +354,18 @@ class PushHistoryListDetailTile extends StatelessWidget {
           flex: 1,
           child: _timeForm(
               title: "푸시",
-              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.pushDateTime)),
+              time: DateFormat(_dateFormat).format(data.pushDateTime)),
         ),
         Expanded(
           flex: 1,
           child: _timeForm(
               title: "수신",
-              time: DateFormat("yy/MM/dd hh:mm:ss").format(data.sentDateTime)),
+              time: DateFormat(_dateFormat).format(data.sentDateTime)),
         ),
         Container(
           width: _stateWidth,
           height: _stateHeight,
-          color: Colors.green,
+          color: data.sentState == "Y" ? Colors.green : Colors.red,
           alignment: Alignment.center,
           child: Text(
             data.sentState,
@@ -533,7 +378,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
 
   Widget _form({required Widget child}) {
     return Container(
-      height: 25,
+      height: _formHeight,
       alignment: Alignment.centerLeft,
       child: child,
     );
@@ -561,7 +406,7 @@ class PushHistoryListDetailTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: 100,
+          width: _infoMainWidth,
           child: Text(
             name,
             overflow: TextOverflow.ellipsis,

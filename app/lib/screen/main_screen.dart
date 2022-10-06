@@ -1,24 +1,42 @@
 import 'package:app/const/Color.dart';
+import 'package:app/controller/screen/main_controller.dart';
 import 'package:app/widget/custom_appbar.dart';
+import 'package:app/widget/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends GetView<MainController> {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    controller.user == null;
     return Scaffold(
-      appBar: CustomAppBar(),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            _DashBoard(),
-            _ButtonComplex(),
-          ],
-        ),
+      key: controller.scaffoldKey,
+      appBar: CustomAppBar(baseController: controller),
+      resizeToAvoidBottomInset: false,
+      drawer: CustomDrawer(baseController: controller),
+      body: GetBuilder<MainController>(builder: (_) {
+        return (controller.user == null) ? _loading() : _body();
+      }),
+      // body: _body(),
+    );
+  }
+
+  Widget _loading() {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget _body() {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          _DashBoard(),
+          _ButtonComplex(),
+        ],
       ),
     );
   }
@@ -68,7 +86,7 @@ class _DashBoard extends StatelessWidget {
       );
 }
 
-class _ButtonComplex extends StatelessWidget {
+class _ButtonComplex extends GetView<MainController> {
   const _ButtonComplex({Key? key}) : super(key: key);
 
   final int _itemCount = 6;
@@ -80,15 +98,30 @@ class _ButtonComplex extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: _gridViewWidth,
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: _itemCount,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _crossAxisCount,
-          crossAxisSpacing: _gridAxisSpacing,
-          mainAxisSpacing: _gridAxisSpacing,
-        ),
-        itemBuilder: (context, int i) => SizedBox(child: _FavoriteButton()),
+      child: GetBuilder<MainController>(
+        builder: (_) => (controller.isLoading.value)
+            ? Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                shrinkWrap: true,
+                itemCount: _itemCount,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _crossAxisCount,
+                  crossAxisSpacing: _gridAxisSpacing,
+                  mainAxisSpacing: _gridAxisSpacing,
+                ),
+                itemBuilder: (context, int i) =>
+                    GetBuilder<MainController>(builder: (_) {
+                  return _FavoriteButton(
+                    title: (controller.favoriteDtoList.length > i)
+                        ? controller.favoriteDtoList[i].screenName
+                        : null,
+                    onTap: (controller.favoriteDtoList.length > i)
+                        ? () => controller.onTapButton(i)
+                        : null,
+                  );
+                }),
+              ),
       ),
     );
   }
@@ -98,6 +131,7 @@ class _FavoriteButton extends StatelessWidget {
   const _FavoriteButton({
     Key? key,
     this.title,
+    this.onTap,
   }) : super(key: key);
 
   final _width = 136.0;
@@ -106,27 +140,31 @@ class _FavoriteButton extends StatelessWidget {
   final _padding = 10.0;
 
   final String? title;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      height: _height,
-      padding: EdgeInsets.all(_padding),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: (title == null) ? boxBorderDisable : mainColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: _width,
+        height: _height,
+        padding: EdgeInsets.all(_padding),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: (title == null) ? boxBorderDisable : mainColor,
+          ),
+          borderRadius: BorderRadius.circular(_radius),
         ),
-        borderRadius: BorderRadius.circular(_radius),
-      ),
-      child: Center(
-        child: Text(
-          title ?? "Blank",
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: (title != null) ? null : textDisable,
-            fontWeight: (title != null) ? FontWeight.bold : null,
-            fontSize: 16,
+        child: Center(
+          child: Text(
+            title ?? "Blank",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: (title != null) ? null : textDisable,
+              fontWeight: (title != null) ? FontWeight.bold : null,
+              fontSize: 16,
+            ),
           ),
         ),
       ),

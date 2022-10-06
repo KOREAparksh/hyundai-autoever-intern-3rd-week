@@ -14,7 +14,7 @@ class PushMessageHistoryServiceTest {
 
 	@Test
 	void testGetPushMessageHistory(){
-		pushMessageHistoryService.getPushMessageHistory().forEach(System.out::println);
+//		pushMessageHistoryService.getPushMessageHistory().forEach(System.out::println);
 	}
 
 }

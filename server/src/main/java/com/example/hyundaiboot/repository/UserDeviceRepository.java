@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface UserDeviceRepository extends JpaRepository<UserDevice, UserDeviceId> {
 	List<UserDevice> findByUserId(String id);
+	UserDevice findByUserAndDeviceMaster(User user, DeviceMaster deviceMaster);
 	void deleteByUserAndDeviceMaster(User user, DeviceMaster deviceMaster);
 }
