@@ -1,10 +1,5 @@
 import 'package:app/const/route.dart';
-import 'package:app/controller/screen/device_register_controller.dart';
 import 'package:app/controller/screen/main_controller.dart';
-import 'package:app/controller/screen/push_history_controller.dart';
-import 'package:app/screen/device_register_screen.dart';
-import 'package:app/screen/main_screen.dart';
-import 'package:app/screen/push_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

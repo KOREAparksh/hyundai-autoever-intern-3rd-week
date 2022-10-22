@@ -1,5 +1,6 @@
 import 'package:app/controller/base_controller.dart';
 import 'package:app/controller/screen/main_controller.dart';
+import 'package:app/controller/screen/noti_controller.dart';
 import 'package:app/dto/favorite_dto/favorite_dto.dart';
 import 'package:app/screen/noti_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,7 +145,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       _list.add(SizedBox(width: _appBarTrailingInnerMargin));
       _list.add(_customIconButton(
         icon: Icon(Icons.notifications),
-        onPressed: () => Get.to(() => NotiScreen()),
+        onPressed: () async {
+          Get.put(NotiController());
+          await Get.to(() => NotiScreen());
+          Get.delete<NotiController>();
+        },
       ));
     }
     return _list;
