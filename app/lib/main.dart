@@ -1,5 +1,6 @@
 import 'package:app/const/route.dart';
 import 'package:app/controller/screen/main_controller.dart';
+import 'package:app/controller/screen/noti_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +14,7 @@ void main() async {
   ]);
 
   Get.put(MainController());
+  Get.put(NotiController());
   runApp(const MyApp());
 }
 
