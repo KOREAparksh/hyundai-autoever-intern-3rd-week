@@ -1,5 +1,5 @@
 import 'package:app/controller/screen/noti_controller.dart';
-import 'package:app/models/notification/NotificationData.dart';
+import 'package:app/models/notification/notification_data.dart';
 import 'package:app/widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
