@@ -10,6 +10,10 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   //환경변수 파일 설정
   await dotenv.load(fileName: "env");
@@ -22,7 +26,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   // use the returned token to send messages to users from your custom server
-  messaging.getToken(vapidKey: dotenv.get("WEBPUSHKEY"));
+  messaging
+      .getToken(vapidKey: dotenv.get("WEBPUSHKEY"))
+      .then((value) => print(value));
 
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -46,12 +52,9 @@ void main() async {
   );
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("@@" + message.toString());
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
-    // If `onMessage` is triggered with a notification, construct our own
-    // local notification to show to users using the created channel.
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -68,6 +71,7 @@ void main() async {
           ));
     }
   });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   Get.put(MainController());
   Get.put(NotiController());
