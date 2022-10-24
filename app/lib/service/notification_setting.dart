@@ -10,6 +10,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 ////////////////////////////////Variation////////////////////////////////////
 
@@ -33,6 +35,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("Handling a background message: ${message.messageId}");
   print("Handling a background message body: ${message.notification!.body}");
+  saveData(
+    type: message.data['type'] ?? "normal",
+    title: message.notification?.title ?? "null",
+    content: message.notification?.body ?? "null",
+  );
 }
 
 void onTapNotiBackground(RemoteMessage message) {
@@ -46,6 +53,11 @@ void onTapNotiBackground(RemoteMessage message) {
 Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+  saveData(
+    type: message.data['type'] ?? "normal",
+    title: notification?.title ?? "null",
+    content: notification?.body ?? "null",
+  );
 
   //chat이면 뭉치게
   if (notification != null && android != null) {
@@ -67,10 +79,21 @@ Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
   }
 }
 
+Future<void> saveData({
+  required String type,
+  required String title,
+  required String content,
+}) async {
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  DatabaseReference ref =
+      database.ref(DateFormat('yyMMddHHmmss').format(DateTime.now()));
+  await ref.set({"type": type, "title": title, "content": content});
+}
+
 Future<void> settingNotification() async {
   //Firebase core설정
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   messaging
       .getToken(vapidKey: dotenv.get("WEBPUSHKEY"))
