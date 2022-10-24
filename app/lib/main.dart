@@ -1,21 +1,31 @@
 import 'package:app/const/route.dart';
-import 'package:app/controller/screen/device_register_controller.dart';
 import 'package:app/controller/screen/main_controller.dart';
-import 'package:app/controller/screen/push_history_controller.dart';
-import 'package:app/screen/device_register_screen.dart';
-import 'package:app/screen/main_screen.dart';
-import 'package:app/screen/push_history_screen.dart';
+import 'package:app/controller/screen/noti_controller.dart';
+import 'package:app/service/notification_setting.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
+  //환경변수 파일 설정
   await dotenv.load(fileName: "env");
   WidgetsFlutterBinding.ensureInitialized();
+
+  //화면회전 설정
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  //FCM 설정
+  settingNotification();
 
   Get.put(MainController());
   runApp(const MyApp());
