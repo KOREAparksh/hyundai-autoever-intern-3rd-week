@@ -10,7 +10,6 @@ class NotiScreen extends StatelessWidget {
   NotiScreen({Key? key}) : super(key: key);
 
   final _title = "알림화면";
-
   final controller = Get.put(NotiController());
 
   @override
@@ -42,7 +41,7 @@ class NotiScreen extends StatelessWidget {
             groupBy: (NotificationData element) => element.notiTileType,
             onTapSearch: () {},
             indexItemBuilder: (context, e, i) => NotiListViewTile(
-              isNew: true,
+              isNew: e.isNew,
               title: e.title,
               content: e.content,
               notiTileType: e.notiTileType,

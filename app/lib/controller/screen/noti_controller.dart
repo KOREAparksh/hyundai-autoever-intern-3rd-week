@@ -17,8 +17,12 @@ class NotiController extends BaseController {
     flutterLocalNotificationsPlugin.cancelAll();
     print("123");
     await readData();
+    var temp = list.reversed.toList();
+    list.clear();
+    list.addAll(temp);
     isLoading(false);
     print("345");
+    readFlag();
   }
 
   Future<void> readData() async {
@@ -31,12 +35,26 @@ class NotiController extends BaseController {
       String title = e.child("title").value.toString();
       String content = e.child("content").value.toString();
       String type = e.child("type").value.toString();
+      String isNew = e.child("isNew").value.toString();
       NotiTileType notiTileType = (type == "chat")
           ? NotiTileType.chatting
           : (type == "normal")
               ? NotiTileType.normal
               : NotiTileType.alert;
-      list.add(NotificationData(notiTileType, title, content));
+      list.add(NotificationData(notiTileType, title, content, isNew == "true"));
     });
+  }
+
+  Future<void> readFlag() async {
+    FirebaseDatabase database = FirebaseDatabase.instance;
+    DatabaseReference ref = database.ref();
+    DataSnapshot dataSnapshot = await ref.get();
+    dataSnapshot.children.forEach(
+      (e) async {
+        String key = e.key.toString();
+        DatabaseReference innerRef = database.ref(key);
+        await innerRef.update({"isNew": false});
+      },
+    );
   }
 }

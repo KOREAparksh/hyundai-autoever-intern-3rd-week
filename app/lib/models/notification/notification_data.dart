@@ -5,9 +5,10 @@ class NotificationData {
   final NotiTileType notiTileType;
   final String title;
   final String content;
+  final bool isNew;
   final DateTime dateTime;
 
-  NotificationData(this.notiTileType, this.title, this.content)
+  NotificationData(this.notiTileType, this.title, this.content, this.isNew)
       : dateTime = DateTime.now();
 
   @override

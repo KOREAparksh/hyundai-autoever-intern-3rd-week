@@ -87,7 +87,8 @@ Future<void> saveData({
   FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference ref =
       database.ref(DateFormat('yyMMddHHmmss').format(DateTime.now()));
-  await ref.set({"type": type, "title": title, "content": content});
+  await ref
+      .set({"type": type, "title": title, "content": content, "isNew": true});
 }
 
 Future<void> settingNotification() async {
