@@ -83,6 +83,11 @@ class CustomDrawer extends StatelessWidget {
               baseController: baseController,
               route: kRoute.PUSH_HISTORY,
             ),
+            _ThirdTile(
+              title: "채팅화면",
+              baseController: baseController,
+              route: kRoute.CHATTING,
+            ),
           ],
         ),
         ExpansionTile(
