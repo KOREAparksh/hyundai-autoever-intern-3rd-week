@@ -11,6 +11,9 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
   //환경변수 파일 설정
   await dotenv.load(fileName: "env");
@@ -26,6 +29,7 @@ void main() async {
 
   Get.put(MainController());
   Get.put(NotiController());
+  flutterLocalNotificationsPlugin.cancelAll();
   runApp(const MyApp());
 }
 

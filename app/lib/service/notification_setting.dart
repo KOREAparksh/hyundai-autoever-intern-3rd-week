@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/const/route.dart';
 import 'package:app/firebase_options.dart';
+import 'package:app/main.dart';
 import 'package:app/screen/noti_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 ////////////////////////////////Variation////////////////////////////////////
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -37,10 +35,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message body: ${message.notification!.body}");
 }
 
-void _handleMessage(RemoteMessage message) {
+void onTapNotiBackground(RemoteMessage message) {
   if (message.data['type'] == 'chat') {
     Get.toNamed(kRoute.CHATTING, arguments: message.data);
-  } else if (message.data['type'] == 'alert') {
+  } else {
     Get.to(() => NotiScreen(), arguments: message.data);
   }
 }
@@ -93,7 +91,7 @@ Future<void> settingNotification() async {
           jsonDecode(notificationResponse.payload ?? "");
       if (message['type'] == 'chat') {
         Get.toNamed(kRoute.CHATTING, arguments: message);
-      } else if (message['type'] == 'alert') {
+      } else {
         Get.to(() => NotiScreen(), arguments: message);
       }
     },
@@ -111,8 +109,8 @@ Future<void> settingNotification() async {
 
   // 종료상태에서 클릭한 푸시 알림 메세지 핸들링
   if (initialMessage != null) {
-    _handleMessage(initialMessage);
+    onTapNotiBackground(initialMessage);
   }
   // 앱이 백그라운드 상태에서 푸시 알림 클릭 하여 열릴 경우 메세지 스트림을 통해 처리
-  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  FirebaseMessaging.onMessageOpenedApp.listen(onTapNotiBackground);
 }
