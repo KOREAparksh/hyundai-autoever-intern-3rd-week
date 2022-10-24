@@ -11,7 +11,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.instance.getToken(vapidKey: dotenv.get("WEBPUSHKEY"));
 }
 
 void main() async {
@@ -71,6 +72,7 @@ void main() async {
           ));
     }
   });
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   Get.put(MainController());
