@@ -53,6 +53,7 @@ void onTapNotiBackground(RemoteMessage message) {
 Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+  String type = message.data['type'] ?? "normal";
   saveData(
     type: message.data['type'] ?? "normal",
     title: notification?.title ?? "null",
@@ -62,7 +63,7 @@ Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
   //chat이면 뭉치게
   if (notification != null && android != null) {
     flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
+      (type == "chat") ? 123 : notification.hashCode,
       notification.title,
       notification.body,
       NotificationDetails(
@@ -72,6 +73,30 @@ Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
           channelDescription: channel.description,
           icon: android.smallIcon,
           priority: Priority.max,
+          styleInformation: (type == "chat")
+              ? MessagingStyleInformation(
+                  Person(name: "psh"),
+                  conversationTitle: notification.title,
+                  htmlFormatTitle: true,
+                  messages: [
+                    Message(
+                      notification.body!,
+                      DateTime.now(),
+                      Person(name: notification.title),
+                    ),
+                    Message(
+                      notification.body!,
+                      DateTime.now(),
+                      Person(name: notification.title),
+                    ),
+                    Message(
+                      notification.body!,
+                      DateTime.now(),
+                      Person(name: notification.title),
+                    ),
+                  ],
+                )
+              : null,
         ),
       ),
       payload: jsonEncode(message.data).toString(),
