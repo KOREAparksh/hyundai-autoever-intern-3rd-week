@@ -28,7 +28,6 @@ void main() async {
   settingNotification();
 
   Get.put(MainController());
-  flutterLocalNotificationsPlugin.cancelAll();
   runApp(const MyApp());
 }
 
