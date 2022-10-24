@@ -1,0 +1,118 @@
+import 'dart:convert';
+
+import 'package:app/const/route.dart';
+import 'package:app/firebase_options.dart';
+import 'package:app/screen/noti_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+
+////////////////////////////////Variation////////////////////////////////////
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+const InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description:
+      'This channel is used for important notifications.', // description
+  importance: Importance.max,
+);
+
+////////////////////////////////Function////////////////////////////////////
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print("Handling a background message: ${message.messageId}");
+  print("Handling a background message body: ${message.notification!.body}");
+}
+
+void _handleMessage(RemoteMessage message) {
+  if (message.data['type'] == 'chat') {
+    Get.toNamed(kRoute.CHATTING, arguments: message.data);
+  } else if (message.data['type'] == 'alert') {
+    Get.to(() => NotiScreen(), arguments: message.data);
+  }
+}
+
+Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+
+  //chat이면 뭉치게
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          icon: android.smallIcon,
+          priority: Priority.max,
+        ),
+      ),
+      payload: jsonEncode(message.data).toString(),
+    );
+  }
+}
+
+Future<void> settingNotification() async {
+  //Firebase core설정
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  messaging
+      .getToken(vapidKey: dotenv.get("WEBPUSHKEY"))
+      .then((value) => print(value));
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  //noti setting
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+      // FCM 포그라운드 메시지 클릭 액션
+      Map<String, dynamic> message =
+          jsonDecode(notificationResponse.payload ?? "");
+      if (message['type'] == 'chat') {
+        Get.toNamed(kRoute.CHATTING, arguments: message);
+      } else if (message['type'] == 'alert') {
+        Get.to(() => NotiScreen(), arguments: message);
+      }
+    },
+  );
+
+  //Foreground 수신 처리
+  FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
+
+  //Background, Terminated 수신 처리
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // 앱이 종료된 상태에서 푸시 알림 클릭하여 열릴 경우 메세지 가져옴
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+
+  // 종료상태에서 클릭한 푸시 알림 메세지 핸들링
+  if (initialMessage != null) {
+    _handleMessage(initialMessage);
+  }
+  // 앱이 백그라운드 상태에서 푸시 알림 클릭 하여 열릴 경우 메세지 스트림을 통해 처리
+  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+}

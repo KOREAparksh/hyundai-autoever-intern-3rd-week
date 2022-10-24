@@ -1,6 +1,7 @@
 import 'package:app/const/route.dart';
 import 'package:app/controller/screen/main_controller.dart';
 import 'package:app/controller/screen/noti_controller.dart';
+import 'package:app/service/notification_setting.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,70 +11,18 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.instance.getToken(vapidKey: dotenv.get("WEBPUSHKEY"));
-}
-
 void main() async {
   //환경변수 파일 설정
   await dotenv.load(fileName: "env");
   WidgetsFlutterBinding.ensureInitialized();
+
+  //화면회전 설정
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
-  //Firebase core설정
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // use the returned token to send messages to users from your custom server
-  messaging
-      .getToken(vapidKey: dotenv.get("WEBPUSHKEY"))
-      .then((value) => print(value));
-
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-    ),
-  );
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-
-    if (notification != null && android != null) {
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: android.smallIcon,
-              priority: Priority.max,
-            ),
-          ));
-    }
-  });
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //FCM 설정
+  settingNotification();
 
   Get.put(MainController());
   Get.put(NotiController());
