@@ -49,7 +49,7 @@
 <img src="https://raw.githubusercontent.com/KOREAparksh/hyundai-autoever-intern-assignment/main/app/assets/액션_터미네이티드.gif" width="49%"/>
 
 ### 알림 후 알림클릭 없이 앱 접속
-<img src="https://raw.githubusercontent.com/KOREAparksh/hyundai-autoever-intern-assignment/main/app/assets/알림클릭안함.gif" width="49%"/>
+<img src="https://raw.githubusercontent.com/KOREAparksh/hyundai-autoever-intern-assignment/main/app/assets/알림없이앱접속.gif" width="49%"/>
 
 ### 새 알림 badge
-<img src="https://raw.githubusercontent.com/KOREAparksh/hyundai-autoever-intern-assignment/main/app/assets/알림badge.gif" width="49%"/>
+<img src="https://raw.githubusercontent.com/KOREAparksh/hyundai-autoever-intern-assignment/main/app/assets/새알림_badge.gif" width="49%"/>
