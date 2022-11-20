@@ -1,5 +1,11 @@
+
+| `AWS, Firebase 내 서버를 종료하여 더 이상 정상작동하지 않습니다.`
+
+
 # hyundai-autoever-intern-assignment
 현대오토에버 채용프로그램 3-4주차 과제 레포지토리
+
+
 
 ## local server setting
 
